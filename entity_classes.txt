@@ -46,7 +46,7 @@ Application
     createdAt: dateTime
     updatedAt: dateTime
 
-Skil
+Skill
     Description: Represents a unique skill that can be associated with jobs, applicants, or specific applications.
     id: UUID
     name: string

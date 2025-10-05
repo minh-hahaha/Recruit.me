@@ -169,19 +169,50 @@ Applicant:
             {
                 "id": UUID,
                 "name": string,
-                "skills": [{"skill_id": UUID, "skill name": string}],
-                "job_offers": {offeredList:[{"id":UUID, "job title":string}], AcceptedList:[{"id":UUID, "job title":string}]}
+                "skills": 
+                    [
+                        {
+                            "skill_id": UUID,
+                            "skill name": string
+                        }
+                    ],
+                "job_offers": 
+                    {
+                        offeredList: 
+                            [
+                                {
+                                    "id":UUID,
+                                    "job title":string
+                                }
+                            ],
+                        AcceptedList:
+                            [
+                                {
+                                    "id":UUID,
+                                    "job title":string
+                                }
+                            ]
+                    }
             }
     Edit Profile
         Request
             {
                 "id": UUID,
-                "skillIds":[UUID]
+                "skillIds":
+                    [
+                        UUID
+                    ]
             }
         Response
             {
                 "id": UUID,
-                "skills": [{"skill_id": UUID, "skill name": string}],
+                "skills": 
+                    [
+                        {
+                            "skill_id": UUID,
+                            "skill name": string
+                        }
+                    ],
             }
     Search Jobs
         Request
@@ -192,7 +223,14 @@ Applicant:
             }
         Response
             {
-                "items":[{"id":UUID, "title": string, "companyId": UUID}]
+                "items":
+                    [
+                        {
+                            "id":UUID,
+                            "title": string,
+                            "companyId": UUID
+                        }
+                    ]
             }
     Apply to Job
         Request
@@ -283,7 +321,16 @@ Recruit.me:
         Response
             {
                 "companyId": UUID,
-                "jobs": [{"jobId": UUID, "title": string, "state": string, "applicantcount": int, "hiredCount": int}],
+                "jobs": 
+                    [
+                        {
+                            "jobId": UUID,
+                            "title": string,
+                            "state": string,
+                            "applicantcount": int,
+                            "hiredCount": int
+                        }
+                    ],
                 "generatedAt": dateTime
             }
     Report applicants
@@ -293,6 +340,20 @@ Recruit.me:
             }
         Response
             {
-                "items": [{"applicantId": UUID, "name": string, "applicationCount": int, "offers": {"pending": int, "accepted": int, "rejected": int, "Rescinded": int}}],
+                "items": 
+                    [
+                        {
+                            "applicantId": UUID,
+                            "name": string,
+                            "applicationCount": int,
+                            "offers": 
+                                {
+                                    "pending": int,
+                                    "accepted": int,
+                                    "rejected": int,
+                                    "Rescinded": int
+                                }
+                        }
+                    ],
                 "generatedAt": dateTime
             }

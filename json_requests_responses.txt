@@ -1,0 +1,113 @@
+Company:
+    Register Company
+        Request
+            {
+                "name": string
+            }
+        Response
+            {
+                "id": UUID,
+                "createdAt": dateTime
+            }
+
+    Review Company Profile
+        Request
+            {
+                "id": UUID
+            }
+        Response:
+            {
+                "name": string
+            }
+
+    Edit Company Profile
+        Request
+            {
+                "id": UUID,
+                "newName": string
+            }
+        Response
+            {
+                "id": UUID,
+                "name": string
+            }
+
+    Create Job
+        Request
+            {
+                "title": string,
+                "description": string,
+                "companyID": UUID,
+                "positions": int,
+                "state": Draft
+            }
+        Response
+            {
+                "id": UUID,
+                "createdAt": dateTime
+            }
+
+    Activate Job
+        Request
+            {
+                "id": UUID,
+            }
+        Response
+            {
+                "state": Active,
+                "updatedAt": dateTime
+            }
+
+    Close Job
+        Request
+            {
+                "id": UUID
+            }
+        Response
+            {
+                "state": Closed,
+                "updatedAt": dateTime
+            }
+
+    Review Applicants
+        Request
+            {
+                "id": UUID
+            }
+        Response
+            {
+                "id": UUID,
+                "applicants": [list of their attributes]
+            }
+
+    Announce Hiring Decisions
+    Reopen Job
+    Rescind Job Offer
+
+---------------------------------------------------------------------------------------------------
+Applicant:
+    Register Account
+    Review Profile
+    Edit Profile
+    Search Jobs
+    Apply to Job
+    Withdraw from Job
+    Accept Offer
+    Reject Offer
+    Rescind Offer
+
+---------------------------------------------------------------------------------------------------
+Recruit.me:
+    Report companies
+        Request
+            {
+                "name": string,
+                "message": string
+            }
+        Response
+            {
+                "name": string,
+                "reported": boolean
+            }
+    Report jobs for company
+    Report applicants

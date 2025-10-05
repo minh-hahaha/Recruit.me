@@ -151,14 +151,116 @@ Company:
 ---------------------------------------------------------------------------------------------------
 Applicant:
     Register Account
+        Request
+            {
+                "name": string
+            }
+        Response
+            {
+                "id": UUID,
+                "createdAt": dateTime
+            }
     Review Profile
+        Request
+            {
+                "id": UUID
+            }
+        Response
+            {
+                "id": UUID,
+                "name": string,
+                "skills": [{"skill_id": UUID, "skill name": string}],
+                "job_offers": {offeredList:[{"id":UUID, "job title":string}], AcceptedList:[{"id":UUID, "job title":string}]}
+            }
     Edit Profile
+        Request
+            {
+                "id": UUID,
+                "skillIds":[UUID]
+            }
+        Response
+            {
+                "id": UUID,
+                "skills": [{"skill_id": UUID, "skill name": string}],
+            }
     Search Jobs
+        Request
+            {
+                "query": string,
+                "skillIds": UUID,
+                "companyName": string,
+            }
+        Response
+            {
+                "items":[{"id":UUID, "title": string, "companyId": UUID}]
+            }
     Apply to Job
+        Request
+            {
+                "id": UUID,
+                "jobId": UUID
+            }
+        Response
+            {
+                "id": UUID,
+                "status": string,
+                "offerStatus": string,
+                "appliedAt": dateTime,
+                "createdAt": dateTime,
+                "updatedAt": dateTime
+            }
     Withdraw from Job
+        Request
+            {
+                "id": UUID,
+                "jobId": UUID
+            }
+        Response
+            {
+                "id": UUID,
+                "status": string,
+                "offerStatus": string,
+                "withdrawnAt": dateTime,
+                "updatedAt": dateTime
+            }
     Accept Offer
+        Request
+            {
+                "id": UUID,
+                "OfferId": UUID
+            }
+        Response
+            {
+                "OfferId": UUID,
+                "offerStatus": string,
+                "respondedAt": dateTime,
+                "updatedAt": dateTime
+            }
     Reject Offer
+        Request
+            {
+                "id": UUID,
+                "offerId": UUID
+            }
+        Response
+            {
+                "OfferId": UUID,
+                "OfferStatus": string,
+                "respondedAt": dateTime,
+                "updatedAt": dateTime
+            }
     Rescind Offer
+        Request
+            {
+                "id": UUID,
+                "offerId": UUID
+            }
+        Response
+            {
+                "OfferId": UUID,
+                "OfferStatus": string,
+                "updatedAt": dateTime
+            }
 
 ---------------------------------------------------------------------------------------------------
 Recruit.me:

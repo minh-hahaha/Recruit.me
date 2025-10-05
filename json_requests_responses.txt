@@ -17,7 +17,16 @@ Company:
             }
         Response:
             {
-                "name": string
+                "name": string,
+                "jobs": [
+                    {
+                        "id": Job-UUID,
+                        "title": string,
+                        "state": Enum {Draft, Active, Closed},
+                        "applicantCount": int,
+                        "hiredCount": int
+                    }
+                ]
             }
 
     Edit Company Profile
@@ -39,18 +48,23 @@ Company:
                 "description": string,
                 "companyID": UUID,
                 "positions": int,
+                "skills": [
+                    {
+                        "id": Skill-UUID
+                    }
+                ]
                 "state": Draft
             }
         Response
             {
-                "id": UUID,
+                "id": Job-UUID,
                 "createdAt": dateTime
             }
 
     Activate Job
         Request
             {
-                "id": UUID,
+                "id": Job-UUID,
             }
         Response
             {
@@ -61,7 +75,7 @@ Company:
     Close Job
         Request
             {
-                "id": UUID
+                "id": Job-UUID
             }
         Response
             {
@@ -72,17 +86,67 @@ Company:
     Review Applicants
         Request
             {
-                "id": UUID
+                "id": Job-UUID
             }
         Response
             {
-                "id": UUID,
-                "applicants": [list of their attributes]
+                "id": Job-UUID,
+                "applicants": [
+                    {
+                        "applicationID": Application-UUID,
+                        "applicantID": Applicant-UUID,
+                        "name": string,
+                        "rating": Enum {Hirable, Wait, Unacceptable},
+                        "offerStatus": Enum {None, Pending, Accepted, Rejected, Rescinded},
+                        "appliedAt": dateTime
+                    }
+                ]
             }
 
     Announce Hiring Decisions
+        Request
+            {
+                "id": Job-UUID,
+                "offers": [
+                    {
+                        "applicationID": Application-UUID
+                    }
+                ]
+            }
+        Response
+            {
+                "id": Job-UUID,
+                "offers": [
+                    {
+                      "applicationID": Application-UUID,
+                      "offerStatus": "Pending",
+                      "offeredAt": dateTime
+                    }
+                ]
+            }
+
     Reopen Job
+        Request
+            {
+                "id": Job-UUID,
+            }
+        Response
+            {
+                "state": Active,
+                "updatedAt": dateTime
+            }
+
     Rescind Job Offer
+        Request
+            {
+                "id": Application-UUID,
+            }
+        Response
+            {
+                "id": Application-UUID,
+                "offerStatus": "Rescinded",
+                "updatedAt": dateTime
+            }
 
 ---------------------------------------------------------------------------------------------------
 Applicant:

@@ -28,6 +28,8 @@ Job
     companyID: UUID
     state: Enum {Draft, Active, Closed}
     positions: int?
+    applicantCount: int
+    hiredCount: int
     createdAt: dateTime
     updatedAt  dateTime
 

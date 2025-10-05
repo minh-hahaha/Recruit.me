@@ -46,7 +46,7 @@ Company:
             {
                 "title": string,
                 "description": string,
-                "companyID": UUID,
+                "companyId": UUID,
                 "positions": int,
                 "skills": [
                     {
@@ -94,7 +94,7 @@ Company:
                 "applicants": [
                     {
                         "applicationID": Application-UUID,
-                        "applicantID": Applicant-UUID,
+                        "applicantId": Applicant-UUID,
                         "name": string,
                         "rating": Enum {Hirable, Wait, Unacceptable},
                         "offerStatus": Enum {None, Pending, Accepted, Rejected, Rescinded},
@@ -276,4 +276,23 @@ Recruit.me:
                 "reported": boolean
             }
     Report jobs for company
+        Request
+            {
+                "companyId": UUID
+            }
+        Response
+            {
+                "companyId": UUID,
+                "jobs": [{"jobId": UUID, "title": string, "state": string, "applicantcount": int, "hiredCount": int}],
+                "generatedAt": dateTime
+            }
     Report applicants
+        Request
+            {
+                None
+            }
+        Response
+            {
+                "items": [{"applicantId": UUID, "name": string, "applicationCount": int, "offers": {"pending": int, "accepted": int, "rejected": int, "Rescinded": int}}],
+                "generatedAt": dateTime
+            }

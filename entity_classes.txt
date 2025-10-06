@@ -26,7 +26,7 @@ Job
     title: string
     description: string
     companyID: UUID
-    state: Enum {Draft, Active, Closed}
+    state: Enum {Inactive, Active, Closed}
     positions: int?
     applicantCount: int
     hiredCount: int

@@ -22,7 +22,7 @@ Company:
                     {
                         "id": Job-UUID,
                         "title": string,
-                        "state": Enum {Draft, Active, Closed},
+                        "status": Enum {Draft, Active, Closed},
                         "applicantCount": int,
                         "hiredCount": int
                     }
@@ -46,7 +46,7 @@ Company:
             {
                 "title": string,
                 "description": string,
-                "companyId": UUID,
+                "companyID": Company-UUID,
                 "positions": int,
                 "skills": [
                     {
@@ -56,7 +56,7 @@ Company:
                         "id": Skill-UUID
                     }
                 ]
-                "state": Draft
+                "status": Enum {Draft, Active, Closed}
             }
         Response
             {
@@ -67,7 +67,7 @@ Company:
     Edit Job
         Request
             {
-                "idf": string,
+                "id": string,
                 "title": string,
                 "description": string,
                 "positions": int,
@@ -79,7 +79,7 @@ Company:
                         "id": Skill-UUID
                     }
                 ]
-                "state": Draft
+                "status": Enum {Draft, Active, Closed}
             }
         Response
             {
@@ -93,7 +93,7 @@ Company:
             }
         Response
             {
-                "state": Active,
+                "status": Active,
                 "updatedAt": dateTime
             }
 
@@ -104,7 +104,7 @@ Company:
             }
         Response
             {
-                "state": Closed,
+                "status": Closed,
                 "updatedAt": dateTime
             }
 
@@ -178,7 +178,7 @@ Company:
             }
         Response
             {
-                "state": Active,
+                "status": Active,
                 "updatedAt": dateTime
             }
 
@@ -402,14 +402,14 @@ Recruit.me:
                         {
                             "jobId": Job-UUID,
                             "title": string,
-                            "state": string,
+                            "status": Enum {Draft, Active, Closed},
                             "applicantcount": int,
                             "hiredCount": int
                         },
                         {
                             "jobId": Job-UUID,
                             "title": string,
-                            "state": string,
+                            "status": Enum {Draft, Active, Closed},
                             "applicantcount": int,
                             "hiredCount": int
                         }

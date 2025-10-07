@@ -33,7 +33,7 @@ The main model class that contains collections of all entities:
   - `location: string`
   - `experienceLevel: string`
   - `skills: Skill[]`
-  - `CreatedAt: dateTime`
+  - `createdAt: dateTime`
 
 ### Job
 - **Description**: Represents a position (or positions) that a company creates, edits, opens, closes, and offers to applicants that can apply to them.

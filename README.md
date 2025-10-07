@@ -1,1 +1,1 @@
-# Recruit.me
+# Recruit.me (Team Maryland)

@@ -52,6 +52,9 @@ Company:
                     {
                         "id": Skill-UUID
                     }
+                    {
+                        "id": Skill-UUID
+                    }
                 ]
                 "state": Draft
             }
@@ -61,6 +64,28 @@ Company:
                 "createdAt": dateTime
             }
 
+    Edit Job
+        Request
+            {
+                "idf": string,
+                "title": string,
+                "description": string,
+                "positions": int,
+                "skills": [
+                    {
+                        "id": Skill-UUID
+                    }
+                    {
+                        "id": Skill-UUID
+                    }
+                ]
+                "state": Draft
+            }
+        Response
+            {
+                "id": Job-UUID,
+                "createdAt": dateTime
+            }
     Activate Job
         Request
             {
@@ -87,6 +112,8 @@ Company:
         Request
             {
                 "id": Job-UUID
+                "page" : int
+                "pageSize" : int
             }
         Response
             {
@@ -100,10 +127,24 @@ Company:
                         "offerStatus": Enum {None, Pending, Accepted, Rejected, Rescinded},
                         "appliedAt": dateTime
                     }
-                ]
+                    {
+                        "applicationID": Application-UUID,
+                        "applicantId": Applicant-UUID,
+                        "name": string,
+                        "rating": Enum {Hirable, Wait, Unacceptable},
+                        "offerStatus": Enum {None, Pending, Accepted, Rejected, Rescinded},
+                        "appliedAt": dateTime
+                    }
+                ],
+                "pagination" : {
+                    "currentPage" :  int,
+                    "pageSize" : int,
+                    "totalItems" : int,
+                    "totalPages": int
+                }
             }
 
-    Announce Hiring Decisions
+    Offer Job
         Request
             {
                 "id": Job-UUID,
@@ -117,6 +158,11 @@ Company:
             {
                 "id": Job-UUID,
                 "offers": [
+                    {
+                      "applicationID": Application-UUID,
+                      "offerStatus": "Pending",
+                      "offeredAt": dateTime
+                    }
                     {
                       "applicationID": Application-UUID,
                       "offerStatus": "Pending",
@@ -172,24 +218,28 @@ Applicant:
                 "skills": 
                     [
                         {
-                            "skill_id": UUID,
-                            "skill name": string
+                            "id": Skill-UUID,
+                            "name": string
+                        }
+                        {
+                            "id": Skill-UUID,
+                            "name": string
                         }
                     ],
-                "job_offers": 
+                "jobOffers": 
                     {
                         offeredList: 
                             [
                                 {
-                                    "id":UUID,
-                                    "job title":string
+                                    "id":Job-UUID,
+                                    "jobTitle":string
                                 }
                             ],
                         AcceptedList:
                             [
                                 {
-                                    "id":UUID,
-                                    "job title":string
+                                    "id":Job-UUID,
+                                    "jobTitle":string
                                 }
                             ]
                     }
@@ -200,7 +250,7 @@ Applicant:
                 "id": UUID,
                 "skillIds":
                     [
-                        UUID
+                        string, string
                     ]
             }
         Response
@@ -209,8 +259,8 @@ Applicant:
                 "skills": 
                     [
                         {
-                            "skill_id": UUID,
-                            "skill name": string
+                            "id": Skill-UUID,
+                            "name": string
                         }
                     ],
             }
@@ -220,13 +270,15 @@ Applicant:
                 "query": string,
                 "skillIds": UUID,
                 "companyName": string,
+                "page" : 1,
+                "pageSize" : 10
             }
         Response
             {
-                "items":
+                "jobs":
                     [
                         {
-                            "id":UUID,
+                            "id": Job-UUID,
                             "title": string,
                             "companyId": UUID
                         }
@@ -235,12 +287,12 @@ Applicant:
     Apply to Job
         Request
             {
-                "id": UUID,
-                "jobId": UUID
+                "id": Appicant-UUID,
+                "jobId": Job-UUID
             }
         Response
             {
-                "id": UUID,
+                "id": Application-UUID,
                 "status": string,
                 "offerStatus": string,
                 "appliedAt": dateTime,
@@ -250,12 +302,12 @@ Applicant:
     Withdraw from Job
         Request
             {
-                "id": UUID,
-                "jobId": UUID
+                "id": Applicant-UUID,
+                "jobId": Job-UUID
             }
         Response
             {
-                "id": UUID,
+                "id": Application-UUID,
                 "status": string,
                 "offerStatus": string,
                 "withdrawnAt": dateTime,
@@ -264,12 +316,12 @@ Applicant:
     Accept Offer
         Request
             {
-                "id": UUID,
-                "OfferId": UUID
+                "id": Applicant-UUID,
+                "offerId": Application-UUID
             }
         Response
             {
-                "OfferId": UUID,
+                "offerId": Application-UUID,
                 "offerStatus": string,
                 "respondedAt": dateTime,
                 "updatedAt": dateTime
@@ -277,26 +329,26 @@ Applicant:
     Reject Offer
         Request
             {
-                "id": UUID,
-                "offerId": UUID
+                "id": Applicant-UUID,,
+                "offerId": Application-UUID
             }
         Response
             {
-                "OfferId": UUID,
-                "OfferStatus": string,
+                "offerId": Application-UUID,
+                "offerStatus": string,
                 "respondedAt": dateTime,
                 "updatedAt": dateTime
             }
     Rescind Offer
         Request
             {
-                "id": UUID,
-                "offerId": UUID
+                "id": Applicant-UUID,
+                "offerId": Application-UUID
             }
         Response
             {
-                "OfferId": UUID,
-                "OfferStatus": string,
+                "offerId": Application-UUID,
+                "offerStatus": string,
                 "updatedAt": dateTime
             }
 
@@ -305,45 +357,82 @@ Recruit.me:
     Report companies
         Request
             {
-                "name": string,
-                "message": string
+                "page": int,
+                "pageSize": int
             }
         Response
             {
+            "companies": [
+                {
+                "companyId": Company-UUID,
                 "name": string,
-                "reported": boolean
+                "jobsCount": int,
+                "applicationsCount": int,
+                "hiredCount": int
+                },
+                {
+                "companyId": Company-UUID,
+                "name": string,
+                "jobsCount": int,
+                "applicationsCount": int,
+                "hiredCount": int
+                }
+
+            ],
+            "pagination": {
+                "currentPage": int,
+                "pageSize": int,
+                "totalItems": int,
+                "totalPages": int
+            },
+            "generatedAt": dateTime
             }
     Report jobs for company
         Request
             {
-                "companyId": UUID
+                "companyId": Company-UUID
+                "page": 1,
+                "pageSize": 10
             }
         Response
             {
-                "companyId": UUID,
+                "companyId": Company-UUID,
                 "jobs": 
                     [
                         {
-                            "jobId": UUID,
+                            "jobId": Job-UUID,
+                            "title": string,
+                            "state": string,
+                            "applicantcount": int,
+                            "hiredCount": int
+                        },
+                        {
+                            "jobId": Job-UUID,
                             "title": string,
                             "state": string,
                             "applicantcount": int,
                             "hiredCount": int
                         }
                     ],
-                "generatedAt": dateTime
+                "pagination": {
+                    "currentPage": int,
+                    "pageSize": int,
+                    "totalItems": int,
+                    "totalPages": int
+                },
             }
     Report applicants
         Request
             {
-                None
+                "page": int,
+                "pageSize" : int
             }
         Response
             {
-                "items": 
+                "applicants": 
                     [
                         {
-                            "applicantId": UUID,
+                            "applicantId": Applicant-UUID,
                             "name": string,
                             "applicationCount": int,
                             "offers": 
@@ -351,9 +440,21 @@ Recruit.me:
                                     "pending": int,
                                     "accepted": int,
                                     "rejected": int,
-                                    "Rescinded": int
+                                    "rescinded": int
+                                }
+                                {
+                                    "pending": int,
+                                    "accepted": int,
+                                    "rejected": int,
+                                    "rescinded": int
                                 }
                         }
                     ],
+                "pagination": {
+                    "currentPage" : int,
+                    "pageSize" : int,
+                    "totalItems" : int,
+                    "totalPages" : int
+                }
                 "generatedAt": dateTime
             }

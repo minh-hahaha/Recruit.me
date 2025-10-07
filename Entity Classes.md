@@ -68,25 +68,25 @@ The main model class that contains collections of all entities:
 ### Skill
 - **Description**: Represents a unique skill that can be associated with jobs, applicants, or specific applications.
 - **Attributes**:
-  - `skillId: UUID`
+  - `id: UUID`
   - `name: string`
 
 ### JobSkill
 - **Description**: Represents the skills required for that specific job.
 - **Attributes**:
-  - `jobId: UUID`
+  - `id: UUID`
   - `skillId: UUID`
 
 ### ApplicantSkill
 - **Description**: Represents the skills listed on an applicant's profile.
 - **Attributes**:
-  - `applicantId: UUID`
+  - `id: UUID`
   - `skillId: UUID`
 
 ### ApplicationSkill
 - **Description**: Represents the skills listed on an application that the applicant chooses specifically when applying to a specific job (can be different from their profile).
 - **Attributes**:
-  - `applicationID: UUID`
+  - `id: UUID`
   - `skillID: UUID` 
 
 

@@ -22,7 +22,7 @@ export async function POST(req: Request) {
             console.error("Failed to create directory:", e);
         }
 
-        let applicants = [];
+        let applicants;
         try {
             const fileData = await fs.readFile(filePath, "utf-8");
             applicants = JSON.parse(fileData);

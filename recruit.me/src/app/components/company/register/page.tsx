@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import "./register.css";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -17,7 +16,7 @@ export default function RegisterPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/components/api/registerCompanies", {
+            const res = await fetch("/api/registerCompanies", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name }),
@@ -71,11 +70,11 @@ export default function RegisterPage() {
                 {error && <p className="register-error">{error}</p>}
 
                 <div className="register-footer">
-                    <Link href="/" className="register-back-link">
+                    <Link href="/">
                         ← Back to Home
                     </Link>
                     <span className="mx-2 text-zinc-500">|</span>
-                    <Link href="/components/company/login" className="register-login-link">
+                    <Link href="/company/login">
                         Login
                     </Link>
                 </div>

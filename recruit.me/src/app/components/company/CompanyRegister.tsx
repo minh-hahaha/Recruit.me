@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import "./login.css"; // same style approach as register.css
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const [name, setName] = useState("");
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -17,7 +16,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/loginApplicants", {
+            const res = await fetch("/api/registerCompanies", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name }),
@@ -26,9 +25,9 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.error || "Login failed");
+                setError(data.error || "Failed to register");
             } else {
-                setResult(`Welcome back, ${name}! (ID: ${data.id})`);
+                setResult(`Account created! ID: ${data.id}`);
                 setName("");
             }
         } catch {
@@ -40,12 +39,12 @@ export default function LoginPage() {
 
     return (
         <main className="flex w-full max-w-3xl flex-col items-center justify-center px-6 py-24 sm:px-16 sm:py-32">
-            <div className="login-card">
-                <h1 className="login-title">Applicant Login</h1>
+            <div className="register-card">
+                <h1 className="register-title">Register Company</h1>
 
-                <form onSubmit={handleSubmit} className="login-form">
+                <form onSubmit={handleSubmit} className="register-form">
                     <div>
-                        <label htmlFor="name" className="login-label">
+                        <label htmlFor="name" className="register-label">
                             Name
                         </label>
                         <input
@@ -53,7 +52,7 @@ export default function LoginPage() {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="login-input"
+                            className="register-input"
                             placeholder="Enter your name"
                         />
                     </div>
@@ -61,22 +60,22 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`login-button ${loading ? "loading" : ""}`}
+                        className={`register-button ${loading ? "loading" : ""}`}
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? "Registering..." : "Register"}
                     </button>
                 </form>
 
-                {result && <p className="login-success">{result}</p>}
-                {error && <p className="login-error">{error}</p>}
+                {result && <p className="register-success">{result}</p>}
+                {error && <p className="register-error">{error}</p>}
 
-                <div className="login-footer">
-                    <Link href="/" className="login-back-link">
+                <div className="register-footer">
+                    <Link href="/">
                         ← Back to Home
                     </Link>
                     <span className="mx-2 text-zinc-500">|</span>
-                    <Link href="/applicant/register" className="login-register-link">
-                        Register
+                    <Link href="/company/login">
+                        Login
                     </Link>
                 </div>
             </div>

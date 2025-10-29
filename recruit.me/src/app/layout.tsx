@@ -25,12 +25,12 @@ export default function RootLayout({
 }>) {
   return (
       <html lang="en">
-      <body className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black font-sans">
+      <body className="flex flex-col min-h-screen font-sans">
       {/* Header */}
       <header className="w-full max-w-5xl mx-auto text-center py-8">
           <Link href="/">
               <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight cursor-pointer">
-                  Recruit<span className="text-blue-600">.Me</span>
+                  <span className="text-blue-600">Recruit.Me</span>
               </h1>
           </Link>
       </header>

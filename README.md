@@ -1,6 +1,7 @@
 # Recruit.me (Team Maryland)
 
-Iteration 1:
+Iteration 1
+
 Company:
   - Register Company
   - Review Company Profile
@@ -12,3 +13,5 @@ Applicant:
   - Register Applicant
   - Review Profile
   - Edit Profile
+
+

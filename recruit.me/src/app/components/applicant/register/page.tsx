@@ -75,7 +75,7 @@ export default function RegisterPage() {
                         ← Back to Home
                     </Link>
                     <span className="mx-2 text-zinc-500">|</span>
-                    <Link href="/applicant/login" className="register-login-link">
+                    <Link href="/components/applicant/login" className="register-login-link">
                         Login
                     </Link>
                 </div>

@@ -61,3 +61,41 @@ export class Company {
         this.createdAt = new Date();
     }
 }
+
+export enum JobStatus {
+    Draft = 'Draft',
+    Active = 'Active',
+    Closed = 'Closed'
+}
+
+export class Job {
+    id: string;
+    title: string;
+    description: string;
+    companyID: string;
+    status: JobStatus;
+    positions?: number;
+    applicantCount: number;
+    hiredCount: number;
+    createdAt: Date;
+    updatedAt: Date;
+
+    constructor(
+        title: string,
+        description: string,
+        companyID: string,
+        positions?: number,
+        status: JobStatus = JobStatus.Draft
+    ) {
+        this.id = uuidv4();
+        this.title = title;
+        this.description = description;
+        this.companyID = companyID;
+        this.status = status;
+        this.positions = positions;
+        this.applicantCount = 0;
+        this.hiredCount = 0;
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+}

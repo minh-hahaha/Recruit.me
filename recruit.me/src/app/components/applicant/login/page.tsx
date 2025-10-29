@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import "./login.css"; // same style approach as register.css
+import "./login.css";
 
 export default function LoginPage() {
     const [name, setName] = useState("");
@@ -17,7 +17,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/loginApplicants", {
+            const res = await fetch("/components/api/loginApplicants", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name }),

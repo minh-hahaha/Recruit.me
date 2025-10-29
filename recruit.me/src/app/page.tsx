@@ -15,12 +15,12 @@ export default function Home() {
                                 Find opportunities, apply easily, and track your progress.
                             </p>
                             <div className="flex flex-col gap-4 w-full">
-                                <Link href="/applicant/register">
+                                <Link href="/components/applicant/register">
                                     <button className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all">
                                         Register
                                     </button>
                                 </Link>
-                                <Link href="/applicant/login">
+                                <Link href="/components/applicant/login">
                                     <button className="w-full py-2.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 font-medium transition-all">
                                         Login
                                     </button>
@@ -37,12 +37,12 @@ export default function Home() {
                                 Post jobs, manage applicants, and discover top talent.
                             </p>
                             <div className="flex flex-col gap-4 w-full">
-                                <Link href="/company/register">
+                                <Link href="/components/company/register">
                                     <button className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all">
                                         Register
                                     </button>
                                 </Link>
-                                <Link href="/company/login">
+                                <Link href="/components/company/login">
                                     <button className="w-full py-2.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 font-medium transition-all">
                                         Login
                                     </button>

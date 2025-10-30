@@ -11,6 +11,9 @@ export class Skill {
 }
 
 export class Applicant {
+    static fromJSON(fromJSON: any): Applicant[] | PromiseLike<Applicant[]> {
+        throw new Error("Method not implemented.");
+    }
     id: string;
     name: string;
     email: string;

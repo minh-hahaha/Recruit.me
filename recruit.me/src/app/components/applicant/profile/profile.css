@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/* Page wrapper */
+.profile-wrap { @apply min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col gap-8 items-center; }
+
+/* Card */
+.card { @apply w-full bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-100 dark:border-zinc-800; }
+
+/* Headings in cards */
+.card h1,.card h2 { @apply font-semibold text-black dark:text-zinc-50; }
+.card h1 { @apply text-3xl mb-2; }
+.card h2 { @apply text-2xl mb-4; }
+
+/* Avatar used in header + PO */
+.avatar { @apply h-14 w-14 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600; }
+
+/* Muted text */
+.muted { @apply text-sm text-zinc-600 dark:text-zinc-400; }
+
+/* === Buttons (deduped) === */
+.btn { @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition; }
+.btn.primary { @apply text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed; }
+.btn.ghost { @apply border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800; }
+.btn.subtle { @apply bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-700; }
+
+/* Actions row */
+.actions { @apply mt-2 flex items-center gap-4; }
+.actions .ok { @apply text-green-600 dark:text-green-400; }
+
+/* === Welcome Header === */
+.welcome-header { @apply w-full flex flex-col md:flex-row justify-between bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl px-8 py-6 shadow-lg mb-8 text-left; }
+.welcome-header .welcome-title { @apply text-3xl font-semibold mb-1; }
+.welcome-header .muted { @apply text-white/80; }
+.welcome-header .avatar { @apply h-16 w-16 rounded-full bg-white/20 mr-4; }
+.header-actions { @apply flex items-center gap-3 mt-4 md:mt-0; }
+
+/* ==== Metrics Grid  ==== */
+.metrics-grid { @apply grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-7xl mb-8; }
+.metric-card { @apply bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl p-6 shadow-sm text-center; }
+.metric-value { @apply text-3xl font-semibold text-black dark:text-zinc-50 mb-1; }
+.metric-label { @apply text-sm text-zinc-600 dark:text-zinc-400; }
+
+/* === 2-col Dashboard === */
+.dashboard-grid { @apply grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 w-full max-w-7xl; }
+.left-col,.right-col { @apply flex flex-col gap-8; }
+
+/* Quick actions */
+.quick-actions { @apply flex flex-col gap-3; }
+.quick-actions .btn { @apply justify-center; }
+
+/* === Section headers === */
+.section-head { @apply flex items-end justify-between mb-4; }
+.section-head h2 { @apply text-2xl font-semibold text-black dark:text-zinc-50; }
+/* stacked modifier */
+.section-head.section-stack { @apply flex flex-col items-start gap-1 mb-4; }
+.section-head.section-stack h2 { @apply mb-0 text-left; }
+.section-head.section-stack .muted { @apply text-left; }
+
+/* === Profile Overview === */
+.po-head { @apply flex items-center gap-4 mb-6; }
+.po-avatar { @apply h-16 w-16 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow; }
+.po-initials { @apply text-xl font-semibold; }
+.po-ident { @apply flex flex-col; }
+.po-name { @apply text-xl font-semibold text-zinc-900 dark:text-zinc-50 leading-tight; }
+.po-email { @apply mt-1 inline-flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400; }
+.po-mail-icon { @apply shrink-0; }
+
+/* Skills */
+.po-skills { @apply mt-2; }
+.po-skills-title { @apply mb-2 font-medium text-zinc-800 dark:text-zinc-200; }
+.chip-list { @apply flex flex-wrap gap-2; }
+.chip { @apply inline-flex items-center rounded-full px-3 py-1 text-sm border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100; }
+
+/* === Lists (applications/offers) === */
+.list { @apply flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800; }
+.list-item { @apply flex items-center justify-between gap-4 py-4; }
+.li-main { @apply flex-1 min-w-0; }
+.li-title { @apply flex items-center gap-3; }
+.li-sub { @apply mt-1; }
+.li-meta { @apply mt-1 text-zinc-800 dark:text-zinc-100; }
+.li-actions { @apply flex items-center gap-2 shrink-0; }
+
+/* Cardify each application when using the list-cards modifier */
+.list.list-cards { @apply divide-y-0 flex flex-col gap-4; }
+.list.list-cards .list-item { @apply bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-sm p-4; }
+.list.list-cards .li-title { @apply mb-1; }
+.list.list-cards .li-title strong { @apply text-zinc-900 dark:text-white; }
+.list.list-cards .li-sub { @apply mt-0.5; }
+.list.list-cards .li-meta { @apply mt-1; }
+
+/* Status badges */
+.badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border; }
+.badge.applied { @apply border-blue-200 text-blue-700 dark:text-blue-300 dark:border-blue-800; }
+.badge.withdrawn { @apply border-zinc-300 text-zinc-700 dark:text-zinc-300 dark:border-zinc-700; }
+.badge.interview,.badge.offer { @apply border-amber-200 text-amber-700 dark:text-amber-300 dark:border-amber-800; }
+.badge.pending { @apply border-amber-200 text-amber-700 dark:text-amber-300 dark:border-amber-800; }
+.badge.accepted { @apply border-green-200 text-green-700 dark:text-green-300 dark:border-green-800; }
+.badge.rejected { @apply border-red-200 text-red-700 dark:text-red-300 dark:border-red-800; }
+
+/* === Offers (inner cards) === */
+.offers { @apply flex flex-col gap-4; }
+.offer-card { @apply bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 shadow-sm; }
+.offer-header { @apply flex items-center justify-between gap-3 mb-1; }
+.offer-title { @apply text-base font-semibold text-zinc-900 dark:text-zinc-50; }
+.offer-company { @apply text-sm text-zinc-600 dark:text-zinc-400; }
+.offer-salary { @apply text-sm text-zinc-800 dark:text-zinc-200 mt-1; }
+.offer-date { @apply text-xs text-zinc-500 dark:text-zinc-400 mt-1; }
+.offer-actions { @apply mt-4 grid grid-cols-2 gap-3; }
+.offer-actions .btn { @apply w-full justify-center; }
+
+

@@ -1,10 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 
 export class Skill {
+    id: string;
     name: string;
     level: string;
 
     constructor(name: string, level: string) {
+        this.id = uuidv4();
         this.name = name;
         this.level = level;
     }

@@ -1,14 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import "./edit.css";
 import type {Applicant, Skill} from "@/app/api/entities";
 
 
-
-
-// Helper for initials
 function getInitials(fullName: string) {
   if (!fullName) return "";
   const parts = fullName.trim().split(/\s+/);
@@ -17,32 +14,25 @@ function getInitials(fullName: string) {
   return (first + last).toUpperCase();
 }
 
-// Mock data (replace with real fetch)
-const MOCK_APPLICANT: Applicant = {
-  id: "f8393bfd-5e9d-45bd-a9b7-15884d1f131a",
-  name: "Alice Johnson",
-  email: "alice@example.com",
-  location: "Boston, MA",
-  experienceLevel: "3 years",
-  skills: [
-    { id: "s1", name: "React" },
-    { id: "s2", name: "JavaScript" },
-    { id: "s3", name: "TypeScript" },
-  ],
-};
+// Mock data
 
 const ALL_SKILLS: Skill[] = [
-  { id: "s1", name: "React" },
-  { id: "s2", name: "JavaScript" },
-  { id: "s3", name: "TypeScript" },
-  { id: "s4", name: "Node.js" },
-  { id: "s5", name: "SQL" },
-  { id: "s6", name: "AWS" },
+  { id: "s1", name: "React", level: "Intermediate" },
+  { id: "s2", name: "JavaScript", level: "Intermediate" },
+  { id: "s3", name: "TypeScript", level: "Intermediate" },
+  { id: "s4", name: "Node.js", level: "Intermediate" },
+  { id: "s5", name: "SQL", level: "Intermediate" },
+  { id: "s6", name: "AWS", level: "Intermediate" },
 ];
 
 export default function EditProfilePage() {
   const router = useRouter();
+  const params = useSearchParams();
+  const aid = params.get("aid") || (typeof window !== "undefined" ? sessionStorage.getItem("applicantId") || "" : "");
 
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [data, setData] = useState<Applicant | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,18 +44,42 @@ export default function EditProfilePage() {
   const availableSkills = useMemo(() => ALL_SKILLS, []);
 
   useEffect(() => {
-    // simulate load
-    setData(MOCK_APPLICANT);
-  }, []);
+    if (!aid) {
+      setError("No applicant ID provided");
+      setLoading(false);
+      return;
+    }
+    (async () => {
+      try {
+        const res = await fetch("/api/profileApplicants/reviewProfile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: aid }),
+        });
+        if (!res.ok) throw new Error(await res.text()); 
+        const a: Applicant & { skills?: { name: string }[] } = await res.json();
 
-  useEffect(() => {
-    if (!data) return;
-    setName(data.name);
-    setEmail(data.email);
-    setLocation(data.location ?? "");
-    setExperienceLevel(data.experienceLevel ?? "");
-    setSelectedSkillIds(data.skills.map((s) => s.id));
-  }, [data]);
+        setName(a.name || "");
+        setEmail(a.email || "");
+        setLocation(a.location || "");
+        setExperienceLevel(a.experienceLevel || "");
+
+        const ids: string[] = [];
+        (a.skills || []).forEach((s) => {
+          const found = availableSkills.find((k) => k.name.toLowerCase() === s.name.toLowerCase());
+          if (found) ids.push(found.id);
+          else ids.push(`custom-${s.name.toLowerCase().replace(/\s+/g, "-")}`);
+        });
+        setSelectedSkillIds(ids);
+      } catch (e: any) {
+        console.error("Failed to load profile:", e?.message || e);
+        setError("Failed to load profile");
+      } finally {
+        setLoading(false);
+      }
+      })();
+    }, [aid, availableSkills]);
+    
 
   const toggleSkill = (id: string) => {
     setSelectedSkillIds((prev) =>
@@ -89,40 +103,56 @@ export default function EditProfilePage() {
       .map((id) => ({
         id,
         name: id.replace(/^custom-/, "").replace(/-/g, " "),
+        level: "Beginner",
       })),
   ];
 
   const removeSkill = (id: string) =>
     setSelectedSkillIds((prev) => prev.filter((x) => x !== id));
 
-  const handleSubmit = async () => {
-    if (!data) return;
-
-    const updated: Applicant = {
-      ...data,
-      name,
-      email,
-      location,
-      experienceLevel,
-      skills: selectedSkills,
-    };
-
-    // TODO: replace this with your actual API call
-    console.log("Saving updated profile:", updated);
-
-    // Navigate back to dashboard
-    router.push("/applicant/profile");
-  };
-
-  const handleCancel = () => router.back();
-
-  if (!data) {
-    return (
-      <div className="profile-wrap">
-        <div className="card">Loading...</div>
-      </div>
-    );
+async function handleSubmit(e?: React.FormEvent) {
+  e?.preventDefault();
+  if (!aid) {
+    setError("No applicant ID provided");
+    return;
   }
+  setSaving(true);
+  setError("");
+
+  const skillNames = selectedSkills.map((s) => s.name);
+
+  try {
+    const res = await fetch("/api/profileApplicants/editProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: aid,
+        name,
+        email,
+        location,
+        experienceLevel,
+        skills: skillNames,
+      }),
+    });
+    if (!res.ok) throw new Error(await res.text());
+
+    router.push(`/applicant/profile?aid=${encodeURIComponent(aid)}`);
+    router.refresh();
+  } catch (e: any) {
+    console.error("Failed to save profile:", e?.message || e);
+    setError("Failed to save profile");
+  } finally {
+    setSaving(false);
+  }
+}
+
+if (loading) {
+  return (
+    <div className="profile-wrap">
+      <div className="card">Loading...</div>
+    </div>
+  );
+}
 
   return (
     <div className="profile-wrap">
@@ -134,13 +164,12 @@ export default function EditProfilePage() {
           <p className="muted">Update your profile information and skills</p>
         </div>
         <div className="header-actions">
-          <button className="btn ghost" onClick={() => router.push("/applicant/profile")}>
+          <button className="btn ghost" onClick={() => router.push(`/applicant/profile?aid=${encodeURIComponent(aid)}`)}>
             Back to Dashboard
           </button>
         </div>
       </div>
 
-      {/* Single wide form card */}
       <div className="card max-w-4xl w-full">
         <div className="section-head section-stack">
           <h2>Profile Overview</h2>
@@ -149,7 +178,6 @@ export default function EditProfilePage() {
           </span>
         </div>
 
-        {/* Avatar + identity */}
         <div className="po-head">
           <div className="po-avatar">
             <span className="po-initials">{getInitials(name)}</span>
@@ -202,7 +230,7 @@ export default function EditProfilePage() {
         <div className="po-skills">
         <div className="po-skills-title">Skills</div>
 
-        {/* Selected skills (removable) */}
+        {/* Selected skills */}
         <div className="chip-list mb-3">
             {selectedSkills.length ? (
             selectedSkills.map((s) => (
@@ -223,7 +251,7 @@ export default function EditProfilePage() {
             )}
         </div>
 
-        {/* Optional: add a custom skill by typing */}
+        {/* add a custom skill by typing */}
         <div className="flex items-center gap-2 mb-3">
             <input
             placeholder="Add a custom skill (e.g., GraphQL)"
@@ -278,11 +306,14 @@ export default function EditProfilePage() {
 
 
         {/* Update / Cancel actions */}
+        <form onSubmit={handleSubmit}>
         <div className="actions actions-stacked mt-8">
-          <button className="btn primary w-full" onClick={handleSubmit}>
-            Update Profile
+          <button type="submit" className="btn primary w-full" disabled={saving}>
+            {saving ? "Saving..." : "Update Profile"}
           </button>
+          {error && <div className="error-msg mt-3">{error}</div>}
         </div>
+        </form>
       </div>
     </div>
   );

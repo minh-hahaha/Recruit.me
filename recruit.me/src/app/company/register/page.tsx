@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const [name, setName] = useState("");
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/loginCompanies", {
+            const res = await fetch("/api/registerCompanies", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name }),
@@ -25,9 +25,9 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.error || "Login failed");
+                setError(data.error || "Failed to register");
             } else {
-                setResult(`Welcome back, ${name}! (ID: ${data.id})`);
+                setResult(`Account created! ID: ${data.id}`);
                 setName("");
             }
         } catch {
@@ -40,7 +40,7 @@ export default function LoginPage() {
     return (
         <main className="flex w-full max-w-3xl flex-col items-center justify-center px-6 py-24 sm:px-16 sm:py-32">
             <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-100 dark:border-zinc-800">
-                <h1 className="text-3xl font-semibold mb-6 text-black dark:text-zinc-50 text-center">Company Login</h1>
+                <h1 className="text-3xl font-semibold mb-6 text-black dark:text-zinc-50 text-center">Register Company</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
@@ -66,7 +66,7 @@ export default function LoginPage() {
                                 : "bg-blue-600 hover:bg-blue-700"
                         }`}
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? "Registering..." : "Register"}
                     </button>
                 </form>
 
@@ -78,8 +78,8 @@ export default function LoginPage() {
                         ← Back to Home
                     </Link>
                     <span className="mx-2 text-zinc-500">|</span>
-                    <Link href="/company/register" className="text-sm text-zinc-700 dark:text-zinc-300 hover:underline">
-                        Register
+                    <Link href="/company/login" className="text-sm text-zinc-700 dark:text-zinc-300 hover:underline">
+                        Login
                     </Link>
                 </div>
             </div>

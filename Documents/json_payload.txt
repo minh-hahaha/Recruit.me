@@ -1,0 +1,333 @@
+Company:
+    /registerCompany
+        POST
+        { "name": "Company-1" }
+
+        200:
+        { "id": 123, "createdAt": "2025-01-01T00:00:00Z" }
+
+        400:
+        { "error": "Name is required" }
+
+    /reviewCompanyProfile
+        POST
+        { "id": 123 }
+
+        200:
+        { "name": "Company-1",
+          "jobs": [ { "id": 1, "title": "Software Engineer", "status": "Active", "applicantCount": 12, "hiredCount": 2 } ]
+        }
+
+        400:
+        { "error": "Company not found" }
+
+    /editCompanyProfile
+        POST
+        { "id": 123, "newName": "New Company Name" }
+
+        200:
+        { "id": 123, "name": "New Company Name" }
+
+        400:
+        { "error": "Company not found" }
+
+    /createJob
+        POST
+        { "title": "Software Engineer", "description": "Develop applications", "companyId": 123, "positions": 3,
+          "skills": [ { "id": 143423423 }, { "id": 23423432432 } ],
+          "status": "Draft"
+        }
+
+        200:
+        { "id": 1, "createdAt": "2025-01-01T00:00:00Z" }
+
+        400:
+        { "error": "Invalid company ID" }
+
+    /editJob
+        POST
+        { "id": 1, "title": "Senior Software Engineer", "description": "Lead development", "positions": 5,
+          "skills": [ { "id": 143423423 }, { "id": 23423432432 } ],
+          "status": "Active"
+        }
+
+        200:
+        { "id": 1, "createdAt": "2025-01-01T00:00:00Z" }
+
+        400:
+        { "error": "Job not found" }
+
+    /activateJob
+        POST
+        { "id": 1 }
+
+        200:
+        { "status": "Active", "updatedAt": "2025-01-02T12:00:00Z" }
+
+        400:
+        { "error": "Job not found" }
+
+    /closeJob
+        POST
+        { "id": 1 }
+
+        200:
+        { "status": "Closed", "updatedAt": "2025-01-03T10:00:00Z" }
+
+        400:
+        { "error": "Job not found" }
+
+    /reviewApplicants
+        POST
+        { "id": 1, "page": 1, "pageSize": 10 }
+
+        200:
+        { "id": 1,
+          "applicants": [
+            { "applicationId": 231, "applicantId": 1, "name": "Alice Johnson", "rating": "Hirable", "offerStatus": "Pending", "appliedAt": "2025-01-01T12:00:00Z" },
+            { "applicationId": 333, "applicantId": 2, "name": "Bob Smith", "rating": "Wait", "offerStatus": "None", "appliedAt": "2025-01-02T09:30:00Z" }
+          ],
+          "pagination": { "currentPage": 1, "pageSize": 10, "totalItems": 25, "totalPages": 3 }
+        }
+
+        400:
+        { "error": "Job not found" }
+
+    /offerJob
+        POST
+        { "id": 1, "offers": [ { "applicationId": 231 }, { "applicationId": 333 } ] }
+
+        200:
+        {
+          "id": 1,
+          "offers": [
+            { "applicationId": 231, "offerStatus": "Pending", "offeredAt": "2025-01-04T08:00:00Z" },
+            { "applicationId": 333, "offerStatus": "Pending", "offeredAt": "2025-01-04T08:00:00Z" }
+          ]
+        }
+
+        400:
+        { "error": "Job not found or invalid application IDs" }
+
+    /reopenJob
+        POST
+        { "id": 1 }
+
+        200:
+        { "status": "Active", "updatedAt": "2025-01-05T14:00:00Z" }
+
+        400:
+        { "error": "Job not found" }
+
+    /rescindJobOffer
+        POST
+        { "id": 231 }
+
+        200:
+        { "id": 231, "offerStatus": "Rescinded", "updatedAt": "2025-01-06T09:00:00Z" }
+
+        400:
+        { "error": "Application not found" }
+
+---------------------------------------------------------------------------------------------------
+Applicant:
+    /registerAccount
+        POST
+        { "name": "Joe" }
+
+        200:
+        { "id": 1, "createdAt": "2025-01-01T00:00:00Z" }
+
+        400:
+        { "error": "Name is required" }
+
+    /reviewProfile
+        POST
+        { "id": 1 }
+
+        200:
+        {
+          "id": 1,
+          "name": "Joe",
+          "skills": [
+            { "id": 202, "name": "Python" },
+            { "id": 303, "name": "React" }
+          ],
+          "jobOffers": {
+            "offeredList": [
+              { "id": 12, "jobTitle": "Software Engineer" }
+            ],
+            "acceptedList": [
+              { "id": 22, "jobTitle": "Data Analyst" }
+            ]
+          }
+        }
+
+        400:
+        { "error": "Applicant not found" }
+
+    /editProfile
+        POST
+        { "id": 1, "skillIds": [202, 303] }
+
+        200:
+        {
+          "id": 1,
+          "skills": [
+            { "id": 202, "name": "Python" },
+            { "id": 303, "name": "React" }
+          ]
+        }
+
+        400:
+        { "error": "Applicant not found" }
+
+    /searchJobs
+        POST
+        { "query": "engineer", "skillIds": [202], "companyName": "Company-1", "page": 1, "pageSize": 10 }
+
+        200:
+        {
+          "jobs": [
+            { "id": 1, "title": "Software Engineer", "companyId": 123 },
+            { "id": 2, "title": "Frontend Developer", "companyId": 456 }
+          ]
+        }
+
+        400:
+        { "error": "Invalid search parameters" }
+
+    /applyToJob
+        POST
+        { "id": 1, "jobId": 1 }
+
+        200:
+        { "id": 21,
+          "status": "applied",
+          "offerStatus": "pending",
+          "appliedAt": "2025-01-01T00:00:00Z",
+          "createdAt": "2025-01-01T00:00:00Z",
+          "updatedAt": "2025-01-01T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid applicant or job" }
+
+    /withdrawFromJob
+        POST
+        { "id": 1, "jobId": 1 }
+
+        200:
+        {
+          "id": "application-1",
+          "status": "withdrawn",
+          "offerStatus": "cancelled",
+          "withdrawnAt": "2025-01-02T00:00:00Z",
+          "updatedAt": "2025-01-02T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid applicant or job" }
+
+    /acceptOffer
+        POST
+        { "id": 1, "offerId": 21 }
+
+        200:
+        {
+          "offerId": 21,
+          "offerStatus": "accepted",
+          "respondedAt": "2025-01-03T00:00:00Z",
+          "updatedAt": "2025-01-03T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid applicant or offer" }
+
+    /rejectOffer
+        POST
+        { id: 1, "offerId": 21 }
+
+        200:
+        {
+          "offerId": 21,
+          "offerStatus": "rejected",
+          "respondedAt": "2025-01-03T00:00:00Z",
+          "updatedAt": "2025-01-03T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid applicant or offer" }
+
+    /rescindOffer
+        POST
+        { id: 1, "offerId": 21 }
+
+        200:
+        {
+          "offerId": 21,
+          "offerStatus": "rescinded",
+          "updatedAt": "2025-01-03T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid applicant or offer" }
+
+---------------------------------------------------------------------------------------------------
+Recruit.me:
+    /reportCompanies
+        POST
+        { "page": 1, "pageSize": 10 }
+
+        200:
+        {
+          "companies": [
+            { "companyId": 1, "name": "Company-1", "jobsCount": 25, "applicationsCount": 100, "hiredCount": 10 },
+            { "companyId": 2, "name": "Company-2", "jobsCount": 40, "applicationsCount": 200, "hiredCount": 25 }
+          ],
+          "pagination": { "currentPage": 1, "pageSize": 10, "totalItems": 2, "totalPages": 1 },
+          "generatedAt": "2025-01-05T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid pagination parameters" }
+
+
+    /reportJobsForCompany
+        POST
+        { "companyId": 1, "page": 1, "pageSize": 10 }
+
+        200:
+        {
+          "companyId": 1,
+          "jobs": [
+            { "jobId": 1, "title": "Software Engineer", "status": "Active", "applicantCount": 25, "hiredCount": 3 },
+            { "jobId": 2, "title": "Data Analyst", "status": "Closed", "applicantCount": 40, "hiredCount": 5 }
+          ],
+          "pagination": { "currentPage": 1, "pageSize": 10, "totalItems": 2, "totalPages": 1 }
+        }
+
+        400:
+        { "error": "Invalid company Id or pagination parameters" }
+
+
+    /reportApplicants
+        POST
+        { "page": 1, "pageSize": 10 }
+
+        200:
+        {
+          "applicants": [
+            { "applicantId": 1, "name": "Joe", "applicationCount": 5,
+              "offers": { "pending": 2, "accepted": 1, "rejected": 1, "rescinded": 1 }
+            },
+            { "applicantId": 2, "name": "Sara", "applicationCount": 3,
+              "offers": { "pending": 1, "accepted": 1, "rejected": 1, "rescinded": 0 }
+            }
+          ],
+          "pagination": { "currentPage": 1, "pageSize": 10, "totalItems": 2, "totalPages": 1 },
+          "generatedAt": "2025-01-05T00:00:00Z"
+        }
+
+        400:
+        { "error": "Invalid pagination parameters" }

@@ -55,7 +55,7 @@ The main model class that contains collections of all entities:
   - `id: UUID`
   - `applicantID: UUID`
   - `jobID: UUID`
-  - `companyID: UUID`
+  - `companyIDnpm run dev: UUID`
   - `status: Enum {Applied, Withdrawn}`
   - `rating: Enum {Hirable, Wait, Unacceptable}?`
   - `offerStatus: Enum {None, Pending, Accepted, Rejected, Rescinded}`

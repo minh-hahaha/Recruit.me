@@ -11,13 +11,13 @@ export default function CompanyPortal() {
                 </h1>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                    {/* Job Management Card */}
+                    {/* Job Management */}
                     <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
                         <h2 className="text-xl font-semibold mb-4 text-zinc-900 dark:text-zinc-50">
                             Job Management
                         </h2>
                         <div className="space-y-4">
-                            <Link href="/components/company/job/create">
+                            <Link href="/company/job/create">
                                 <button className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all">
                                     Create New Job
                                 </button>

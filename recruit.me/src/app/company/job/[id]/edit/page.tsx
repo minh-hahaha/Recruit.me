@@ -18,7 +18,7 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
     skills: [{ id: "1", name: "JavaScript" }]
   };
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: Job) => {
     try {
       // TODO: Implement the API call to update the job
       console.log('Updating job:', { ...data, id: params.id });

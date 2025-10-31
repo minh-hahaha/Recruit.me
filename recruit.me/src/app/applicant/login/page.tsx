@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -8,6 +9,7 @@ export default function LoginPage() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,8 +29,9 @@ export default function LoginPage() {
             if (!res.ok) {
                 setError(data.error || "Login failed");
             } else {
-                setResult(`Welcome back, ${name}! (ID: ${data.id})`);
-                setName("");
+                sessionStorage.setItem("applicantId", data.id);
+                router.push(`/applicant/profile?aid=${encodeURIComponent(data.id)}`);
+                setResult("Login successful! Redirecting to your profile...");
             }
         } catch {
             setError("Something went wrong");

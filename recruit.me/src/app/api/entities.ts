@@ -1,19 +1,25 @@
 import { v4 as uuidv4 } from "uuid";
 
 export class Skill {
+    id: string;
     name: string;
     level: string;
 
     constructor(name: string, level: string) {
+        this.id = uuidv4();
         this.name = name;
         this.level = level;
     }
 }
 
 export class Applicant {
+    static fromJSON(fromJSON: any): Applicant[] | PromiseLike<Applicant[]> {
+        throw new Error("Method not implemented.");
+    }
     id: string;
     name: string;
     email: string;
+    password?: string;
     location: string;
     experienceLevel: string;
     skills: Skill[];
@@ -22,6 +28,7 @@ export class Applicant {
     constructor(
         name: string,
         email = "",
+        password = "",
         location = "",
         experienceLevel = "",
         skills: Skill[] = []
@@ -29,6 +36,7 @@ export class Applicant {
         this.id = uuidv4();
         this.name = name;
         this.email = email;
+        this.password = password;
         this.location = location;
         this.experienceLevel = experienceLevel;
         this.skills = skills;

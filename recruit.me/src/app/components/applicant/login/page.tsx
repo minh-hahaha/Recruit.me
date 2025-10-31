@@ -31,8 +31,7 @@ export default function LoginPage() {
             } else {
                 sessionStorage.setItem("applicantId", data.id);
                 router.push(`/applicant/profile?aid=${encodeURIComponent(data.id)}`);
-                //setResult(`Welcome back, ${name}! (ID: ${data.id})`);
-                //setName("");
+                setResult("Login successful! Redirecting to your profile...");
             }
         } catch {
             setError("Something went wrong");

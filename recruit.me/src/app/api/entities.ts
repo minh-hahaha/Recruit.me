@@ -19,6 +19,7 @@ export class Applicant {
     id: string;
     name: string;
     email: string;
+    password?: string;
     location: string;
     experienceLevel: string;
     skills: Skill[];
@@ -27,6 +28,7 @@ export class Applicant {
     constructor(
         name: string,
         email = "",
+        password = "",
         location = "",
         experienceLevel = "",
         skills: Skill[] = []
@@ -34,6 +36,7 @@ export class Applicant {
         this.id = uuidv4();
         this.name = name;
         this.email = email;
+        this.password = password;
         this.location = location;
         this.experienceLevel = experienceLevel;
         this.skills = skills;

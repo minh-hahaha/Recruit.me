@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       ...current,
       ...(body.name !== undefined ? { name: body.name } : {}),
       ...(body.email !== undefined ? { email: body.email } : {}),
+      ...(body.password !== undefined ? { password: body.password } : {}),
       ...(body.location !== undefined ? { location: body.location } : {}),
       ...(body.experienceLevel !== undefined ? { experienceLevel: body.experienceLevel } : {}),
       ...(body.skills !== undefined

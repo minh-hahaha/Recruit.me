@@ -6,7 +6,7 @@ import type {Applicant} from "@/app/api/entities";
 import "./profile.css";
 
 
-type ApplicationItem = {
+type Application = {
   id: string;
   title: string;
   company: string;
@@ -16,7 +16,7 @@ type ApplicationItem = {
   appliedOn: string;
 };
 
-type OfferItem = {
+type Offer = {
   id: string;
   title: string;
   company: string;
@@ -26,7 +26,7 @@ type OfferItem = {
 };
 
 // ---- MOCK DATA ----
-const MOCK_APPLICATIONS: ApplicationItem[] = [
+const MOCK_APPLICATIONS: Application[] = [
   {
     id: "a1",
     title: "Senior Frontend Developer",
@@ -47,7 +47,7 @@ const MOCK_APPLICATIONS: ApplicationItem[] = [
   },
 ];
 
-const MOCK_OFFERS: OfferItem[] = [
+const MOCK_OFFERS: Offer[] = [
   {
     id: "o1",
     title: "Senior Frontend Developer",
@@ -76,8 +76,8 @@ export default function ApplicantProfilePage() {
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
-  const [applications] = useState<ApplicationItem[]>(MOCK_APPLICATIONS);
-  const [offers] = useState<OfferItem[]>(MOCK_OFFERS);
+  const [applications] = useState<Application[]>(MOCK_APPLICATIONS);
+  const [offers] = useState<Offer[]>(MOCK_OFFERS);
 
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function ApplicantProfilePage() {
         <div>
           <h1 className="welcome-title">Welcome back, {data.name.split(" ")[0]}!</h1>
           <p className="muted">
-            {data.location || "—"} • {data.experienceLevel || "—"}
+            {location || "—"} • {experienceLevel || "—"}
           </p>
         </div>
         <div className="header-actions">

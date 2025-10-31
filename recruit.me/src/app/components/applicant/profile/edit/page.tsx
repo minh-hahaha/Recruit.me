@@ -36,6 +36,7 @@ export default function EditProfilePage() {
   const [data, setData] = useState<Applicant | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [location, setLocation] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]);
@@ -61,6 +62,7 @@ export default function EditProfilePage() {
 
         setName(a.name || "");
         setEmail(a.email || "");
+        setPassword(a.password || "");
         setLocation(a.location || "");
         setExperienceLevel(a.experienceLevel || "");
 
@@ -129,6 +131,7 @@ async function handleSubmit(e?: React.FormEvent) {
         id: aid,
         name,
         email,
+        password,
         location,
         experienceLevel,
         skills: skillNames,
@@ -210,6 +213,16 @@ if (loading) {
           <label className="field">
             <span>Email</span>
             <input value={email} onChange={(e) => setEmail(e.target.value)} />
+          </label>
+
+          <label className="field">
+            <span>Password</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter or update password"
+            />
           </label>
 
           <label className="field">

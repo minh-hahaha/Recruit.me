@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
+
 
 export default function LoginPage() {
+    const router = useRouter();
     const [name, setName] = useState("");
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -27,8 +30,9 @@ export default function LoginPage() {
             if (!res.ok) {
                 setError(data.error || "Login failed");
             } else {
-                setResult(`Welcome back, ${name}! (ID: ${data.id})`);
-                setName("");
+                sessionStorage.setItem("companyId", data.id);
+                router.push(`/company/profile?cid=${encodeURIComponent(data.id)}`);
+                setResult("Login successful! Redirecting to your profile...");
             }
         } catch {
             setError("Something went wrong");

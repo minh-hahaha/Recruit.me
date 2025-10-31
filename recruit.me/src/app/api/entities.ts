@@ -47,6 +47,7 @@ export class Applicant {
 export class Company {
     id: string;
     name: string;
+    password?: string;
     industry: string;
     location: string;
     website?: string;
@@ -55,6 +56,7 @@ export class Company {
 
     constructor(
         name: string,
+        password = "",
         industry = "",
         location = "",
         description = "",
@@ -62,6 +64,7 @@ export class Company {
     ) {
         this.id = uuidv4();
         this.name = name;
+        this.password = password;
         this.industry = industry;
         this.location = location;
         this.description = description;

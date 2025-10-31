@@ -36,5 +36,16 @@
     "createdAt": "2025-10-31T00:16:19.498Z",
     "updatedAt": "2025-10-31T00:34:13.971Z",
     "password": "test123"
+  },
+  {
+    "id": "9d549be8-952e-4f4e-b880-ec7e578aeb6b",
+    "name": "Test",
+    "email": "",
+    "password": "12345",
+    "location": "",
+    "experienceLevel": "",
+    "skills": [],
+    "createdAt": "2025-10-31T19:07:16.292Z",
+    "updatedAt": "2025-10-31T19:07:42.644Z"
   }
 ]

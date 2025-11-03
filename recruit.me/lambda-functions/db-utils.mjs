@@ -1,41 +1,30 @@
 import mysql from 'mysql';
 import { config } from './config.mjs';
 
-let pool;
 
-function getPool() {
-  if (!pool) {
-    pool = mysql.createPool({
-      host: config.host,
-      user: config.user,
-      password: config.password,
-      database: config.database,
-    });
-  }
-  return pool;
-}
+const pool = mysql.createPool({
+  host: config.host,
+  user: config.user,
+  password: config.password,
+  database: config.database,
+  connectionLimit: 5
+});
 
 // get a single connection (for transactions)
 export function getConnection() {
-  const pool = getPool();
   return new Promise((resolve, reject) => {
-    pool.getConnection((err, connection) => {
-      if (err) reject(err);
-      else resolve(connection);
+    pool.getConnection((err, conn) => {
+      if (err) return reject(err);
+      resolve(conn);
     });
   });
 }
 
-
 export function query(sql, params = []) {
-  const pool = getPool();
   return new Promise((resolve, reject) => {
-    pool.query(sql, params, (err, results) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(results);
-      }
+    pool.query(sql, params, (err, results) => {  
+      if (err) return reject(err);
+      resolve(results);
     });
   });
 }

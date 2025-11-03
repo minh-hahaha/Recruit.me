@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, cache } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type {Applicant} from "@/app/api/entities";
+
+const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
 
 
 type Application = {
@@ -93,9 +95,10 @@ function ApplicantProfileContent() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`/api/profileApplicants/${encodeURIComponent(aid)}`, {cache: "no-store"});
-        if (!res.ok) throw new Error(await res.text());
-        const a: Applicant = await res.json();
+        const response = await fetch(`${API_BASE_URL}/applicants/${encodeURIComponent(aid)}`,
+        { method: 'GET', cache: 'no-store' });
+        if (!response.ok) throw new Error(await response.text());
+        const a: Applicant = await response.json();
         
         if (!a) throw new Error("No applicant data found");
 

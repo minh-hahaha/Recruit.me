@@ -43,5 +43,3 @@ next-env.d.ts
 
 # temp data directory
 tempData/
-
-lambda-functions/config.mjs

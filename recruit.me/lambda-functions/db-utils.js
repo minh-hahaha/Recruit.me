@@ -1,12 +1,13 @@
 // connection utils for all Lambda functions to connect to the database
 
 const mysql = require('mysql2/promise');
+const config = require('./config.json');
 
 const connection = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database
 });
 
 let pool;

@@ -4,3 +4,4 @@ export const config = {
     "password" : "recruitme",
     "database" : "recruitme"
 }
+

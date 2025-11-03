@@ -1,13 +1,12 @@
-const { v4: uuidv4 } = require('uuid');
-const { query, getConnection, createResponse, handleError } = require('../shared/db-utils');
+import { v4 as uuidv4 } from 'uuid';
+import { query, getConnection, createResponse, handleError } from './db-utils.mjs';
 
-exports.handler = async (event) => {
-    try {
-
+export const handler = async (event) => {
+  try {
     const body = JSON.parse(event.body || '{}');
     const { title, description, companyId, positions, skills, status } = body;
 
-    // check inputs for all required fields
+    // Validate inputs
     if (!title || title.trim() === '') {
       return createResponse(400, { error: 'Title is required' });
     }
@@ -21,7 +20,6 @@ exports.handler = async (event) => {
     // Verify company exists
     const companySql = 'SELECT id FROM companies WHERE id = ?';
     const companies = await query(companySql, [companyId]);
-
     if (companies.length === 0) {
       return createResponse(400, { error: 'Invalid company ID' });
     }
@@ -29,50 +27,60 @@ exports.handler = async (event) => {
     const connection = await getConnection();
 
     try {
-        await connection.beginTransaction();
+      await query('START TRANSACTION');
 
-        // create job
+      const jobId = uuidv4();
+      const createdAt = new Date();
+      const jobStatus = status && ['Draft', 'Active', 'Closed'].includes(status)
+        ? status
+        : 'Draft';
 
-        const jobId = uuidv4();
-        const createdAt = new Date();
-        const jobStatus = status && ['Draft', 'Active', 'Closed'].includes(status) ? status : 'Draft';
+      // Insert job
+      const jobSql = `
+        INSERT INTO jobs (id, title, description, companyID, status, positions, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
+      await query(jobSql, [jobId, title, description, companyId, jobStatus, positions || 1, createdAt]);
 
+      // Insert skills if provided
+      if (skills && Array.isArray(skills) && skills.length > 0) {
+        for (const skill of skills) {
+          const skillName = typeof skill === 'string' ? skill : skill.name;
 
-        const jobSql = 'INSERT INTO jobs (id, title, description, companyId, status, positions, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        await connection.execute(jobSql, [
-            jobId,
-            title,
-            description,
-            companyId,
-            jobStatus,
-            positions || 1,
-            createdAt,
-            createdAt,
-          ]);
+          // Check if skill exists
+          const existingSkill = await query('SELECT id FROM skills WHERE name = ?', [skillName]);
+          let skillId;
 
-
-        // insert job skills if provided
-        if (skills && Array.isArray(skills) && skills.length > 0) {
-            const skillSql = 'INSERT INTO job_skills (id, job_id, name) VALUES (?, ?, ?)';
-            for (const skill of skills) {
-              const skillName = typeof skill === 'string' ? skill : skill.name;
-              await connection.execute(skillSql, [uuidv4(), jobId, skillName]);
-            }
+          if (existingSkill.length === 0) {
+            skillId = uuidv4();
+            await query('INSERT INTO skills (id, name) VALUES (?, ?)', [skillId, skillName]);
+          } else {
+            skillId = existingSkill[0].id;
           }
-    
-          await connection.commit();
-    
-          return createResponse(200, {
-            id: jobId,
-            createdAt: createdAt.toISOString(),
-          });
-        } catch (error) {
-          await connection.rollback();
-          throw error;
-        } finally {
-          connection.release();
+
+          // Link job and skill
+          await query(
+            'INSERT INTO job_skills (id, jobID, skillID) VALUES (?, ?, ?)',
+            [uuidv4(), jobId, skillId]
+          );
         }
+      }
+
+      await query('COMMIT');
+
+      return createResponse(200, {
+        id: jobId,
+        createdAt: createdAt.toISOString(),
+      });
+
     } catch (error) {
-    return handleError(error, 'Failed to create job');
+      await query('ROLLBACK');
+      throw error;
+    } finally {
+      connection.release();
     }
+
+  } catch (error) {
+    return handleError(error, 'Failed to create job');
+  }
 };

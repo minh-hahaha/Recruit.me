@@ -18,21 +18,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/loginApplicants", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name }),
-            });
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.error || "Login failed");
-            } else {
-                sessionStorage.setItem("applicantId", data.id);
-                router.push(`/applicant/profile?aid=${encodeURIComponent(data.id)}`);
-                setResult("Login successful! Redirecting to your profile...");
-            }
         } catch {
             setError("Something went wrong");
         } finally {

@@ -16,20 +16,7 @@ export default function RegisterPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/registerCompanies", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name }),
-            });
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.error || "Failed to register");
-            } else {
-                setResult(`Account created! ID: ${data.id}`);
-                setName("");
-            }
         } catch {
             setError("Something went wrong");
         } finally {

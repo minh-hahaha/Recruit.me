@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import type {Applicant, Skill} from "@/app/api/entities";
 
 
 function getInitials(fullName: string) {
@@ -15,7 +14,7 @@ function getInitials(fullName: string) {
 
 // Mock data
 
-const ALL_SKILLS: Skill[] = [
+const ALL_SKILLS = [
   { id: "s1", name: "React", level: "Intermediate" },
   { id: "s2", name: "JavaScript", level: "Intermediate" },
   { id: "s3", name: "TypeScript", level: "Intermediate" },
@@ -32,7 +31,7 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [data, setData] = useState<Applicant | null>(null);
+  const [data, setData] = useState< null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,38 +48,8 @@ export default function EditProfilePage() {
       setLoading(false);
       return;
     }
-    (async () => {
-      try {
-        const res = await fetch("/api/profileApplicants/reviewProfile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: aid }),
-        });
-        if (!res.ok) throw new Error(await res.text()); 
-        const a: Applicant & { skills?: { name: string }[] } = await res.json();
-
-        setName(a.name || "");
-        setEmail(a.email || "");
-        setPassword(a.password || "");
-        setLocation(a.location || "");
-        setExperienceLevel(a.experienceLevel || "");
-
-        const ids: string[] = [];
-        (a.skills || []).forEach((s) => {
-          const found = availableSkills.find((k) => k.name.toLowerCase() === s.name.toLowerCase());
-          if (found) ids.push(found.id);
-          else ids.push(`custom-${s.name.toLowerCase().replace(/\s+/g, "-")}`);
-        });
-        setSelectedSkillIds(ids);
-      } catch (e: any) {
-        console.error("Failed to load profile:", e?.message || e);
-        setError("Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-      })();
     }, [aid, availableSkills]);
-    
+
 
   const toggleSkill = (id: string) => {
     setSelectedSkillIds((prev) =>
@@ -97,7 +66,7 @@ export default function EditProfilePage() {
     setCustomSkill("");
   };
 
-  const selectedSkills: Skill[] = [
+  const selectedSkills = [
     ...availableSkills.filter((s) => selectedSkillIds.includes(s.id)),
     ...selectedSkillIds
       .filter((id) => id.startsWith("custom-"))
@@ -123,23 +92,7 @@ async function handleSubmit(e?: React.FormEvent) {
   const skillNames = selectedSkills.map((s) => s.name);
 
   try {
-    const res = await fetch("/api/profileApplicants/editProfile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: aid,
-        name,
-        email,
-        password,
-        location,
-        experienceLevel,
-        skills: skillNames,
-      }),
-    });
-    if (!res.ok) throw new Error(await res.text());
 
-    router.push(`/applicant/profile?aid=${encodeURIComponent(aid)}`);
-    router.refresh();
   } catch (e: any) {
     console.error("Failed to save profile:", e?.message || e);
     setError("Failed to save profile");
@@ -166,8 +119,8 @@ if (loading) {
           <p className="text-white/80">Update your profile information and skills</p>
         </div>
         <div className="flex items-center gap-3 mt-4 md:mt-0">
-          <button 
-            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10" 
+          <button
+            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10"
             onClick={() => router.push(`/applicant/profile?aid=${encodeURIComponent(aid)}`)}>
             Back to Dashboard
           </button>
@@ -208,19 +161,19 @@ if (loading) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <label className="flex flex-col">
             <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Name</span>
-            <input 
+            <input
               className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </label>
 
           <label className="flex flex-col">
             <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Email</span>
-            <input 
+            <input
               className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </label>
 
@@ -237,10 +190,10 @@ if (loading) {
 
           <label className="flex flex-col">
             <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Location</span>
-            <input 
+            <input
               className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              value={location} 
-              onChange={(e) => setLocation(e.target.value)} 
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
           </label>
 
@@ -293,9 +246,9 @@ if (loading) {
                 }
             }}
             />
-            <button 
-              type="button" 
-              className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800" 
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800"
               onClick={addCustomSkill}
             >
               Add
@@ -342,9 +295,9 @@ if (loading) {
         {/* Update / Cancel actions */}
         <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3 mt-8">
-          <button 
-            type="submit" 
-            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-full" 
+          <button
+            type="submit"
+            className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
             disabled={saving}
           >
             {saving ? "Saving..." : "Update Profile"}

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import type {Applicant} from "@/app/api/entities";
 
 
 type Application = {
@@ -70,7 +69,7 @@ export default function ApplicantProfilePage() {
   const params = useSearchParams();
   const router = useRouter();
   const aid = params.get("aid") || (typeof window !== "undefined" ? sessionStorage.getItem("applicantId") || "" : "");
-  const [data, setData] = useState<Applicant | null>(null);
+  const [data, setData] = useState< null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
@@ -89,28 +88,6 @@ export default function ApplicantProfilePage() {
       return;
     }
 
-    (async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch(`/api/profileApplicants/${encodeURIComponent(aid)}`, {cache: "no-store"});
-        if (!res.ok) throw new Error(await res.text());
-        const a: Applicant = await res.json();
-        
-        if (!a) throw new Error("No applicant data found");
-
-        setData(a);
-        setName(a.name || "");
-        setEmail(a.email || "");
-        setLocation(a.location || "");
-        setExperienceLevel(a.experienceLevel || "");
-      } catch (e: any) {
-        console.error("Failed to load applicant data:", e?.message || e);
-        setError(e?.message || "Failed to load applicant data");
-      } finally {
-        setLoading(false);
-      }
-    })();
   }, [aid]
 );  
 
@@ -119,7 +96,7 @@ export default function ApplicantProfilePage() {
     ["Applied", "Interview", "Offer"].includes(a.status)
   ).length;
   const offersCount = offers.length;
-  const skillCount = data?.skills.length ?? 0;
+  const skillCount = 0;
 
   const baseContainerClasses = "min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col gap-8 items-center";
 
@@ -153,7 +130,7 @@ export default function ApplicantProfilePage() {
     );
   }
 
-  const firstName = data.name?.split(" ")[0] || "User";
+  const firstName = "User";
 
   return (
     <div className={baseContainerClasses}>
@@ -217,10 +194,10 @@ export default function ApplicantProfilePage() {
             <div className="mt-2">
               <div className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Skills</div>
               <div className="flex flex-wrap gap-2">
-                {(data?.skills?.length ? data.skills : []).map((s) => (
-                  <span key={s.name} className="inline-flex items-center rounded-full px-3 py-1 text-sm border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100">{s.name}</span>
+                {([]).map((s) => (
+                  <span key={s} className="inline-flex items-center rounded-full px-3 py-1 text-sm border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100">{s}</span>
                 ))}
-                {!data?.skills?.length && <span className="text-sm text-zinc-600 dark:text-zinc-400">—</span>}
+                { <span className="text-sm text-zinc-600 dark:text-zinc-400">—</span>}
               </div>
             </div>
           </div>

@@ -22,51 +22,6 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
 
   useEffect(() => {
     if (!jobId) return;
-
-    // Fetch the job data
-    const fetchJob = async () => {
-      try {
-        // Get all jobs and find the one matching the ID
-        const response = await fetch('/api/jobs', {
-          method: 'GET',
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch jobs');
-        }
-
-        const jobs = await response.json();
-        const foundJob = jobs.find((j: any) => String(j.id) === String(jobId));
-
-        if (!foundJob) {
-          setError('Job not found');
-          setLoading(false);
-          return;
-        }
-
-        // Convert to Job format
-        const jobData: Job = {
-          id: foundJob.id,
-          title: foundJob.title,
-          description: foundJob.description,
-          companyID: foundJob.companyID,
-          status: foundJob.status as JobStatus,
-          positions: foundJob.positions || 1,
-          skills: foundJob.skills || [],
-          applicantCount: foundJob.applicantCount || 0,
-          hiredCount: foundJob.hiredCount || 0,
-        };
-
-        setJob(jobData);
-      } catch (err) {
-        console.error('Error fetching job:', err);
-        setError('Failed to load job data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchJob();
   }, [jobId]);
 
   const handleSubmit = async (data: Job) => {
@@ -79,28 +34,6 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
     setSubmitting(true);
 
     try {
-      const response = await fetch('/api/editJob', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: jobId,
-          title: data.title,
-          description: data.description,
-          positions: data.positions || 1,
-          skills: data.skills || [],
-          status: data.status,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        setError(result.error || 'Failed to update job');
-        setSubmitting(false);
-        return;
-      }
 
       // After successful update, redirect to the company profile
       router.push('/company/profile');

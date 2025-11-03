@@ -32,28 +32,6 @@ export default function CreateJobPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/createJob', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: data.title,
-          description: data.description,
-          companyId: companyId,
-          positions: data.positions || 1,
-          skills: data.skills || [],
-          status: data.status,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        setError(result.error || 'Failed to create job');
-        setLoading(false);
-        return;
-      }
 
       // After successful creation, redirect to the company profile
       router.push('/company/profile');

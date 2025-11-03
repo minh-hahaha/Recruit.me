@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginPage() {
@@ -19,21 +19,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/loginCompanies", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name }),
-            });
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.error || "Login failed");
-            } else {
-                sessionStorage.setItem("companyId", data.id);
-                router.push(`/company/profile?cid=${encodeURIComponent(data.id)}`);
-                setResult("Login successful! Redirecting to your profile...");
-            }
         } catch {
             setError("Something went wrong");
         } finally {

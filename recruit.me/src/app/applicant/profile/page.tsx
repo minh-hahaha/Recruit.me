@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type {Applicant} from "@/app/api/entities";
 
@@ -66,7 +66,7 @@ function getInitials(fullName: string) {
 }
 
 
-export default function ApplicantProfilePage() {
+function ApplicantProfileContent() {
   const params = useSearchParams();
   const router = useRouter();
   const aid = params.get("aid") || (typeof window !== "undefined" ? sessionStorage.getItem("applicantId") || "" : "");
@@ -321,6 +321,14 @@ export default function ApplicantProfilePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ApplicantProfilePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex items-center justify-center">Loading...</div>}>
+      <ApplicantProfileContent />
+    </Suspense>
   );
 }
 

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { type Job, JobStatus } from '../../types';
 import { useState, useEffect } from 'react';
 
+const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
+
 export default function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [jobId, setJobId] = useState<string | null>(null);
@@ -27,7 +29,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
     const fetchJob = async () => {
       try {
         // Get all jobs and find the one matching the ID
-        const response = await fetch('/api/jobs', {
+        const response = await fetch(`${API_BASE_URL}/job/getJob`, {
           method: 'GET',
         });
 
@@ -79,7 +81,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
     setSubmitting(true);
 
     try {
-      const response = await fetch('/api/editJob', {
+      const response = await fetch(`${API_BASE_URL}/job/editJob`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

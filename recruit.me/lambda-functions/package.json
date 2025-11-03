@@ -1,0 +1,15 @@
+{
+    "name": "recruitme-lambda-functions",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Lambda functions for Recruit.Me backend",
+    "dependencies": {
+        "mysql": "^2.18.1",
+        "uuid": "^9.0.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+}

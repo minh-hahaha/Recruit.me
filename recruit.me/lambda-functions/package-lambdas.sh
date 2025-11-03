@@ -7,6 +7,10 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
+# Ensure output directory exists
+OUTPUT_DIR="Zip Files"
+mkdir -p "$OUTPUT_DIR"
+
 # Install dependencies first
 echo "Installing npm dependencies..."
 npm install 
@@ -26,6 +30,10 @@ for folder in */; do
     if [[ "$folder_name" == "node_modules" ]]; then
         continue
     fi
+    # Skip output directory
+    if [[ "$folder_name" == "$OUTPUT_DIR" ]]; then
+        continue
+    fi
     
     # Skip if folder doesn't exist
     if [ ! -d "$folder_name" ]; then
@@ -43,27 +51,28 @@ for folder in */; do
     
     # Create zip file name
     zip_name="${folder_name}.zip"
+    zip_path="${OUTPUT_DIR}/${zip_name}"
     
     # Remove existing zip if it exists
-    if [ -f "$zip_name" ]; then
-        echo "Deleting existing $zip_name..."
-        rm "$zip_name"
+    if [ -f "$zip_path" ]; then
+        echo "Deleting existing $zip_path..."
+        rm "$zip_path"
     fi
     
     # Create zip with all files at root level (using -j flag to junk paths)
     echo "Packaging $folder_name..."
     # Add JS files, config, db-utils, and package.json at root level
-    zip -j "$zip_name" $js_files config.mjs db-utils.mjs package.json
+    zip -j "$zip_path" $js_files config.mjs db-utils.mjs package.json
     
     # Add node_modules with directory structure (if it exists)
     if [ -d "node_modules" ]; then
-        zip -r "$zip_name" node_modules/
+        zip -r "$zip_path" node_modules/
     fi
     
     if [ $? -eq 0 ]; then
-        echo "✓ Created $zip_name"
+        echo "✓ Created $zip_path"
     else
-        echo "✗ Failed to create $zip_name"
+        echo "✗ Failed to create $zip_path"
     fi
 done
 

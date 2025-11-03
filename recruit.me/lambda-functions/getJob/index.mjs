@@ -1,6 +1,6 @@
-const { query, createResponse, handleError } = require('./db-utils.js');
+import { query, createResponse, handleError } from './db-utils.mjs';
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
     try {
         const jobsSql = "SELECT * FROM jobs order by createdAt desc";
         const jobs = await query(jobsSql);
@@ -9,21 +9,21 @@ exports.handler = async (event) => {
 
         const jobsWithSkills = await Promise.all(
             jobs.map(async (job) => {
-                const skillsSql = "SELECT skill_id FROM job_skills WHERE job_id = ?";
+                const skillsSql = "SELECT skillID FROM job_skills WHERE jobID = ?";
                 const skills = await query(skillsSql, [job.id]);
 
                 return {
                     id: job.id,
                     title: job.title,
                     description: job.description,
-                    companyID: job.company_id,
+                    companyID: job.companyID,
                     status: job.status,
                     positions: job.positions || 1,
                     skills: skills.map(s => ({ name: s.name })),
-                    applicantCount: job.applicant_count || 0,
-                    hiredCount: job.hired_count || 0,
-                    createdAt: job.created_at,
-                    updatedAt: job.updated_at,
+                    applicantCount: job.applicantCount || 0,
+                    hiredCount: job.hiredCount || 0,
+                    createdAt: job.createdAt,
+                    updatedAt: job.updatedAt,
                 }}
             )
         );

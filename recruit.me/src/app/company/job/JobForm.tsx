@@ -13,7 +13,6 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
-    companyID: initialData?.companyID || '',
     status: initialData?.status || JobStatus.Draft,
     positions: initialData?.positions || 1,
     skills: initialData?.skills || [],

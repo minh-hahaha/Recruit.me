@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { type Job } from '../types';
 import { useState, useEffect } from 'react';
 
+ const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
+
 export default function CreateJobPage() {
   const router = useRouter();
   const [companyId, setCompanyId] = useState<string | null>(null);
@@ -28,11 +30,15 @@ export default function CreateJobPage() {
       return;
     }
 
+
     setError(null);
     setLoading(true);
 
     try {
-      const response = await fetch('/api/createJob', {
+      console.log(data);
+      console.log(companyId);
+
+      const response = await fetch(`${API_BASE_URL}/job/createJob`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +56,7 @@ export default function CreateJobPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.error || 'Failed to create job');
+        setError((result && (result.error || result.message)) || `Failed to create job (status ${response.status})`);
         setLoading(false);
         return;
       }

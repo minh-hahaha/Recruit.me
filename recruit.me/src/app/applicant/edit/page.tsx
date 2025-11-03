@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type {Applicant, Skill} from "@/app/api/entities";
 
@@ -11,6 +11,14 @@ function getInitials(fullName: string) {
   const first = parts[0]?.[0] ?? "";
   const last = parts.length > 1 ? parts[parts.length - 1][0] ?? "" : "";
   return (first + last).toUpperCase();
+}
+
+export default function EditProfilePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex items-center justify-center">Loading...</div>}>
+      <EditProfileContent />
+    </Suspense>
+  );
 }
 
 // Mock data
@@ -24,7 +32,7 @@ const ALL_SKILLS: Skill[] = [
   { id: "s6", name: "AWS", level: "Intermediate" },
 ];
 
-export default function EditProfilePage() {
+function EditProfileContent() {
   const router = useRouter();
   const params = useSearchParams();
   const aid = params.get("aid") || (typeof window !== "undefined" ? sessionStorage.getItem("applicantId") || "" : "");
@@ -148,6 +156,8 @@ async function handleSubmit(e?: React.FormEvent) {
   }
 }
 
+ 
+
 if (loading) {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col gap-8 items-center">
@@ -155,6 +165,8 @@ if (loading) {
     </div>
   );
 }
+
+ 
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col gap-8 items-center">

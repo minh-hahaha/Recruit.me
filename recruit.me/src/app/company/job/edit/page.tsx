@@ -3,11 +3,19 @@
 import { JobForm } from '../JobForm';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { type Job, JobStatus } from '../types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 
 const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
 export default function EditJobPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex items-center justify-center">Loading...</div>}>
+      <EditJobContent />
+    </Suspense>
+  );
+}
+
+function EditJobContent() {
   const params = useSearchParams();
   const router = useRouter();
   const jobId = params.get("jid") || (typeof window !== "undefined" ? sessionStorage.getItem("jobId") || "" : "");

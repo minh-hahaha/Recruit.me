@@ -9,7 +9,13 @@ export const handler = async (event) => {
 
         const jobsWithSkills = await Promise.all(
             jobs.map(async (job) => {
-                const skillsSql = "SELECT skillID FROM job_skills WHERE jobID = ?";
+                // Join with skills table to get skill names
+                const skillsSql = `
+                    SELECT s.name 
+                    FROM job_skills js
+                    INNER JOIN skills s ON js.skillID = s.id
+                    WHERE js.jobID = ?
+                `;
                 const skills = await query(skillsSql, [job.id]);
 
                 return {

@@ -50,18 +50,21 @@ function EditProfileContent() {
     (async () => {
       setLoading(true);
       try {
+        console.log("Fetching applicant from:", `${API_BASE_URL}/applicant/review`);
         const [appRes, skillsRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/applicants/reviewApplicant`, {
+          fetch(`${API_BASE_URL}/applicant/review`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           cache: "no-store",
           body: JSON.stringify({ id: aid }),
         }),
-        fetch(`${API_BASE_URL}/applicants/listSkills`, {
+        fetch(`${API_BASE_URL}/applicant/listSkills`, {
           method: "GET",
           cache: "no-store",
         }),
         ]);
+
+
 
         if (!appRes.ok) throw new Error(await appRes.text());
         if (!skillsRes.ok) throw new Error(await skillsRes.text());
@@ -114,7 +117,7 @@ async function handleSubmit(e?: React.FormEvent) {
 
 
   try {
-    const res = await fetch(`${API_BASE_URL}/applicants/editApplicant`, {
+    const res = await fetch(`${API_BASE_URL}/applicant/edit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

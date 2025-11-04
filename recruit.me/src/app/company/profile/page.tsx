@@ -1,17 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import type {Company} from "@/app/api/entities";
-import {Job, JobStatus} from "@/app/api/entities";
+import {Job} from "@/app/api/entities";
 
+const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
 
-
-const MOCK_JOBS: Job[] = [
-  { id: "j1", title: "Frontend Engineer", description: "Make the website", status: JobStatus.Active, companyID: "HELP", positions: 3, applicantCount: 10, hiredCount: 1, createdAt: new Date(), updatedAt: new Date()},
-  { id: "j2", title: "Backend Engineer", description: "Make the databases", status: JobStatus.Draft, companyID: "HELP", positions: 1, applicantCount: 2, hiredCount: 0, createdAt: new Date(), updatedAt: new Date()},
-];
 
 export default function CompanyProfilePage() {
   const params = useSearchParams();
@@ -20,20 +16,40 @@ export default function CompanyProfilePage() {
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [jobs] = useState<Job[]>(MOCK_JOBS);
+  const [jobs, setJobs] = useState<Job[]>([])
 
   useEffect(() => {
+    if (!cid) {
+      setError("No company id provided");
+      setLoading(false);
+      return;
+    }
+
     (async () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`/api/profileCompanies/${encodeURIComponent(cid)}`, {cache: "no-store"});
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          throw new Error(body?.error || `API error ${res.status}`);
+        const companyRes = await fetch(`${API_BASE_URL}/api/profileCompanies/${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
+        const companyText = await companyRes.text();
+        let companyBody: any;
+        try { companyBody = companyText ? JSON.parse(companyText) : {}; } catch { companyBody = { raw: companyText }; }
+        if (!companyRes.ok) throw new Error(companyBody?.error || companyBody?.raw || `API error ${companyRes.status}`);
+        setCompany(companyBody as Company);
+
+        try {
+          const jobsRes = await fetch(`${API_BASE_URL}/job/getJob`, { method: 'GET', cache: "no-store" });
+          if (!jobsRes.ok) {
+            console.warn("jobs endpoint returned", jobsRes.status);
+            setJobs([]);
+          } else {
+            const allJobs = await jobsRes.json();
+            const companyJobs = Array.isArray(allJobs) ? allJobs.filter((j: any) => String(j.companyID) === String(cid)) : [];
+            setJobs(companyJobs);
+          }
+        } catch (jobErr) {
+          console.error("Failed to fetch jobs:", jobErr);
+          setJobs([]);
         }
-        const data: Company = await res.json();
-        setCompany(data);
       } catch (e: any) {
         console.error("Failed to load company:", e);
         setError(e?.message || "Failed to load company");
@@ -41,7 +57,7 @@ export default function CompanyProfilePage() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [cid]);
 
   const totalJobs = jobs.length;
   const activeJobs = jobs.filter((j) => j.status === "Active").length;

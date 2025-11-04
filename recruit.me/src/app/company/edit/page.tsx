@@ -13,6 +13,8 @@ type FormState = {
   password?: string;
 };
 
+const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
+
 export default function CompanyEditPage() {
   const params = useSearchParams();
   const router = useRouter();
@@ -41,7 +43,7 @@ export default function CompanyEditPage() {
 
     (async () => {
       try {
-        const res = await fetch(`/api/profileCompanies/${encodeURIComponent(cid)}`, { cache: "no-store" });
+        const res = await fetch(`${API_BASE_URL}/api/profileCompanies/${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
           throw new Error(body?.error || `Failed to load company (${res.status})`);
@@ -77,7 +79,7 @@ export default function CompanyEditPage() {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`/api/profileCompanies/${encodeURIComponent(cid)}`, {
+      const res = await fetch(`${API_BASE_URL}/api/profileCompanies/${encodeURIComponent(cid)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

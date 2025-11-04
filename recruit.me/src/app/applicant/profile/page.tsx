@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense, cache } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type {Applicant} from "@/app/api/entities";
 
-const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
+const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
 
 type Application = {

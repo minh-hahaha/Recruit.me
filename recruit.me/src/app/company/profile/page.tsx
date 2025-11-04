@@ -66,7 +66,7 @@ export default function CompanyProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-8">
-        <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-100 dark:border-zinc-800 text-center">
+        <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-100 dark:border-zinc-800 text-center text-zinc-900 dark:text-white">
           Loading company...
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function CompanyProfilePage() {
           <h2 className="text-xl font-semibold text-red-600 mb-4">Error</h2>
           <div className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">{error}</div>
           <div className="flex justify-center gap-3">
-            <button onClick={() => router.refresh()} className="px-4 py-2 border rounded">Retry</button>
+            <button onClick={() => router.refresh()} className="px-4 py-2 border rounded dark: border-zinc-600 dark: text-white">Retry</button>
             <Link href="/"><button className="px-4 py-2 border rounded">Home</button></Link>
           </div>
         </div>
@@ -99,16 +99,16 @@ export default function CompanyProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4">
+    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 text-zinc-900 dark:text-white py-10 px-4">
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-semibold">{company.name}</h1>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">{company.industry || "—"} • {company.location || "—"}</p>
+            <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white">{company.name}</h1>
+            <p className="text-sm text-zinc-600 dark:text-zinc-300">{company.industry || "—"} • {company.location || "—"}</p>
           </div>
           <div className="flex gap-3">
             <Link href={`/company/edit?cid=${company.id}`}>
-              <button className="inline-flex items-center px-4 py-2 rounded-lg border bg-transparent">Edit Profile</button>
+              <button className="inline-flex items-center px-4 py-2 rounded-lg border bg-transparent dark:border-zinc-600 dark:text-white">Edit Profile</button>
             </Link>
           </div>
         </div>
@@ -126,7 +126,8 @@ export default function CompanyProfilePage() {
           {/* Left: Overview + Jobs */}
           <div className="space-y-6">
             <section className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
-              <h2 className="text-xl font-semibold mb-3">About {company.name}</h2>
+              <h2 className="text-xl font-semibold mb-3 text-zinc-900 dark:text-white">About {company.name}</h2>
+             
               <p className="text-zinc-700 dark:text-zinc-300">{company.description || <em>No description provided.</em>}</p>
               {company.website && (
                 <p className="mt-3 text-sm">
@@ -137,14 +138,17 @@ export default function CompanyProfilePage() {
 
             <section className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">Jobs</h3>
+                <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Jobs</h3>
+         
               </div>
               <div className="space-y-3">
                 {jobs.map((j) => (
                   <div key={j.id} className="flex items-center justify-between p-3 rounded-lg border border-zinc-100 dark:border-zinc-800">
                     <div>
-                      <div className="font-medium">{j.title}</div>
-                      <div className="text-sm text-zinc-600">{j.createdAt.toString()} • {j.applicantCount} applicants</div>
+
+                      <div className="font-medium text-zinc-900 dark:text-white">{j.title}</div>
+                      <div className="text-sm text-zinc-600 dark:text_zinc-400">{j.createdAt.toString()} • {j.applicantCount} applicants</div>
+                
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-1 rounded-full text-xs ${j.status === "Active" ? "bg-green-100 text-green-800" : j.status === "Draft" ? "bg-zinc-100 text-zinc-800" : "bg-red-100 text-red-800"}`}>
@@ -172,7 +176,8 @@ export default function CompanyProfilePage() {
           {/* Right: Quick Actions */}
           <aside className="space-y-6">
             <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
-              <h4 className="text-lg font-semibold mb-2">Actions</h4>
+              <h4 className="text-lg font-semibold mb-2 text-zinc-900 dark:text-white">Actions</h4>
+    
               <div className="flex flex-col gap-3">
                 <Link href="/company/job/create"><button className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white">Create Job</button></Link>
                 <Link href={`/company/edit?cid=${company.id}`}><button className="w-full px-3 py-2 rounded-lg border">Edit Profile</button></Link>
@@ -180,8 +185,9 @@ export default function CompanyProfilePage() {
             </div>
 
             <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
-              <h4 className="text-lg font-semibold mb-2">Contact</h4>
-              <p className="text-sm text-zinc-600">{company.website ? <a href={company.website} target="_blank" rel="noreferrer">{company.website}</a> : "No contact info"}</p>
+
+              <h4 className="text-lg font-semibold mb-2 text-zinc-900 dark:text-white">Contact</h4>
+              <p className="text-sm text-zinc-600 dark:text-zinc-300">{company.website ? <a href={company.website} target="_blank" rel="noreferrer">{company.website}</a> : "No contact info"}</p>
             </div>
           </aside>
         </div>
@@ -194,7 +200,7 @@ export default function CompanyProfilePage() {
 function Metric({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-zinc-100 dark:border-zinc-800 text-center shadow-sm">
-      <div className="text-2xl font-semibold mb-1 text-black dark:text-zinc-50">{value}</div>
+      <div className="text-2xl font-semibold mb-1 text-black dark:text-zinc-900 dark:text-white">{value}</div>
       <div className="text-sm text-zinc-600 dark:text-zinc-400">{label}</div>
     </div>
   );

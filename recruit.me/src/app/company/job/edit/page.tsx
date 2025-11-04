@@ -1,30 +1,29 @@
-// This file is not currently used but will be in the future when [id] is figured out.
-// Please see job/edit/page.tsx for now
 'use client'
 
-import { JobForm } from '../../JobForm';
-import { useRouter } from 'next/navigation';
-import { type Job, JobStatus } from '../../types';
+import { JobForm } from '../JobForm';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { type Job, JobStatus } from '../types';
 import { useState, useEffect } from 'react';
 
 const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
-export default function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditJobPage() {
+  const params = useSearchParams();
   const router = useRouter();
-  const [jobId, setJobId] = useState<string | null>(null);
+  const jobId = params.get("jid") || (typeof window !== "undefined" ? sessionStorage.getItem("jobId") || "" : "");
+  // const [jobId, setJobId] = useState<string | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
+  // useEffect(() => {
     // Resolve params promise
-    params.then((resolvedParams) => {
+/*     params.then((resolvedParams) => {
       setJobId(resolvedParams.id);
     });
-  }, [params]);
-
-  useEffect(() => {
+  }, [params]); */
+   useEffect(() => {
     if (!jobId) return;
 
     // Fetch the job data

@@ -32,8 +32,7 @@ export default function RegisterPage() {
                 setError(data.error || "Failed to register");
             } else {
                 sessionStorage.setItem("applicantId", body.id);
-                router.push(`/applicant/profile?aid=${encodeURIComponent(body.id)}`);
-                setResult(`Account created! ID: ${body.id}`);
+                router.push(`/applicant/login`);
                 setName("");
             }
         } catch {

@@ -32,8 +32,7 @@ export default function RegisterPage() {
                 setError(data.error || "Failed to register");
             } else {
                 sessionStorage.setItem("companyId", body.id);
-                router.push(`/company/profile?cid=${encodeURIComponent(body.id)}`);
-                setResult(`Company created! ID: ${body.id}`);
+                router.push(`/company/login`);
                 setName("");
             }
         } catch {

@@ -95,7 +95,7 @@ function ApplicantProfileContent() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${API_BASE_URL}/applicants/${encodeURIComponent(aid)}`,
+        const response = await fetch(`${API_BASE_URL}/applicant/${encodeURIComponent(aid)}`,
         { method: 'GET', cache: 'no-store' });
         if (!response.ok) throw new Error(await response.text());
         const a: Applicant = await response.json();

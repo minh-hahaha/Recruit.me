@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import type {Company} from "@/app/api/entities";
@@ -8,8 +8,14 @@ import {Job} from "@/app/api/entities";
 
 const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
-
 export default function CompanyProfilePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex items-center justify-center">Loading...</div>}>
+      <CompanyProfileContent />
+    </Suspense>
+  );
+}
+function CompanyProfileContent() {
   const params = useSearchParams();
   const router = useRouter();
   const cid = params.get("cid") || (typeof window !== "undefined" ? sessionStorage.getItem("companyId") || "" : "");

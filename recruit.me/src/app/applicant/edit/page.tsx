@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type {Applicant, Skill} from "@/app/api/entities";
 
+const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
+
 
 function getInitials(fullName: string) {
   if (!fullName) return "";
@@ -21,17 +23,6 @@ export default function EditProfilePage() {
   );
 }
 
-// Mock data
-
-const ALL_SKILLS: Skill[] = [
-  { id: "s1", name: "React", level: "Intermediate" },
-  { id: "s2", name: "JavaScript", level: "Intermediate" },
-  { id: "s3", name: "TypeScript", level: "Intermediate" },
-  { id: "s4", name: "Node.js", level: "Intermediate" },
-  { id: "s5", name: "SQL", level: "Intermediate" },
-  { id: "s6", name: "AWS", level: "Intermediate" },
-];
-
 function EditProfileContent() {
   const router = useRouter();
   const params = useSearchParams();
@@ -40,16 +31,15 @@ function EditProfileContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [data, setData] = useState<Applicant | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [location, setLocation] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
-  const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]);
+  const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
+  const [selectedSkillNames, setSelectedSkillNames] = useState<string[]>([]);
   const [customSkill, setCustomSkill] = useState("");
 
-  const availableSkills = useMemo(() => ALL_SKILLS, []);
 
   useEffect(() => {
     if (!aid) {
@@ -58,28 +48,35 @@ function EditProfileContent() {
       return;
     }
     (async () => {
+      setLoading(true);
       try {
-        const res = await fetch("/api/profileApplicants/reviewProfile", {
+        const [appRes, skillsRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/applicants/reviewApplicant`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          cache: "no-store",
           body: JSON.stringify({ id: aid }),
-        });
-        if (!res.ok) throw new Error(await res.text()); 
-        const a: Applicant & { skills?: { name: string }[] } = await res.json();
+        }),
+        fetch(`${API_BASE_URL}/applicants/listSkills`, {
+          method: "GET",
+          cache: "no-store",
+        }),
+        ]);
 
+        if (!appRes.ok) throw new Error(await appRes.text());
+        if (!skillsRes.ok) throw new Error(await skillsRes.text());
+
+        const a: Applicant & { skills?: { name: string }[] } = await appRes.json();
+        const skillsList: Skill[] = await skillsRes.json();
+
+        setAvailableSkills(skillsList);
         setName(a.name || "");
         setEmail(a.email || "");
         setPassword(a.password || "");
         setLocation(a.location || "");
         setExperienceLevel(a.experienceLevel || "");
+        setSelectedSkillNames(a.skills?.map((s) => s.name) || []);
 
-        const ids: string[] = [];
-        (a.skills || []).forEach((s) => {
-          const found = availableSkills.find((k) => k.name.toLowerCase() === s.name.toLowerCase());
-          if (found) ids.push(found.id);
-          else ids.push(`custom-${s.name.toLowerCase().replace(/\s+/g, "-")}`);
-        });
-        setSelectedSkillIds(ids);
       } catch (e: any) {
         console.error("Failed to load profile:", e?.message || e);
         setError("Failed to load profile");
@@ -87,37 +84,24 @@ function EditProfileContent() {
         setLoading(false);
       }
       })();
-    }, [aid, availableSkills]);
-    
+    }, [aid]);
 
-  const toggleSkill = (id: string) => {
-    setSelectedSkillIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
+    const addSkill = (name: string) => {
+    const clean = name.trim();
+    if (!clean || selectedSkillNames.includes(clean)) return;
+    setSelectedSkillNames([...selectedSkillNames, clean]);
   };
 
-  const addCustomSkill = () => {
-    const trimmed = customSkill.trim();
-    if (!trimmed) return;
-    const id = `custom-${trimmed.toLowerCase().replace(/\s+/g, "-")}`;
-    if (selectedSkillIds.includes(id)) return;
-    setSelectedSkillIds([...selectedSkillIds, id]);
-    setCustomSkill("");
+    const removeSkill = (name: string) => {
+    setSelectedSkillNames(selectedSkillNames.filter((s) => s !== name));
   };
 
-  const selectedSkills: Skill[] = [
-    ...availableSkills.filter((s) => selectedSkillIds.includes(s.id)),
-    ...selectedSkillIds
-      .filter((id) => id.startsWith("custom-"))
-      .map((id) => ({
-        id,
-        name: id.replace(/^custom-/, "").replace(/-/g, " "),
-        level: "Beginner",
-      })),
-  ];
-
-  const removeSkill = (id: string) =>
-    setSelectedSkillIds((prev) => prev.filter((x) => x !== id));
+   const addCustomSkill = () => {
+    if (customSkill.trim()) {
+      addSkill(customSkill.trim());
+      setCustomSkill("");
+    }
+  };
 
 async function handleSubmit(e?: React.FormEvent) {
   e?.preventDefault();
@@ -128,10 +112,9 @@ async function handleSubmit(e?: React.FormEvent) {
   setSaving(true);
   setError("");
 
-  const skillNames = selectedSkills.map((s) => s.name);
 
   try {
-    const res = await fetch("/api/profileApplicants/editProfile", {
+    const res = await fetch(`${API_BASE_URL}/applicants/editApplicant`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -141,11 +124,10 @@ async function handleSubmit(e?: React.FormEvent) {
         password,
         location,
         experienceLevel,
-        skills: skillNames,
+        skills: selectedSkillNames,
       }),
     });
     if (!res.ok) throw new Error(await res.text());
-
     router.push(`/applicant/profile?aid=${encodeURIComponent(aid)}`);
     router.refresh();
   } catch (e: any) {
@@ -272,15 +254,15 @@ if (loading) {
 
         {/* Selected skills */}
         <div className="flex flex-wrap gap-2 w-full mb-3">
-            {selectedSkills.length ? (
-            selectedSkills.map((s) => (
-                <span key={s.id} className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm border bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-zinc-800 dark:text-zinc-100">
-                {s.name}
+            {selectedSkillNames.length ? (
+            selectedSkillNames.map((s) => (
+                <span key={s} className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm border bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-zinc-800 dark:text-zinc-100">
+                {s}
                 <button
                     type="button"
-                    aria-label={`Remove ${s.name}`}
+                    aria-label={`Remove ${s}`}
                     className="-mr-1 inline-flex items-center justify-center h-5 w-5 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-300 dark:hover:bg-zinc-600 transition"
-                    onClick={() => removeSkill(s.id)}
+                    onClick={() => removeSkill(s)}
                 >
                     ×
                 </button>
@@ -315,41 +297,35 @@ if (loading) {
         </div>
 
         {/* Available skills (addable chips) */}
-        <div className="flex flex-wrap gap-2 w-full">
-            {availableSkills.map((s) => {
-            const already = selectedSkillIds.includes(s.id);
+       <div className="flex flex-wrap gap-2 w-full">
+          {availableSkills.map((s) => {
+            const already = selectedSkillNames
+              .some(n => n.toLowerCase() === s.name.toLowerCase());
+
             return (
-                <button
+              <button
                 key={s.id}
                 type="button"
-                className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition cursor-pointer ${
-                  already ? "opacity-50 cursor-not-allowed hover:bg-white dark:hover:bg-zinc-900" : ""
-                }`}
-                onClick={() => {
-                    if (!already) setSelectedSkillIds((prev) => [...prev, s.id]);
-                }}
+                className={`px-3 py-1 rounded-full border text-sm transition ${
+                  already
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                } 
+                bg-white dark:bg-zinc-900 
+                text-zinc-800 dark:text-white 
+                border-zinc-300 dark:border-zinc-600`}
+                onClick={() => addSkill(s.name)}          
+                disabled={already}                       
                 aria-label={already ? `${s.name} already added` : `Add ${s.name}`}
                 title={already ? "Already added" : "Add"}
-                >
-                <span className="leading-none">{s.name}</span>
-                {!already && (
-                    <svg
-                    aria-hidden
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="16"
-                    height="16"
-                    className="shrink-0"
-                    >
-                    <path d="M11 11V6h2v5h5v2h-5v5h-2v-5H6v-2h5z" />
-                    </svg>
-                )}
-                </button>
+              >
+                {s.name}
+              </button>
             );
-            })}
+          })}
         </div>
-        </div>
-
+      </div>
+                
 
         {/* Update / Cancel actions */}
         <form onSubmit={handleSubmit}>

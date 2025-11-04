@@ -24,10 +24,12 @@ export default function RegisterPage() {
 
             const data = await res.json();
 
+            const body = JSON.parse(data.body);
+
             if (!res.ok) {
                 setError(data.error || "Failed to register");
             } else {
-                setResult(`Account created! ID: ${data.id}`);
+                setResult(`Account created! ID: ${body.id}`);
                 setName("");
             }
         } catch {

@@ -26,12 +26,14 @@ export default function RegisterPage() {
 
             const data = await res.json();
 
+            const body = JSON.parse(data.body);
+
             if (!res.ok) {
                 setError(data.error || "Failed to register");
             } else {
-                sessionStorage.setItem("applicantId", data.id);
-                router.push(`/applicant/profile?aid=${encodeURIComponent(data.id)}`);
-                setResult(`Account created! ID: ${data.id}`);
+                sessionStorage.setItem("applicantId", body.id);
+                router.push(`/applicant/profile?aid=${encodeURIComponent(body.id)}`);
+                setResult(`Account created! ID: ${body.id}`);
                 setName("");
             }
         } catch {

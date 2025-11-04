@@ -43,7 +43,8 @@ export default function CompanyEditPage() {
 
     (async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/company/getCompany/${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
+        console.log(cid);
+        const res = await fetch(`${API_BASE_URL}/company/getCompany/?id=${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
           throw new Error(body?.error || `Failed to load company (${res.status})`);
@@ -79,7 +80,7 @@ export default function CompanyEditPage() {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/company/editCompany/${encodeURIComponent(cid)}`, {
+      const res = await fetch(`${API_BASE_URL}/company/editCompany/?id=${encodeURIComponent(cid)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

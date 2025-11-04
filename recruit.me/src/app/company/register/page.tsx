@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function RegisterPage() {
@@ -8,6 +9,7 @@ export default function RegisterPage() {
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -29,7 +31,9 @@ export default function RegisterPage() {
             if (!res.ok) {
                 setError(data.error || "Failed to register");
             } else {
-                setResult(`Account created! ID: ${body.id}`);
+                sessionStorage.setItem("companyId", body.id);
+                router.push(`/company/profile?cid=${encodeURIComponent(body.id)}`);
+                setResult(`Company created! ID: ${body.id}`);
                 setName("");
             }
         } catch {

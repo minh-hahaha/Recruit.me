@@ -1,30 +1,29 @@
 // index.js
-import { query, getConnection, createRepsonse, handleError}from './db-utils.mjs';
+import { query, getConnection, createResponse, handleError} from './db-utils.mjs';
 
 export const handler = async (event) => {
   const applicantId = event.pathParameters?.id;
   if (!applicantId) {
     return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Missing applicant ID in path' }),
+      statusCode: (400, { error: 'Missing applicant ID in path' }),
     };
   }
 
   const connection = await getConnection();
 
   try {
-    const applicants = await query(
-      `SELECT id, name, email, location, experience_level
+    const applicant = await query(
+      `SELECT id, name, email, location, password, experienceLevel
        FROM applicants
        WHERE id = ?`,
       [String(applicantId)]
     );
 
-    if (applicants.length === 0) {
-      return json(404, { error: 'Applicant not found' });
+    if (applicant.length === 0) {
+      return createResponse(404, { error: 'Applicant not found' });
     }
 
-    const a = applicants[0];
+    const a = applicant[0];
 
 
     // Query skills linked to this applicant
@@ -44,7 +43,7 @@ export const handler = async (event) => {
       password: a.password ?? "",
       email: a.email ?? "",
       location: a.location ?? "",
-      experienceLevel: a.experience_level ?? "",
+      experienceLevel: a.experienceLevel ?? "",
       skills: skills.map(r => ({ name: r.name, level: r.level ?? null })),
     });
 

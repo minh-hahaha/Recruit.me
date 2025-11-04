@@ -1,5 +1,5 @@
 
-import { query, getConnection, createRepsonse, handleError}from './db-utils.mjs';
+import { query, getConnection, createResponse, handleError}from './db-utils.mjs';
 
 export const handler = async (event) => {
   try {
@@ -17,7 +17,7 @@ export const handler = async (event) => {
     await exec("START TRANSACTION");
 
     // Ensure applicant exists
-    const exists = await conn.execute(
+    const exists = await exec(
       `SELECT id FROM applicants WHERE id = ?`,
       [String(applicantId)]
     );
@@ -43,24 +43,22 @@ export const handler = async (event) => {
 
    // Handle skills update if provided
     if (Array.isArray(body.skills)) {
-      const names = body.skills
-        .map(s => typeof s === "string" ? s : s?.name)
-        .filter(Boolean);
+      const names = [... new Set(
+        body.skills.map(s => typeof s === "string" ? s : s?.name).filter(Boolean))];
 
     
-      await conn.execute(
-        `DELETE FROM applicant_skills WHERE applicantID = ?`,
-        [String(applicantId)]
+      await exec(
+        `DELETE FROM applicant_skills WHERE applicantID = ?`,[String(applicantId)]
       );
 
      
       for (const name of names) {
-        const [got] = await exec(`SELECT id FROM skills WHERE name = ? LIMIT 1`, [name]);
+        const got = await exec(`SELECT id FROM skills WHERE name = ? LIMIT 1`, [name]);
         let skillId = got.length ? got[0].id : null;
         
         if (!skillId) {
-            await exec('INSERT INTO skils (id, name) VALUES (UUID(), ?)', [name]);
-            const [again] = await exec(`SELECT id FROM skills WHERE name = ? LIMIT 1`, [name]);
+            await exec('INSERT INTO skills (id, name) VALUES (UUID(), ?) ON DUPLICATE KEY UPDATE name = VALUES(name)', [name]);
+            const again = await exec(`SELECT id FROM skills WHERE name = ? LIMIT 1`, [name]);
             skillId = again[0].id;
         } 
         
@@ -76,7 +74,7 @@ export const handler = async (event) => {
 
 
     const applicants = await query(
-        `SELECT id, name, email, location, experienceLevel
+        `SELECT id, name, email, location, password, experienceLevel
            FROM applicants
           WHERE id = ?`,
         [String(applicantId)]
@@ -104,6 +102,7 @@ export const handler = async (event) => {
       name: a.name ?? "",
       email: a.email ?? "",
       location: a.location ?? "",
+      password: a.password ?? "",
       experienceLevel: a.experienceLevel ?? "",
       skills: skills.map(r => ({ name: r.name })),
     });

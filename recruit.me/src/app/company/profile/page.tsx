@@ -6,7 +6,7 @@ export default function CompanyProfilePage() {
     return (
         <main className="flex-grow flex flex-col px-6 py-24 sm:px-16 sm:py-32">
             <div className="w-full max-w-4xl mx-auto">
-                <h1 className="text-3xl font-semibold mb-8 text-black-900">
+                <h1 className="text-3xl font-semibold mb-8 text-black-900 dark: text-white">
                     Company Profile
                 </h1>
 

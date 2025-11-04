@@ -98,8 +98,6 @@ export default function CompanyProfilePage() {
     );
   }
 
-  const firstWord = company.name?.split(" ")[0] ?? "Company";
-
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4">
       <div className="w-full max-w-7xl mx-auto">
@@ -128,7 +126,7 @@ export default function CompanyProfilePage() {
           {/* Left: Overview + Jobs */}
           <div className="space-y-6">
             <section className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
-              <h2 className="text-xl font-semibold mb-3">About {firstWord}</h2>
+              <h2 className="text-xl font-semibold mb-3">About {company.name}</h2>
               <p className="text-zinc-700 dark:text-zinc-300">{company.description || <em>No description provided.</em>}</p>
               {company.website && (
                 <p className="mt-3 text-sm">
@@ -140,7 +138,6 @@ export default function CompanyProfilePage() {
             <section className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Jobs</h3>
-                <Link href="/company/job"><span className="text-sm text-zinc-600">Manage all</span></Link>
               </div>
               <div className="space-y-3">
                 {jobs.map((j) => (
@@ -149,10 +146,18 @@ export default function CompanyProfilePage() {
                       <div className="font-medium">{j.title}</div>
                       <div className="text-sm text-zinc-600">{j.createdAt.toString()} • {j.applicantCount} applicants</div>
                     </div>
-                    <div className="text-sm">
+                    <div className="flex items-center gap-2">
                       <span className={`px-2 py-1 rounded-full text-xs ${j.status === "Active" ? "bg-green-100 text-green-800" : j.status === "Draft" ? "bg-zinc-100 text-zinc-800" : "bg-red-100 text-red-800"}`}>
                         {j.status}
                       </span>
+                      <Link href={`/company/job/${j.id}/edit`}>
+                        <button
+                          className="ml-2 px-2 py-1 rounded text-xs border bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300"
+                          title="Edit Job"
+                        >
+                          Edit
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 ))}
@@ -166,7 +171,6 @@ export default function CompanyProfilePage() {
               <h4 className="text-lg font-semibold mb-2">Actions</h4>
               <div className="flex flex-col gap-3">
                 <Link href="/company/job/create"><button className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white">Create Job</button></Link>
-                <Link href="/company/job"><button className="w-full px-3 py-2 rounded-lg border">Manage Jobs</button></Link>
                 <Link href={`/company/edit?cid=${company.id}`}><button className="w-full px-3 py-2 rounded-lg border">Edit Profile</button></Link>
               </div>
             </div>

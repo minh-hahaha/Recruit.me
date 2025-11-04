@@ -29,7 +29,7 @@ export default function CompanyProfilePage() {
       setLoading(true);
       setError(null);
       try {
-        const companyRes = await fetch(`${API_BASE_URL}/api/profileCompanies/${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
+        const companyRes = await fetch(`${API_BASE_URL}/company/getCompany/${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
         const companyText = await companyRes.text();
         let companyBody: any;
         try { companyBody = companyText ? JSON.parse(companyText) : {}; } catch { companyBody = { raw: companyText }; }

@@ -18,7 +18,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/loginApplicants", {
+            const res = await fetch("https://8f542md451.execute-api.us-east-1.amazonaws.com/prod/applicant/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name }),

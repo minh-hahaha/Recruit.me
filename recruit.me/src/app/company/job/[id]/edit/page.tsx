@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { type Job, JobStatus } from '../../types';
 import { useState, useEffect } from 'react';
 
-const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
+const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
 export default function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();

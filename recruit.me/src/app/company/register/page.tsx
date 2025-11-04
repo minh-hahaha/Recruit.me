@@ -23,7 +23,7 @@ export default function RegisterPage() {
             const res = await fetch("https://8f542md451.execute-api.us-east-1.amazonaws.com/prod/company/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name }),
+                body: JSON.stringify({ name, password }),
             });
 
             const data = await res.json();

@@ -27,11 +27,13 @@ export default function LoginPage() {
 
             const data = await res.json();
 
+            const body = JSON.parse(data.body);
+
             if (!res.ok) {
                 setError(data.error || "Login failed");
             } else {
-                sessionStorage.setItem("companyId", data.id);
-                router.push(`/company/profile?cid=${encodeURIComponent(data.id)}`);
+                sessionStorage.setItem("companyId", body.id);
+                router.push(`/company/profile?cid=${encodeURIComponent(body.id)}`);
                 setResult("Login successful! Redirecting to your profile...");
             }
         } catch {

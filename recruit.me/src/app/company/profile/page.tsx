@@ -6,7 +6,7 @@ import Link from "next/link";
 import type {Company} from "@/app/api/entities";
 import {Job} from "@/app/api/entities";
 
-const API_BASE_URL = 'https://f91m7y39wl.execute-api.us-east-1.amazonaws.com/prod';
+const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
 
 export default function CompanyProfilePage() {

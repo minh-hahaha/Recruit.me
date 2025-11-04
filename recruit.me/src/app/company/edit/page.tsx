@@ -43,7 +43,6 @@ export default function CompanyEditPage() {
 
     (async () => {
       try {
-        console.log(cid);
         const res = await fetch(`${API_BASE_URL}/company/getCompany/?id=${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));

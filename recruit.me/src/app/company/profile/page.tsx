@@ -150,14 +150,18 @@ export default function CompanyProfilePage() {
                       <span className={`px-2 py-1 rounded-full text-xs ${j.status === "Active" ? "bg-green-100 text-green-800" : j.status === "Draft" ? "bg-zinc-100 text-zinc-800" : "bg-red-100 text-red-800"}`}>
                         {j.status}
                       </span>
-                      <Link href={`/company/job/${j.id}/edit`}>
+                      { /* <Link href={`/company/job/${j.id}/edit`}> */ }
                         <button
                           className="ml-2 px-2 py-1 rounded text-xs border bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300"
                           title="Edit Job"
+                          onClick={() => {
+                            sessionStorage.setItem("editJobId",j.id);
+                            router.push(`/company/job/edit?jid=${encodeURIComponent(j.id)}`);
+                          }}
                         >
                           Edit
                         </button>
-                      </Link>
+                      { /* </Link> */ }
                     </div>
                   </div>
                 ))}

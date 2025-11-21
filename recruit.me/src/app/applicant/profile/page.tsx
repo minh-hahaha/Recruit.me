@@ -6,16 +6,25 @@ import type {Applicant} from "@/app/api/entities";
 
 const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
+type ProfileApplicationStatus = "Applied" | "Withdrawn" | "Interview" | "Offer" | "Rejected";
 
-type Application = {
+type ProfileApplication = {
   id: string;
+  jobID: string;      
   title: string;
   company: string;
   location: string;
   salary?: string;
-  status: "Applied" | "Withdrawn" | "Interview" | "Offer" | "Rejected";
+  status: ProfileApplicationStatus;
   appliedOn: string;
+  withdrawnOn?: string | null;
 };
+
+type ApplicantWithApplications = Applicant & {
+  applications?: ProfileApplication[];
+};
+
+
 
 type Offer = {
   id: string;
@@ -79,7 +88,9 @@ function ApplicantProfileContent() {
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
-  const [applications] = useState<Application[]>(MOCK_APPLICATIONS);
+  const [applications,  setApplications] = useState<ProfileApplication[]>([]);
+  const [withdrawingIds, setWithdrawingIds] = useState<Set<string>>(new Set());
+  const [reapplyingIds, setReapplyingIds] = useState<Set<string>>(new Set());
   const [offers] = useState<Offer[]>(MOCK_OFFERS);
 
 
@@ -98,7 +109,7 @@ function ApplicantProfileContent() {
         const response = await fetch(`${API_BASE_URL}/applicant/${encodeURIComponent(aid)}`,
         { method: 'GET', cache: 'no-store' });
         if (!response.ok) throw new Error(await response.text());
-        const a: Applicant = await response.json();
+        const a: ApplicantWithApplications = await response.json();
         
         if (!a) throw new Error("No applicant data found");
 
@@ -107,6 +118,7 @@ function ApplicantProfileContent() {
         setEmail(a.email || "");
         setLocation(a.location || "");
         setExperienceLevel(a.experienceLevel || "");
+        setApplications(a.applications || []);
       } catch (e: any) {
         console.error("Failed to load applicant data:", e?.message || e);
         setError(e?.message || "Failed to load applicant data");
@@ -125,6 +137,110 @@ function ApplicantProfileContent() {
   const skillCount = data?.skills.length ?? 0;
 
   const baseContainerClasses = "min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col gap-8 items-center";
+
+  async function handleWithdraw(applicationId: string) {
+  try {
+    setWithdrawingIds(prev => {
+      const next = new Set(prev);
+      next.add(applicationId);
+      return next;
+    });
+
+    const res = await fetch(
+      `${API_BASE_URL}/applications/${encodeURIComponent(applicationId)}/withdraw`,
+      { method: "PUT" }
+    );
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Failed to withdraw application");
+    }
+
+    const data = await res.json();
+    const updatedApp = data.application ?? data; 
+  
+    setApplications(prev =>
+      prev.map(app =>
+        app.id === applicationId
+          ? {
+              ...app,
+              status: "Withdrawn",
+              withdrawnOn:
+                updatedApp.withdrawnAt ??
+                new Date().toISOString(),
+            }
+          : app
+      )
+    );
+  } catch (err) {
+    console.error("Withdraw failed:", err);
+    alert("Could not withdraw from this job. Please try again.");
+  } finally {
+    setWithdrawingIds(prev => {
+      const next = new Set(prev);
+      next.delete(applicationId);
+      return next;
+    });
+  }
+}
+
+async function handleReapply(app: ProfileApplication) {
+  try {
+    if (!aid) {
+      alert("Missing applicant ID");
+      return;
+    }
+
+    setReapplyingIds(prev => {
+      const next = new Set(prev);
+      next.add(app.id);
+      return next;
+    });
+
+    const res = await fetch(`${API_BASE_URL}/applications/apply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        applicantID: aid,
+        jobID: app.jobID,
+      }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Failed to re-apply");
+    }
+
+    const data = await res.json();
+    const newApp = data.application ?? data;
+
+    setApplications(prev =>
+      prev.map(a =>
+        a.id === app.id
+          ? {
+              ...a,
+              status: "Applied",
+              appliedOn:
+                newApp.appliedAt ?? new Date().toISOString(),
+              withdrawnOn: null,
+            }
+          : a
+      )
+    );
+  } catch (err) {
+    console.error("Re-apply failed:", err);
+    alert("Could not re-apply to this job. Please try again.");
+  } finally {
+    setReapplyingIds(prev => {
+      const next = new Set(prev);
+      next.delete(app.id);
+      return next;
+    });
+  }
+}
+
+
+
 
   if (loading) {
     return (
@@ -256,10 +372,22 @@ function ApplicantProfileContent() {
                 </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {a.status === "Applied" ? (
-                      <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800">Withdraw Application</button>
+                      <button
+                        onClick={() => handleWithdraw(a.id)}
+                        disabled={withdrawingIds.has(a.id)}
+                        className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {withdrawingIds.has(a.id) ? "Withdrawing..." : "Withdraw Application"}
+                      </button>
                     ) : a.status === "Withdrawn" ? (
-                      <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800">Re-apply</button>
-                    ) : null}
+                      <button
+                        onClick={() => handleReapply(a)}
+                        disabled={reapplyingIds.has(a.id)}
+                        className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {reapplyingIds.has(a.id) ? "Re-applying..." : "Re-apply"}
+                      </button>
+                    ) : null} 
                   </div>
                 </div>
                 ))}

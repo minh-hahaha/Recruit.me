@@ -52,6 +52,7 @@ function ApplicantApplyContent() {
   //submission confirmation
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("Congrats! Your application has been submitted.");
+  const [submitting, setSubmitting] = useState(false);
 
 
   useEffect(() => {
@@ -112,22 +113,22 @@ useEffect(() => {
         setCompany(j.company || "");
         setDescription(j.description || "");
         setJobSalary(j.salary || "");
-      } catch (e: any) {
+    } catch (e: any) {
         console.error("Failed to load job data:", e?.message || e);
-        setError(e?.message || "Failed to load job data");
+        setJobError(e?.message || "Failed to load job data");
       } finally {
-        setLoading(false);
+        setJobLoading(false);
       }
     })();
   }, [jobid]
 ); 
-
 async function handleSubmit() {
    if (!aid || !jobid) {
     alert("Missing applicant ID or job ID.");
     return;
   }
 
+  setSubmitting(true);
     try {
     // const res = await fetch(`${API_BASE_URL}/applications/apply`, {
     //   method: "POST",
@@ -164,8 +165,10 @@ async function handleSubmit() {
     console.error("Failed to submit application:", e);
     setSubmitMessage("Something went wrong submitting your application.");
     setSubmitSuccess(true);
+  } finally {
+    setSubmitting(false);
   }
-  }
+}
 
   return (
     <div className={baseContainerClasses}>

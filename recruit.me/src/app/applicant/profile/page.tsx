@@ -36,26 +36,6 @@ type Offer = {
 };
 
 // ---- MOCK DATA ----
-const MOCK_APPLICATIONS: Application[] = [
-  {
-    id: "a1",
-    title: "Senior Frontend Developer",
-    company: "TechCorp Solutions",
-    location: "Boston, MA",
-    salary: "$120k–$150k",
-    status: "Applied",
-    appliedOn: "09/14/2025",
-  },
-  {
-    id: "a2",
-    title: "Data Scientist",
-    company: "DataDynamics Inc",
-    location: "New York, NY",
-    salary: "$130k–$160k",
-    status: "Withdrawn",
-    appliedOn: "09/22/2025",
-  },
-];
 
 const MOCK_OFFERS: Offer[] = [
   {

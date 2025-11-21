@@ -11,7 +11,7 @@ export const handler = async (event) => {
     try {
         const existingApplication = await query(
             'SELECT id, applicantID, jobID, companyID, status, appliedAt, withdrawnAt FROM applications WHERE id = ?',
-            [String(applicantId)],
+            [String(applicationId)],
         );
 
          if (existingApplication.length === 0) {

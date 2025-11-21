@@ -27,7 +27,7 @@ export const handler = async (event) => {
         
         await query(
             `UPDATE applications SET status = 'Withdrawn', withdrawnAt = NOW(), updatedAt = NOW() WHERE id = ?`,
-            ['Withdrawn', String(applicationId)],
+            [String(applicationId)],
         );
 
         const updatedApplication = await query(

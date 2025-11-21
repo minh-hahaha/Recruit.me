@@ -127,7 +127,7 @@ function ApplicantProfileContent() {
     });
 
     const res = await fetch(
-      `${API_BASE_URL}/applications/${encodeURIComponent(applicationId)}/withdraw`,
+      `${API_BASE_URL}/applications/${encodeURIComponent(applicationId)}/withdrawApplication`,
       { method: "PUT" }
     );
 
@@ -145,9 +145,9 @@ function ApplicantProfileContent() {
           ? {
               ...app,
               status: "Withdrawn",
-              withdrawnOn:
-                updatedApp.withdrawnAt ??
-                new Date().toISOString(),
+              withdrawnOn: updatedApp?.withdrawnAt
+                ? new Date(updatedApp.withdrawnAt).toLocaleDateString("en-US")
+                : new Date().toLocaleDateString("en-US"),
             }
           : app
       )
@@ -201,7 +201,9 @@ async function handleReapply(app: ProfileApplication) {
               ...a,
               status: "Applied",
               appliedOn:
-                newApp.appliedAt ?? new Date().toISOString(),
+                  newApp.appliedAt
+                    ? new Date(newApp.appliedAt).toLocaleDateString("en-US")
+                    : new Date().toLocaleDateString("en-US"),
               withdrawnOn: null,
             }
           : a
@@ -348,7 +350,11 @@ async function handleReapply(app: ProfileApplication) {
                   {a.company} • {a.location}
                   {a.salary ? ` • ${a.salary}` : ""}
                 </div>
-                <div className="mt-1 text-sm text-zinc-800 dark:text-zinc-100">Applied {a.appliedOn}</div>
+                <div className="mt-1 text-sm text-zinc-800 dark:text-zinc-100">Applied {new Date(a.appliedOn).toLocaleDateString("en-US")}
+                </div>
+                {a.status === "Withdrawn" && a.withdrawnOn ? (
+                  <div className="mt-1 text-sm text-zinc-800 dark:text-zinc-100">Withdrawn {new Date(a.withdrawnOn).toLocaleDateString("en-US")}</div>
+                ) : null}
                 </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {a.status === "Applied" ? (
@@ -357,14 +363,13 @@ async function handleReapply(app: ProfileApplication) {
                         disabled={withdrawingIds.has(a.id)}
                         className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {withdrawingIds.has(a.id) ? "Withdrawing..." : "Withdraw Application"}
+                        {withdrawingIds.has(a.id) ? "Withdrawing..." : "Withdraw"}
                       </button>
                     ) : a.status === "Withdrawn" ? (
                       <button
                         onClick={() => handleReapply(a)}
                         disabled={reapplyingIds.has(a.id)}
-                        className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
+                        className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed">
                         {reapplyingIds.has(a.id) ? "Re-applying..." : "Re-apply"}
                       </button>
                     ) : null} 

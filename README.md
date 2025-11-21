@@ -1,6 +1,9 @@
 # Recruit.me (Team Maryland)
 
-Iteration 1
+Link:
+http://recruit-me3.s3-website-us-east-1.amazonaws.com/
+
+Use Cases implemented for Iteration 1:
 
 Company:
   - Register Company
@@ -13,5 +16,3 @@ Applicant:
   - Register Applicant
   - Review Profile
   - Edit Profile
-
-

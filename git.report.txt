@@ -1,0 +1,1260 @@
+commit be4825d8e882b8075fc571137cbb1ee46d997df2
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 02:37:29 2025 -0500
+
+    update lambda functions to match whats currently in AWS
+
+ recruit.me/lambda-functions/createJob/index.mjs    |  4 ++
+ .../lambda-functions/editApplicant/index.mjs       | 23 +++++----
+ recruit.me/lambda-functions/getApplicant/index.mjs | 17 +++----
+ .../lambda-functions/loginApplicants/index.mjs     | 35 +++++++++++++
+ recruit.me/lambda-functions/loginCompany/index.mjs | 34 +++++++++++++
+ .../lambda-functions/registerApplicants/index.mjs  | 57 ++++++++++++++++++++++
+ .../lambda-functions/registerCompanies/index.mjs   | 56 +++++++++++++++++++++
+ 7 files changed, 205 insertions(+), 21 deletions(-)
+
+commit 70e61ab5498541e860e6a6d204fb90208afee108
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Nov 4 02:28:09 2025 -0500
+
+    S3 Link Added and Completed.
+
+ README.md                                  |  7 ++++---
+ recruit.me/src/app/applicant/edit/page.tsx | 24 +++++++++++++++++-------
+ 2 files changed, 21 insertions(+), 10 deletions(-)
+
+commit 01ee497cab2ae05193c7036b64a020885bf2cf61
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Nov 4 02:00:16 2025 -0500
+
+    Password Full Implementation With Login
+
+ recruit.me/src/app/applicant/login/page.tsx    | 24 +++++++++++++++++++++++-
+ recruit.me/src/app/applicant/register/page.tsx |  2 +-
+ recruit.me/src/app/company/login/page.tsx      | 24 +++++++++++++++++++++++-
+ recruit.me/src/app/company/register/page.tsx   |  2 +-
+ 4 files changed, 48 insertions(+), 4 deletions(-)
+
+commit 959f4caf0c99ce710367f2623ba44bedc05a137d
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Nov 4 01:52:43 2025 -0500
+
+    Password
+
+ recruit.me/src/app/applicant/register/page.tsx | 26 +++++++++++++++++++++++---
+ recruit.me/src/app/company/register/page.tsx   | 26 +++++++++++++++++++++++---
+ 2 files changed, 46 insertions(+), 6 deletions(-)
+
+commit 7f8304329960e5326a49b08eec5d08e4ac71d6ed
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Nov 4 01:34:37 2025 -0500
+
+    S3 Prep work
+
+ recruit.me/src/app/api/createJob/route.ts          |  84 -----------
+ recruit.me/src/app/api/editJob/route.ts            |  74 ----------
+ recruit.me/src/app/api/jobs/route.ts               |  25 ----
+ recruit.me/src/app/api/loginApplicants/route.ts    |  29 ----
+ recruit.me/src/app/api/loginCompanies/route.ts     |  29 ----
+ .../src/app/api/profileApplicants/[id]/route.ts    |  33 -----
+ .../app/api/profileApplicants/editProfile/route.ts |  55 --------
+ .../api/profileApplicants/reviewProfile/route.ts   |  32 -----
+ .../src/app/api/profileCompanies/[id]/route.ts     |  74 ----------
+ .../app/api/profileCompanies/editProfile/route.ts  |  51 -------
+ .../api/profileCompanies/reviewProfile/route.ts    |  29 ----
+ recruit.me/src/app/api/registerApplicants/route.ts |  45 ------
+ recruit.me/src/app/api/registerCompanies/route.ts  |  45 ------
+ recruit.me/src/app/applicant/login/page.tsx        |   6 +-
+ recruit.me/src/app/applicant/register/page.tsx     |   3 +-
+ recruit.me/src/app/company/job/[id]/edit/page.tsx  | 155 ---------------------
+ recruit.me/src/app/company/login/page.tsx          |   6 +-
+ recruit.me/src/app/company/register/page.tsx       |   3 +-
+ 18 files changed, 6 insertions(+), 772 deletions(-)
+
+commit d60cb47e55db3c2f41d37b911936da1b77c84c09
+Merge: ec904bf f1ab2b3
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Tue Nov 4 01:31:49 2025 -0500
+
+    Merge pull request #11 from minh-hahaha/bug_fix_suspense
+    
+    wrap the page content in a suspense to fix build bug with useSearchPa…
+
+commit ec904bf2a24d33b88783e5921fb16b7e81b2f204
+Merge: 4e6addd 968150f
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Tue Nov 4 01:28:17 2025 -0500
+
+    updated text color on company profile
+
+commit f1ab2b339918445c7756b859d9a1b328d9fc0816
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 01:26:53 2025 -0500
+
+    wrap the page content in a suspense to fix build bug with useSearchParams
+
+ recruit.me/src/app/company/edit/page.tsx     | 10 +++++++++-
+ recruit.me/src/app/company/job/edit/page.tsx | 10 +++++++++-
+ recruit.me/src/app/company/profile/page.tsx  | 10 ++++++++--
+ 3 files changed, 26 insertions(+), 4 deletions(-)
+
+commit 968150fee1af5653f118d84676ac67a0a3fbfdd5
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Tue Nov 4 01:13:23 2025 -0500
+
+    changed some of the color scheme in company profile
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398485 -> 398485 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398798 -> 398798 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 0 -> 398279 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398174 -> 398174 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 0 -> 397933 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 397984 -> 398045 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397855 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398223 bytes
+ recruit.me/lambda-functions/editCompany/index.mjs  |  59 ++++++
+ recruit.me/lambda-functions/getCompany/index.mjs   |  26 +++
+ recruit.me/lambda-functions/getJob/index.mjs       |   8 +-
+ .../src/app/api/profileCompanies/[id]/route.ts     |  74 +++++++
+ .../app/api/profileCompanies/editProfile/route.ts  |  51 +++++
+ .../api/profileCompanies/reviewProfile/route.ts    |  29 +++
+ recruit.me/src/app/company/edit/page.tsx           | 230 +++++++++++++++++++++
+ recruit.me/src/app/company/job/[id]/edit/page.tsx  |   2 +
+ recruit.me/src/app/company/job/edit/page.tsx       | 154 ++++++++++++++
+ recruit.me/src/app/company/login/page.tsx          |   6 +-
+ recruit.me/src/app/company/profile/page.tsx        | 218 ++++++++++++++++---
+ 20 files changed, 830 insertions(+), 27 deletions(-)
+
+commit 4e6addd9aa90b393e4484be98b94df19966c04ac
+Merge: 792f52d 63fb9b2
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Tue Nov 4 01:01:16 2025 -0500
+
+    Merge pull request #10 from minh-hahaha/auto_login_company
+    
+    have the company register page auto log into the company account
+
+commit 63fb9b24be9e601555e834973c01d1c2da1c40bc
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 01:00:33 2025 -0500
+
+    have the company register page auto log into the company account
+
+ recruit.me/src/app/company/register/page.tsx | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+commit e55dece29262a1a76e08f906db9f8d0da4bfd7c2
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Tue Nov 4 00:58:03 2025 -0500
+
+    visual update for company profile
+
+ recruit.me/src/app/company/profile/page.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 792f52d95024478dc42c9282117f5c6474e86720
+Merge: e75e0ce 053a661
+Author: htgraves <htgraves91@gmail.com>
+Date:   Tue Nov 4 00:46:18 2025 -0500
+
+    Merge pull request #9 from minh-hahaha/company_profile
+    
+    Company profile
+
+commit 053a661e526b2639bf82ce1d29b1933c5f9f068c
+Merge: 11a14c8 e75e0ce
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 00:42:40 2025 -0500
+
+    Merge branch 'main' into company_profile
+
+commit e75e0ce46f3bd826267c70ff0878e2bbd6aff4f6
+Merge: 56003de dcd6fb1
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Tue Nov 4 00:41:07 2025 -0500
+
+    Merge pull request #8 from minh-hahaha/jobAWS
+    
+    change getJob to return name
+
+commit dcd6fb1f3a9145b7b084e2f4d7acf5884ebb48fe
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Nov 4 00:38:54 2025 -0500
+
+    change getJob to return name
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398485 -> 398485 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398798 -> 398798 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398174 -> 398174 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 397984 -> 398045 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397855 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398223 bytes
+ recruit.me/lambda-functions/getJob/index.mjs       |   8 +++++++-
+ 8 files changed, 7 insertions(+), 1 deletion(-)
+
+commit 11a14c82e08fd65d7645ccbf6c78479ad80a9c70
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 00:34:43 2025 -0500
+
+    change how job ids are stored and shared
+
+ recruit.me/src/app/company/job/[id]/edit/page.tsx |   2 +
+ recruit.me/src/app/company/job/edit/page.tsx      | 154 ++++++++++++++++++++++
+ recruit.me/src/app/company/profile/page.tsx       |   8 +-
+ 3 files changed, 162 insertions(+), 2 deletions(-)
+
+commit 4fcaeff137b7a808c59d10fb4cbbcb6c7c0b2774
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 23:33:58 2025 -0500
+
+    fix company name bug; remove references to manage jobs in favor of an edit button (edit button is currently broken)
+
+ recruit.me/src/app/company/profile/page.tsx | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+commit 6c2053ae362ade2aa35635c4067333dd2b021683
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 23:15:32 2025 -0500
+
+    remove console log
+
+ recruit.me/src/app/company/edit/page.tsx | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 644d42b8a8950da4dc304b499a3e9a806383d5ee
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 3 23:12:10 2025 -0500
+
+    json parsing for company login
+
+ recruit.me/src/app/company/login/page.tsx | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+commit 5d8f8021f202560740e75632660466fef906065e
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 22:52:28 2025 -0500
+
+    fix get and put request
+
+ recruit.me/src/app/company/edit/page.tsx    | 5 +++--
+ recruit.me/src/app/company/profile/page.tsx | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+commit 56003debffe4a7b3a639a5f3a3151e628899bc68
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 3 22:43:45 2025 -0500
+
+    updated api gateways
+
+ recruit.me/src/app/applicant/edit/page.tsx | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+commit e84bdd571b77852b807f73b9dc48fc26fc04f568
+Merge: 3473c17 b1df721
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 22:43:40 2025 -0500
+
+    Merge branch 'main' into company_profile
+
+commit b1df721e9693e7d8699da0c48be7949e7ebc345e
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 3 22:32:02 2025 -0500
+
+    fixed json parsing for login/register to other pages
+
+ recruit.me/src/app/applicant/login/page.tsx    | 6 ++++--
+ recruit.me/src/app/applicant/profile/page.tsx  | 2 +-
+ recruit.me/src/app/applicant/register/page.tsx | 8 +++++---
+ recruit.me/src/app/company/register/page.tsx   | 4 +++-
+ 4 files changed, 13 insertions(+), 7 deletions(-)
+
+commit 3473c17cf1b88201eb8116b896d7befe916eefc9
+Merge: 094aa7e 8251276
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 22:26:18 2025 -0500
+
+    Merge branch 'main' into company_profile
+
+commit 094aa7e2f6e108f6c8ef9efe639d16643c4cba4f
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 22:25:51 2025 -0500
+
+    update put and get lambda endpoint locations
+
+ recruit.me/src/app/company/edit/page.tsx    | 4 ++--
+ recruit.me/src/app/company/profile/page.tsx | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 825127622c6a11b8ed0f2274438f90a583c75829
+Merge: 525ffb9 091c993
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 3 22:00:24 2025 -0500
+
+    Merge remote-tracking branch 'origin/main'
+
+commit 091c99331c9a0c3351f7a46c72b4f378ca77ff16
+Merge: 4a38798 a913ed0
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Mon Nov 3 22:00:03 2025 -0500
+
+    Merge pull request #7 from minh-hahaha/applicant-profile
+    
+    Applicant profile
+
+commit a913ed057380d3adc478217c3b5fc8e7d8e15681
+Merge: d86bea6 4a38798
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 21:59:27 2025 -0500
+
+    Merge branch 'main' into applicant-profile
+    
+    merge with job stuff
+
+commit d86bea6f33b7805b3393b04bb026a03830b036df
+Merge: d05f9f6 b25d981
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 21:58:27 2025 -0500
+
+    Merge branch 'main' into applicant-profile
+    
+    merge main
+
+commit 4fcac1e4a0366bd7388f45dfff8c3cb4e348e6e9
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 21:49:19 2025 -0500
+
+    update api url
+
+ recruit.me/src/app/company/edit/page.tsx    | 2 +-
+ recruit.me/src/app/company/profile/page.tsx | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 525ffb9c641a6b880466b95935ac7491bbc372dd
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 3 21:45:30 2025 -0500
+
+    register/login for applicant and companies
+
+ recruit.me/next.config.js                      | 17 +++++++++++++++++
+ recruit.me/src/app/applicant/login/page.tsx    |  2 +-
+ recruit.me/src/app/applicant/register/page.tsx |  2 +-
+ recruit.me/src/app/company/login/page.tsx      |  2 +-
+ recruit.me/src/app/company/register/page.tsx   |  2 +-
+ 5 files changed, 21 insertions(+), 4 deletions(-)
+
+commit d05f9f6fd302c1603c579c2ae8c2e9062c066ae8
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 3 21:37:06 2025 -0500
+
+    API gateway updated
+
+ recruit.me/src/app/applicant/edit/page.tsx    | 2 +-
+ recruit.me/src/app/applicant/profile/page.tsx | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 4a387985fb6c888273f7abd36aa3fefd8ea0afb5
+Merge: b25d981 6b8e85b
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Mon Nov 3 21:35:34 2025 -0500
+
+    Merge pull request #6 from minh-hahaha/jobAWS
+    
+    Job aws
+
+commit 6b8e85b7a0faf5a4aa6fce2bd513dbe3c5e0d6ac
+Merge: d82bf23 b25d981
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 21:34:54 2025 -0500
+
+    Merge branch 'main' into jobAWS
+    
+    merge main
+
+commit d82bf23864db91512f5f3a844b85b5a16580fc12
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 21:34:40 2025 -0500
+
+    updated api prod endpoint
+
+ recruit.me/src/app/company/job/[id]/edit/page.tsx | 2 +-
+ recruit.me/src/app/company/job/create/page.tsx    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 01f68d129e03e0d2d250659e8656e523f1c82c44
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 21:30:08 2025 -0500
+
+    registerCompany already existed
+
+ .../lambda-functions/Zip Files/createCompany.zip   | Bin 398028 -> 0 bytes
+ .../lambda-functions/createCompany/index.mjs       |  38 ---------------------
+ 2 files changed, 38 deletions(-)
+
+commit 2903d24cddbce3efba391e46eed32975209dc8d2
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 21:04:28 2025 -0500
+
+    create zip files
+
+ .../lambda-functions/Zip Files/createCompany.zip       | Bin 0 -> 398028 bytes
+ recruit.me/lambda-functions/Zip Files/editCompany.zip  | Bin 0 -> 398279 bytes
+ recruit.me/lambda-functions/Zip Files/getCompany.zip   | Bin 0 -> 397933 bytes
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 1464a9da03bded5e42f489289a93e9aff10d753d
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 20:42:11 2025 -0500
+
+    create lamdba functions (not on aws yet) and update pages to hopefully use them
+    
+    followed henry example for the API endpoint stuff in pages
+
+ .../lambda-functions/createCompany/index.mjs       | 38 ++++++++++++++
+ recruit.me/lambda-functions/editCompany/index.mjs  | 59 ++++++++++++++++++++++
+ recruit.me/lambda-functions/getCompany/index.mjs   | 26 ++++++++++
+ recruit.me/src/app/company/edit/page.tsx           |  6 ++-
+ recruit.me/src/app/company/profile/page.tsx        | 46 +++++++++++------
+ 5 files changed, 158 insertions(+), 17 deletions(-)
+
+commit 5aae4299bfbe8a2745550fd157eae64c20abbf39
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 3 19:04:19 2025 -0500
+
+    working static version of reviewing company profile and editing it
+
+ .../src/app/api/profileCompanies/[id]/route.ts     |  74 +++++++
+ .../app/api/profileCompanies/editProfile/route.ts  |  51 +++++
+ .../api/profileCompanies/reviewProfile/route.ts    |  29 +++
+ recruit.me/src/app/company/edit/page.tsx           | 228 +++++++++++++++++++++
+ recruit.me/src/app/company/profile/page.tsx        | 194 +++++++++++++++---
+ 5 files changed, 552 insertions(+), 24 deletions(-)
+
+commit 7f8c3c8121c8db7535283f49e8c465d25c1c4543
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 3 16:00:52 2025 -0500
+
+    lambdas added, listSkills for editProfile created
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398485 -> 398485 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 0 -> 398798 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 0 -> 398174 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 397984 -> 397984 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 0 -> 397855 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 0 -> 398223 bytes
+ .../lambda-functions/editApplicant/index.mjs       | 120 ++++++++++++++++
+ recruit.me/lambda-functions/getApplicant/index.mjs |  57 ++++++++
+ recruit.me/lambda-functions/listSkills/index.mjs   |  24 ++++
+ .../lambda-functions/reviewApplicant/index.mjs     |  55 ++++++++
+ recruit.me/src/app/applicant/edit/page.tsx         | 154 +++++++++------------
+ recruit.me/src/app/applicant/profile/page.tsx      |  11 +-
+ 13 files changed, 328 insertions(+), 93 deletions(-)
+
+commit b25d981e93f795b871c06de947036f351373bfd1
+Merge: e082507 72e0e45
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Mon Nov 3 14:37:04 2025 -0500
+
+    Merge pull request #5 from minh-hahaha/jobAWS
+    
+    Create Job and Edit Job
+
+commit 72e0e453b82f5371b4ff6f5b647a29b39a096041
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 04:31:27 2025 -0500
+
+    update gitignore to include config file
+
+ recruit.me/.gitignore | 2 --
+ 1 file changed, 2 deletions(-)
+
+commit 0d2894dc229900ad624980ff843de47e6d7fbe60
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 04:29:00 2025 -0500
+
+    WE CAN CREATE JOBS AND EDIT JOBS
+    
+    Though minor bug for skills in edit job. fix later
+
+ recruit.me/src/app/company/job/JobForm.tsx        |  1 -
+ recruit.me/src/app/company/job/[id]/edit/page.tsx |  6 ++++--
+ recruit.me/src/app/company/job/create/page.tsx    | 10 ++++++++--
+ 3 files changed, 12 insertions(+), 5 deletions(-)
+
+commit d61b34445420da0a7db457a7415070271e2966c0
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 03:30:18 2025 -0500
+
+    fix useSearchParams error
+    
+    I don't know, chat fixed it
+
+ recruit.me/src/app/applicant/edit/page.tsx    | 16 ++++++++++++++--
+ recruit.me/src/app/applicant/profile/page.tsx | 12 ++++++++++--
+ 2 files changed, 24 insertions(+), 4 deletions(-)
+
+commit fe512da08d8a2648a7811e27fa0d7bddc440e230
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 03:12:12 2025 -0500
+
+    getJob on lambda
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398485 -> 398485 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 397991 -> 397984 bytes
+ .../getJob/{index.js => index.mjs}                 |  16 ++++++++--------
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+commit 62c1ee703ac53af543b2ea886505d965f5fb5986
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 02:18:30 2025 -0500
+
+    Zip Files folder
+
+ .../lambda-functions/{ => Zip Files}/createJob.zip | Bin 398485 -> 398485 bytes
+ .../lambda-functions/{ => Zip Files}/editJob.zip   | Bin 398701 -> 398701 bytes
+ .../lambda-functions/{ => Zip Files}/getJob.zip    | Bin 397991 -> 397991 bytes
+ recruit.me/lambda-functions/package-lambdas.sh     |  23 ++++++++++++++-------
+ 4 files changed, 16 insertions(+), 7 deletions(-)
+
+commit eb655c44667b88985f2a6c27d4018eadbc366284
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 02:14:38 2025 -0500
+
+    editJob lambda WORKS!
+    
+    its 2am
+
+ recruit.me/lambda-functions/createJob.zip     | Bin 398520 -> 398485 bytes
+ recruit.me/lambda-functions/db-utils.mjs      |  37 +++-----
+ recruit.me/lambda-functions/editJob.zip       | Bin 398614 -> 398701 bytes
+ recruit.me/lambda-functions/editJob/index.js  |  96 ---------------------
+ recruit.me/lambda-functions/editJob/index.mjs | 116 ++++++++++++++++++++++++++
+ recruit.me/lambda-functions/getJob.zip        | Bin 398026 -> 397991 bytes
+ 6 files changed, 129 insertions(+), 120 deletions(-)
+
+commit 3d8e23f174bc9c7cba2e3ab0f66b4ae7438088da
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 3 00:16:52 2025 -0500
+
+    createJob lambda working
+
+ .DS_Store                                       | Bin 8196 -> 10244 bytes
+ recruit.me/.gitignore                           |   2 +
+ recruit.me/lambda-functions/config.mjs          |   3 +-
+ recruit.me/lambda-functions/createJob.zip       | Bin 0 -> 398520 bytes
+ recruit.me/lambda-functions/createJob/index.mjs |  98 +++++++------
+ recruit.me/lambda-functions/db-utils.js         |  69 ---------
+ recruit.me/lambda-functions/db-utils.mjs        |  59 ++++++++
+ recruit.me/lambda-functions/editJob.zip         | Bin 0 -> 398614 bytes
+ recruit.me/lambda-functions/editJob/index.js    |  96 +++++++++++++
+ recruit.me/lambda-functions/getJob.zip          | Bin 0 -> 398026 bytes
+ recruit.me/lambda-functions/getJob/index.js     |  35 +++++
+ recruit.me/lambda-functions/package-lambdas.sh  |  72 ++++++++++
+ recruit.me/lambda-functions/package-lock.json   | 177 +++++++++---------------
+ recruit.me/lambda-functions/package.json        |  11 +-
+ 14 files changed, 393 insertions(+), 229 deletions(-)
+
+commit 6c6b492829d1a1c1e2a8d0939a97e991e525b311
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sun Nov 2 22:11:04 2025 -0500
+
+    updated utils with configs
+
+ recruit.me/lambda-functions/config.mjs  | 6 ++++++
+ recruit.me/lambda-functions/db-utils.js | 9 +++++----
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+commit b68f0ac7e52557397b8ca7c154386093a7a1123a
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sun Nov 2 22:04:11 2025 -0500
+
+    createJob lambda function
+
+ .DS_Store                                       | Bin 8196 -> 8196 bytes
+ recruit.me/lambda-functions/createJob/index.mjs |  78 ++++++++++++
+ recruit.me/lambda-functions/db-utils.js         |  68 ++++++++++
+ recruit.me/lambda-functions/package-lock.json   | 162 ++++++++++++++++++++++++
+ recruit.me/lambda-functions/package.json        |  16 +++
+ 5 files changed, 324 insertions(+)
+
+commit 4db9939a889dc2f55bd5b43f424728bd8b889b6b
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sun Nov 2 21:31:52 2025 -0500
+
+    updated schema
+
+ recruit.me/database/schema.sql | 116 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 79 insertions(+), 37 deletions(-)
+
+commit 6a08d34dd19a2f7bde89423748b12dd17b521d87
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sun Nov 2 20:56:21 2025 -0500
+
+    database schema
+
+ recruit.me/.gitignore          |  1 -
+ recruit.me/database/schema.sql | 94 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 94 insertions(+), 1 deletion(-)
+
+commit 645f056292aecdd3a14905e632fee5cd7e3e8850
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sun Nov 2 20:17:18 2025 -0500
+
+    gitignore
+
+ recruit.me/.gitignore | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+commit e082507ff10e9d3d97ecf4e24be7acb202f87bc4
+Merge: c05b90f 93d7f3e
+Author: htgraves <htgraves91@gmail.com>
+Date:   Fri Oct 31 15:54:53 2025 -0400
+
+    Merge pull request #4 from minh-hahaha/job
+
+commit 93d7f3e275c1376993aeb4a171ad48d94e97b390
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Fri Oct 31 15:41:37 2025 -0400
+
+    why im i diverted
+
+ recruit.me/src/app/company/profile/page.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 48529b631c14fde8d76641bc7bdbb1c6c34940ee
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Fri Oct 31 15:33:18 2025 -0400
+
+    remove tempData
+
+ recruit.me/.gitignore               |  4 +--
+ recruit.me/tempData/applicants.json | 51 -------------------------------------
+ 2 files changed, 2 insertions(+), 53 deletions(-)
+
+commit 7493e48b481652dba73eb4080b9579be4b6f32ec
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Fri Oct 31 15:31:58 2025 -0400
+
+    api for create, edit and get jobs
+
+ .vscode/settings.json                              |   2 +
+ recruit.me/.gitignore                              |   3 +
+ recruit.me/src/app/api/createJob/route.ts          |  84 +++++
+ recruit.me/src/app/api/editJob/route.ts            |  74 +++++
+ recruit.me/src/app/api/entities.ts                 |   3 +
+ recruit.me/src/app/api/jobs/route.ts               |  25 ++
+ recruit.me/src/app/applicant/edit/page.tsx         | 359 ++++++++++++++++++++-
+ recruit.me/src/app/applicant/profile/page.tsx      | 355 +++++++++++++++++++-
+ recruit.me/src/app/company/job/[id]/edit/page.tsx  | 150 ++++++++-
+ recruit.me/src/app/company/job/create/page.tsx     |  82 ++++-
+ recruit.me/src/app/company/login/page.tsx          |   8 +-
+ .../CompanyPortal.tsx => company/profile/page.tsx} |   6 +-
+ .../app/components/applicant/profile/edit/edit.css |  72 -----
+ .../app/components/applicant/profile/edit/page.tsx | 333 -------------------
+ .../src/app/components/applicant/profile/page.tsx  | 293 -----------------
+ .../app/components/applicant/profile/profile.css   | 111 -------
+ recruit.me/src/app/pages/AdminPortal.tsx           |   0
+ recruit.me/src/app/pages/ApplicantPortal.tsx       |   0
+ recruit.me/tempData/applicants.json                |  11 +
+ 19 files changed, 1133 insertions(+), 838 deletions(-)
+
+commit d541b59934d8a8744c44b27f61ccf800f4d100b4
+Merge: 0637ee6 c05b90f
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Fri Oct 31 14:40:47 2025 -0400
+
+    merge main with applicant
+
+commit c05b90fb03614a82a3a89eb802da7b112ca98094
+Merge: d28b14c 01401df
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Fri Oct 31 14:35:22 2025 -0400
+
+    Merge pull request #3 from minh-hahaha/applicant-profile
+    
+    Applicant profile
+
+commit 0637ee6198fc25fd9ebcc256baf8e2c6a50ced6d
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Fri Oct 31 14:31:30 2025 -0400
+
+    move frontend Link outside of component folder
+
+ Documents/Entity Classes.md                        |  2 +-
+ .../app/{components => }/applicant/login/page.tsx  |  0
+ .../{components => }/applicant/register/page.tsx   |  0
+ .../app/{components => }/company/job/JobForm.tsx   |  0
+ .../company/job/[id]/edit/page.tsx                 |  2 +-
+ .../{components => }/company/job/create/page.tsx   |  0
+ .../src/app/{components => }/company/job/types.ts  |  0
+ .../app/{components => }/company/login/page.tsx    |  0
+ .../app/{components => }/company/register/page.tsx | 26 +++++++++++++---------
+ recruit.me/src/app/page.tsx                        |  8 +++----
+ .../src/app/{components => pages}/AdminPortal.tsx  |  0
+ .../app/{components => pages}/ApplicantPortal.tsx  |  0
+ .../app/{components => pages}/CompanyPortal.tsx    |  4 ++--
+ recruit.me/tempData/applicants.json                |  9 ++++++++
+ 14 files changed, 32 insertions(+), 19 deletions(-)
+
+commit 01401dfd50441b2ccc69e63452f8854770e58c6d
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Fri Oct 31 14:18:06 2025 -0400
+
+    pushing everything to git branch
+
+ .DS_Store                           |  Bin 0 -> 8196 bytes
+ Documents/Entity Classes.md         |   99 +
+ Documents/GUI.pdf                   |  Bin 0 -> 5561401 bytes
+ Documents/Group Analysis.zip        |  Bin 0 -> 4515162 bytes
+ Documents/Use Cases.pdf             |  Bin 0 -> 111489 bytes
+ Documents/json_payload.txt          |  333 ++
+ README.md                           |   17 +
+ recruit.me/.gitignore               |   42 +
+ recruit.me/.prettierignore          |    3 +
+ recruit.me/.prettierrc              |    1 +
+ recruit.me/README.md                |   36 +
+ recruit.me/eslint.config.mjs        |   18 +
+ recruit.me/package-lock.json        | 6595 +++++++++++++++++++++++++++++++++++
+ recruit.me/package.json             |   28 +
+ recruit.me/postcss.config.mjs       |    7 +
+ recruit.me/public/file.svg          |    1 +
+ recruit.me/public/globe.svg         |    1 +
+ recruit.me/public/next.svg          |    1 +
+ recruit.me/public/vercel.svg        |    1 +
+ recruit.me/public/window.svg        |    1 +
+ recruit.me/tempData/applicants.json |   40 +
+ recruit.me/tsconfig.json            |   34 +
+ 22 files changed, 7258 insertions(+)
+
+commit 0d1ed8a3a681c164ea01e24806b105b1e63debe6
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Oct 30 20:35:04 2025 -0400
+
+    added password to profile/edit profile
+
+ recruit.me/src/app/api/entities.ts                         |  3 +++
+ .../src/app/api/profileApplicants/editProfile/route.ts     |  1 +
+ recruit.me/src/app/components/applicant/login/page.tsx     |  3 +--
+ .../src/app/components/applicant/profile/edit/page.tsx     | 13 +++++++++++++
+ recruit.me/src/app/components/applicant/profile/page.tsx   | 14 +++++++-------
+ recruit.me/src/app/components/applicant/register/page.tsx  |  4 ++++
+ 6 files changed, 29 insertions(+), 9 deletions(-)
+
+commit b4ed540b23acef04e56d464236fcdc2e16fd7885
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Oct 30 19:38:32 2025 -0400
+
+    updated api for edit profile
+
+ recruit.me/src/app/api/entities.ts                 |   2 +
+ .../app/api/profileApplicants/editProfile/route.ts |  54 +++++++
+ .../api/profileApplicants/reviewProfile/route.ts   |  32 ++++
+ .../app/components/applicant/profile/edit/page.tsx | 169 ++++++++++++---------
+ 4 files changed, 188 insertions(+), 69 deletions(-)
+
+commit f7a552f4ab5c51000db983da0bbbc33638c48a0f
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Oct 30 14:16:24 2025 -0400
+
+    Add src: profile page, edit profile, and wiring from applicant login to profile
+
+ Documents/Entity Classes.md                        |   99 -
+ Documents/GUI.pdf                                  |  Bin 5561401 -> 0 bytes
+ Documents/Group Analysis.zip                       |  Bin 4515162 -> 0 bytes
+ Documents/Use Cases.pdf                            |  Bin 111489 -> 0 bytes
+ Documents/json_payload.txt                         |  333 -
+ README.md                                          |   17 -
+ recruit.me/.gitignore                              |   41 -
+ recruit.me/.prettierignore                         |    3 -
+ recruit.me/.prettierrc                             |    1 -
+ recruit.me/README.md                               |   36 -
+ recruit.me/eslint.config.mjs                       |   18 -
+ recruit.me/next.config.ts                          |    7 -
+ recruit.me/package-lock.json                       | 6569 --------------------
+ recruit.me/package.json                            |   28 -
+ recruit.me/postcss.config.mjs                      |    7 -
+ recruit.me/public/file.svg                         |    1 -
+ recruit.me/public/globe.svg                        |    1 -
+ recruit.me/public/next.svg                         |    1 -
+ recruit.me/public/vercel.svg                       |    1 -
+ recruit.me/public/window.svg                       |    1 -
+ recruit.me/src/app/api/entities.ts                 |    3 +
+ .../src/app/api/profileApplicants/[id]/route.ts    |   33 +
+ recruit.me/src/app/applicant/edit/page.tsx         |    1 +
+ recruit.me/src/app/applicant/profile/page.tsx      |    2 +
+ .../src/app/components/applicant/login/page.tsx    |    8 +-
+ .../app/components/applicant/profile/edit/edit.css |   72 +
+ .../app/components/applicant/profile/edit/page.tsx |  289 +
+ .../src/app/components/applicant/profile/page.tsx  |  293 +
+ .../app/components/applicant/profile/profile.css   |  111 +
+ recruit.me/tempData/applicants.json                |   11 -
+ recruit.me/tsconfig.json                           |   34 -
+ 31 files changed, 810 insertions(+), 7211 deletions(-)
+
+commit 283375b3f964a051fe47df394eeb5574b5dfc416
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 23:21:15 2025 -0400
+
+    draft for frontend create jobs
+
+ Documents/Entity Classes.md                        |   1 +
+ recruit.me/src/app/api/entities.ts                 |  38 ++++
+ recruit.me/src/app/components/CompanyPortal.tsx    |  31 +++
+ .../src/app/components/company/job/JobForm.tsx     | 220 +++++++++++++++++++++
+ .../app/components/company/job/[id]/edit/page.tsx  |  33 ++++
+ .../src/app/components/company/job/create/page.tsx |  22 +++
+ recruit.me/src/app/components/company/job/types.ts |  37 ++++
+ 7 files changed, 382 insertions(+)
+
+commit d28b14c08d143a5f752f481f67580234eda6b3ef
+Merge: 9dda0ac aa9f86a
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Tue Oct 28 22:32:21 2025 -0400
+
+    Merge pull request #2 from minh-hahaha/RefactoringPages_MoreSetup
+    
+    Refactoring pages more setup
+
+commit aa9f86a67ab5e9fe8d04d8b3abaf5f71655e83ae
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 22:27:02 2025 -0400
+
+    fix deleted tsx component files
+
+ .../src/app/components/applicant/login/page.tsx    | 89 +++++++++++++++++++++-
+ .../src/app/components/applicant/register/page.tsx | 89 +++++++++++++++++++++-
+ .../src/app/components/company/login/page.tsx      | 89 +++++++++++++++++++++-
+ .../src/app/components/company/register/page.tsx   | 85 ++++++++++++++++++++-
+ recruit.me/src/app/page.tsx                        |  8 +-
+ 5 files changed, 344 insertions(+), 16 deletions(-)
+
+commit ba5b55a1f13998114f87b4f5338f9e80ea3c25ab
+Merge: cc2223f 9dda0ac
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 22:22:16 2025 -0400
+
+    Merge branch 'main' into RefactoringPages_MoreSetup
+
+commit cc2223ffbc8eb353ba5dd7830ec2ff0b552ac8ef
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 22:17:59 2025 -0400
+
+    fix page links error. some folder changes
+
+ recruit.me/.prettierignore                         |   3 +
+ recruit.me/.prettierrc                             |   1 +
+ recruit.me/package-lock.json                       |  17 ++++
+ recruit.me/package.json                            |   1 +
+ .../src/app/{components => }/api/entities.ts       |   0
+ .../{components => }/api/loginApplicants/route.ts  |   0
+ .../{components => }/api/loginCompanies/route.ts   |   0
+ .../api/registerApplicants/route.ts                |   0
+ .../api/registerCompanies/route.ts                 |   0
+ recruit.me/src/app/applicant/login/page.tsx        |   5 +
+ recruit.me/src/app/applicant/register/page.tsx     |   5 +
+ recruit.me/src/app/company/login/page.tsx          |   5 +
+ recruit.me/src/app/company/register/page.tsx       |   5 +
+ recruit.me/src/app/components/JobPortal.tsx        |   0
+ recruit.me/src/app/components/LandingPage.tsx      |   7 --
+ .../{login/page.tsx => ApplicantLogin.tsx}         |  27 +++---
+ .../{register/page.tsx => ApplicantRegister.tsx}   |  27 +++---
+ .../src/app/components/applicant/login/login.css   |  45 ---------
+ .../app/components/applicant/register/register.css |  49 ----------
+ .../company/{login/page.tsx => CompanyLogin.tsx}   |  27 +++---
+ .../{register/page.tsx => CompanyRegister.tsx}     |   5 +-
+ .../src/app/components/company/login/login.css     |  45 ---------
+ .../app/components/company/register/register.css   |  49 ----------
+ recruit.me/src/app/globals.css                     |  27 +-----
+ recruit.me/src/app/layout.tsx                      |   4 +-
+ recruit.me/src/app/page.tsx                        | 104 ++++++++++-----------
+ recruit.me/src/tempData/applicants.json            |   0
+ recruit.me/tempData/applicants.json                |  11 +++
+ 28 files changed, 155 insertions(+), 314 deletions(-)
+
+commit 9dda0ac268d68ed5ed25ff5419569b71d0144d2c
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 28 20:44:57 2025 -0400
+
+    Fixed error
+
+ recruit.me/src/app/components/applicant/login/page.tsx    | 4 ++--
+ recruit.me/src/app/components/applicant/register/page.tsx | 2 +-
+ recruit.me/src/app/components/company/login/page.tsx      | 2 +-
+ recruit.me/src/app/components/company/register/page.tsx   | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+commit cce8fcc2b09af2db892274923f74fbff956269f2
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 28 20:27:02 2025 -0400
+
+    Updated Links
+
+ recruit.me/src/app/components/applicant/login/page.tsx    | 2 +-
+ recruit.me/src/app/components/applicant/register/page.tsx | 2 +-
+ recruit.me/src/app/components/company/login/page.tsx      | 2 +-
+ recruit.me/src/app/components/company/register/page.tsx   | 2 +-
+ recruit.me/src/app/page.tsx                               | 8 ++++----
+ 5 files changed, 8 insertions(+), 8 deletions(-)
+
+commit 951ac8894f317e119734c20458caeb731e0ddcff
+Author: Huy Ho <149995341+huyho1@users.noreply.github.com>
+Date:   Tue Oct 28 20:20:47 2025 -0400
+
+    Update README.md
+
+ README.md | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit cf6a9b9971f824e9754e9b8a6c8db26008b12d3e
+Author: Huy Ho <149995341+huyho1@users.noreply.github.com>
+Date:   Tue Oct 28 20:20:18 2025 -0400
+
+    Update README.md
+
+ README.md | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+commit abf8db24eab81ee6404a6f7f79481e5ab4f0d2a5
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 20:18:59 2025 -0400
+
+    reorganize the folders with updates
+
+ recruit.me/src/app/{ => components}/api/entities.ts                 | 0
+ recruit.me/src/app/{ => components}/api/loginApplicants/route.ts    | 0
+ recruit.me/src/app/{ => components}/api/loginCompanies/route.ts     | 0
+ recruit.me/src/app/{ => components}/api/registerApplicants/route.ts | 0
+ recruit.me/src/app/{ => components}/api/registerCompanies/route.ts  | 0
+ recruit.me/src/app/{ => components}/applicant/login/login.css       | 0
+ recruit.me/src/app/{ => components}/applicant/login/page.tsx        | 0
+ recruit.me/src/app/{ => components}/applicant/register/page.tsx     | 0
+ recruit.me/src/app/{ => components}/applicant/register/register.css | 0
+ recruit.me/src/app/components/company/JobForm.tsx                   | 0
+ recruit.me/src/app/{ => components}/company/login/login.css         | 0
+ recruit.me/src/app/{ => components}/company/login/page.tsx          | 0
+ recruit.me/src/app/{ => components}/company/register/page.tsx       | 0
+ recruit.me/src/app/{ => components}/company/register/register.css   | 0
+ 14 files changed, 0 insertions(+), 0 deletions(-)
+
+commit c8c694f73230f6b7d328ef604a8270844f1914b0
+Merge: bdfe43e 21b118d
+Author: Huy Ho <149995341+huyho1@users.noreply.github.com>
+Date:   Tue Oct 28 20:13:55 2025 -0400
+
+    Merge pull request #1 from minh-hahaha/register
+    
+    Register
+
+commit 21b118d5d3e6a2036eb7dedca066e8a826b411ec
+Merge: 11688d0 bdfe43e
+Author: Huy Ho <149995341+huyho1@users.noreply.github.com>
+Date:   Tue Oct 28 20:13:41 2025 -0400
+
+    Merge branch 'main' into register
+
+commit 11688d0ad8dd73d76495df302fe82c1796512a32
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 28 20:00:48 2025 -0400
+
+    Created a header and footer and updated basic styling to be more uniform.
+
+ recruit.me/src/app/applicant/login/login.css       |   4 -
+ recruit.me/src/app/applicant/login/page.tsx        |  76 +++++++------
+ recruit.me/src/app/applicant/register/page.tsx     |  76 +++++++------
+ recruit.me/src/app/applicant/register/register.css |   4 -
+ recruit.me/src/app/company/login/login.css         |   4 -
+ recruit.me/src/app/company/login/page.tsx          |  76 +++++++------
+ recruit.me/src/app/company/register/page.tsx       |  76 +++++++------
+ recruit.me/src/app/company/register/register.css   |   4 -
+ recruit.me/src/app/layout.tsx                      |  32 ++++--
+ recruit.me/src/app/page.tsx                        | 123 +++++++++------------
+ 10 files changed, 223 insertions(+), 252 deletions(-)
+
+commit bdfe43e285171be51a869ff700a32889ad44310e
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 19:54:35 2025 -0400
+
+    basic frontend pages setup
+    
+    Portals are pages that is inside the components folder. Other more
+    specific folders of more specific components are in each admin, company,
+    applicant folders
+
+ recruit.me/src/app/components/AdminPortal.tsx     |   0
+ recruit.me/src/app/components/ApplicantPortal.tsx |   0
+ recruit.me/src/app/components/CompanyPortal.tsx   |   0
+ recruit.me/src/app/components/JobPortal.tsx       |   0
+ recruit.me/src/app/components/LandingPage.tsx     |   7 +++
+ recruit.me/src/app/favicon.ico                    | Bin 25931 -> 0 bytes
+ recruit.me/src/app/page.tsx                       |  62 ++--------------------
+ 7 files changed, 10 insertions(+), 59 deletions(-)
+
+commit a35f0902f20a908066c874390399b2a54d48a1df
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 28 16:12:41 2025 -0400
+
+    Got Rid of Warnings
+
+ recruit.me/src/app/api/registerApplicants/route.ts | 2 +-
+ recruit.me/src/app/api/registerCompanies/route.ts  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 0ed13364df054dd8976ffc77d623670c7dc13d20
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 28 16:09:53 2025 -0400
+
+    Initial Draft of Registering + Logging In
+
+ recruit.me/package-lock.json                       | 17 ++++-
+ recruit.me/package.json                            | 13 ++--
+ recruit.me/src/app/api/entities.ts                 | 63 ++++++++++++++++
+ recruit.me/src/app/api/loginApplicants/route.ts    | 29 ++++++++
+ recruit.me/src/app/api/loginCompanies/route.ts     | 29 ++++++++
+ recruit.me/src/app/api/registerApplicants/route.ts | 45 +++++++++++
+ recruit.me/src/app/api/registerCompanies/route.ts  | 45 +++++++++++
+ recruit.me/src/app/applicant/login/login.css       | 49 ++++++++++++
+ recruit.me/src/app/applicant/login/page.tsx        | 87 ++++++++++++++++++++++
+ recruit.me/src/app/applicant/register/page.tsx     | 87 ++++++++++++++++++++++
+ recruit.me/src/app/applicant/register/register.css | 53 +++++++++++++
+ recruit.me/src/app/company/login/login.css         | 49 ++++++++++++
+ recruit.me/src/app/company/login/page.tsx          | 87 ++++++++++++++++++++++
+ recruit.me/src/app/company/register/page.tsx       | 87 ++++++++++++++++++++++
+ recruit.me/src/app/company/register/register.css   | 53 +++++++++++++
+ recruit.me/src/app/page.tsx                        | 13 ++++
+ recruit.me/src/tempData/applicants.json            |  0
+ 17 files changed, 799 insertions(+), 7 deletions(-)
+
+commit 91df89f610a715e6a8bb535ee1ca0bfba588614b
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 28 14:18:31 2025 -0400
+
+    reorganize and create project
+
+ Entity Classes.md => Documents/Entity Classes.md |    0
+ GUI.pdf => Documents/GUI.pdf                     |  Bin
+ Documents/Group Analysis.zip                     |  Bin 0 -> 4515162 bytes
+ Use Cases.pdf => Documents/Use Cases.pdf         |  Bin
+ json_payload.txt => Documents/json_payload.txt   |    0
+ recruit.me/.gitignore                            |   41 +
+ recruit.me/README.md                             |   36 +
+ recruit.me/eslint.config.mjs                     |   18 +
+ recruit.me/next.config.ts                        |    7 +
+ recruit.me/package-lock.json                     | 6537 ++++++++++++++++++++++
+ recruit.me/package.json                          |   26 +
+ recruit.me/postcss.config.mjs                    |    7 +
+ recruit.me/public/file.svg                       |    1 +
+ recruit.me/public/globe.svg                      |    1 +
+ recruit.me/public/next.svg                       |    1 +
+ recruit.me/public/vercel.svg                     |    1 +
+ recruit.me/public/window.svg                     |    1 +
+ recruit.me/src/app/favicon.ico                   |  Bin 0 -> 25931 bytes
+ recruit.me/src/app/globals.css                   |   26 +
+ recruit.me/src/app/layout.tsx                    |   34 +
+ recruit.me/src/app/page.tsx                      |   65 +
+ recruit.me/tsconfig.json                         |   34 +
+ 22 files changed, 6836 insertions(+)
+
+commit 8a1f914e4ee464d5e7f5a139bcf91dd6a510f59e
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Oct 7 20:53:42 2025 -0400
+
+    update example IDs to not be in quotes
+
+ json_payload.txt | 112 +++++++++++++++++++++++++++----------------------------
+ 1 file changed, 56 insertions(+), 56 deletions(-)
+
+commit b21cc4dc1382ccbcfda947c8b68adea2a0c5b6c1
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 7 20:34:58 2025 -0400
+
+    Minor Edits to Json
+
+ json_payload.txt | 68 ++++++++++++++++++++++++++++----------------------------
+ 1 file changed, 34 insertions(+), 34 deletions(-)
+
+commit d0c5733c9756281abf82edf47d756ee6778d72f3
+Merge: 1e7a3dd 2dfe8af
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 7 20:28:50 2025 -0400
+
+    Merge remote-tracking branch 'origin/main'
+
+commit 1e7a3ddfd5f1a301284764e33c095d1f326fb600
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Oct 7 20:25:47 2025 -0400
+
+    Fixed Formatting Rough Draft
+
+ json_payload.txt | 755 +++++++++++++++++++++++--------------------------------
+ 1 file changed, 314 insertions(+), 441 deletions(-)
+
+commit 2dfe8af9b609564d124c147c8128aea01ed1936d
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Tue Oct 7 19:51:36 2025 -0400
+
+    Update README.md
+
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 318aea3758c5a07caa2cf5880453a53174eb74e8
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 7 15:56:46 2025 -0400
+
+    rename json
+
+ json_requests_responses.txt => json_payload.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 2d5075caf88f0f40f275791e196bfe4132804045
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 7 15:37:58 2025 -0400
+
+    updated state to status and casing
+
+ Entity Classes.md           |  2 +-
+ json_requests_responses.txt | 20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+commit caed862c7ae8de9349e93d70ff9fe170264969e9
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 7 15:31:05 2025 -0400
+
+    edit json requests
+    
+    added pagination and changed some id fields
+
+ Entity Classes.md           |   8 +-
+ json_requests_responses.txt | 185 ++++++++++++++++++++++++++++++++++----------
+ 2 files changed, 147 insertions(+), 46 deletions(-)
+
+commit e79a985de362e0814185b149de34e331bca84d7f
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Oct 7 13:21:25 2025 -0400
+
+    delete entity classes txt file
+
+ entity_classes.txt | 69 ------------------------------------------------------
+ 1 file changed, 69 deletions(-)
+
+commit 858acb04918600acdbac0b7fa2716b5695a9c1b0
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Oct 6 19:33:36 2025 -0400
+
+    updated entity classes in .md
+
+ Entity Classes.md  | 100 +++++++++++++++++++++++++++++++++++++++++++++++++----
+ entity_classes.txt |   2 +-
+ 2 files changed, 94 insertions(+), 8 deletions(-)
+
+commit 573c46d2b13f21fa796dea5f2380fe4f14cad038
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Oct 6 19:11:58 2025 -0400
+
+    pdf of GUI
+
+ GUI.pdf | Bin 0 -> 5561401 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 9fcac719c1d4d060fcdcdd0a3d4f1105f4287bd1
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Sun Oct 5 19:47:24 2025 -0400
+
+    update formatting of json
+
+ json_requests_responses.txt | 75 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 68 insertions(+), 7 deletions(-)
+
+commit 4434ce078105450648281beaa9afc0b7126ff7ad
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Sun Oct 5 19:32:39 2025 -0400
+
+    add last recruit.me json
+
+ json_requests_responses.txt | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
+
+commit e5e4aecf6e1b44b0ca388d2088bc7d7e9375177b
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Sun Oct 5 19:23:34 2025 -0400
+
+    add applicant response and requests
+
+ json_requests_responses.txt | 102 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+
+commit a2e348d9d087e1a426ae2533f168c815bb91b070
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sun Oct 5 19:11:49 2025 -0400
+
+    Should be finished with Company Section.
+
+ entity_classes.txt          |  2 ++
+ json_requests_responses.txt | 78 +++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 73 insertions(+), 7 deletions(-)
+
+commit 3571ed119afceb7e300ad6342e85b648715d452a
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sun Oct 5 18:33:30 2025 -0400
+
+    Started With Company, About 30% done.
+
+ json_requests_responses.txt | 113 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
+
+commit 0f010f6924497e56fa3a4715f54b4dd68c4e443f
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Oct 2 12:19:24 2025 -0400
+
+    another spelling error
+
+ entity_classes.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit bbc81bba5c5a8963b613efdc38f55e7664f7689d
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Oct 2 12:17:22 2025 -0400
+
+    spelling error
+
+ entity_classes.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 1fed941427ff541a17acaa0e898f2f18733cba4e
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Oct 2 12:15:09 2025 -0400
+
+    Entity Classes - first draft
+
+ entity_classes.txt | 67 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+
+commit 5bcd1b48f71928aae283249c1964f0517486cd0c
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Wed Oct 1 22:52:15 2025 -0400
+
+    added Entity Classes file
+
+ Entity Classes.md | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+commit 191202fe1f9a2e9a8fec640f72f01cbd6aa9c356
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Wed Oct 1 22:44:06 2025 -0400
+
+    add use cases pdf
+
+ Use Cases.pdf | Bin 0 -> 111489 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 03c1166e8208eff2f56a62f81a0567c19dd06b51
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Wed Oct 1 22:42:44 2025 -0400
+
+    first commit
+
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)

@@ -34,6 +34,7 @@ function EditProfileContent() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [location, setLocation] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
@@ -223,13 +224,22 @@ if (loading) {
 
           <label className="flex flex-col">
             <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Password</span>
-            <input
-              className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter or update password"
-            />
+            <div className="relative">
+              <input
+                className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter or update password"
+              />
+              <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </label>
 
           <label className="flex flex-col">

@@ -6,6 +6,8 @@ import Link from "next/link";
 
 export default function LoginPage() {
     const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -21,18 +23,16 @@ export default function LoginPage() {
             const res = await fetch("https://8f542md451.execute-api.us-east-1.amazonaws.com/prod/applicant/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name }),
+                body: JSON.stringify({ name, password }),
             });
 
             const data = await res.json();
 
-            const body = JSON.parse(data.body);
-
             if (!res.ok) {
                 setError(data.error || "Login failed");
             } else {
-                sessionStorage.setItem("applicantId", body.id);
-                router.push(`/applicant/profile?aid=${encodeURIComponent(body.id)}`);
+                sessionStorage.setItem("applicantId", data.id);
+                router.push(`/applicant/profile?aid=${encodeURIComponent(data.id)}`);
                 setResult("Login successful! Redirecting to your profile...");
             }
         } catch {
@@ -60,6 +60,26 @@ export default function LoginPage() {
                             className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                             placeholder="Enter your name"
                         />
+                        <label htmlFor="name" className="block mb-2 font-medium text-zinc-800 dark:text-zinc-200 mt-2">
+                            Password
+                        </label>
+                        <div className="relative">
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                                placeholder="Enter your password"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-3 flex items-center text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600"
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                        </div>
                     </div>
 
                     <button

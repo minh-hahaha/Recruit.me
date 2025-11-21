@@ -4,6 +4,7 @@ import { query, getConnection, createResponse, handleError } from './db-utils.mj
 export const handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
+    console.log('Parsed body:', body);
     const { title, description, companyId, positions, skills, status } = body;
 
     // Validate inputs
@@ -67,6 +68,9 @@ export const handler = async (event) => {
       }
 
       await query('COMMIT');
+
+      console.log('Job created with ID:', jobId);
+
 
       return createResponse(200, {
         id: jobId,

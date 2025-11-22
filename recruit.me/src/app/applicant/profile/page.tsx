@@ -170,7 +170,7 @@ function ApplicantProfileContent() {
           </p>
         </div>
         <div className="flex items-center gap-3 mt-4 md:mt-0">
-              <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10">Search Jobs</button>
+              <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10" onClick={() => router.push(`/applicant/search?aid=${encodeURIComponent(aid)}`)}>Search Jobs</button>
               <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed" onClick={() => router.push(`/applicant/edit?aid=${encodeURIComponent(aid)}`)}>
                 Edit Profile
               </button>

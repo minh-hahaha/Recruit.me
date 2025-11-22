@@ -108,6 +108,14 @@ function SearchJobs() {
                     </span>
                 </div>
             </div>
+
+            <div className="w-full max-w-4xl mx-auto flex justify-center items-center p-8 bg-transparent">
+                <span className="flex items-center gap-6 text-2xl font-semibold text-black dark:text-zinc-50">
+                    <button className="hover:scale-110 transition">&lt;</button>
+                    <button className="hover:scale-110 transition">1</button>
+                    <button className="hover:scale-110 transition">&gt;</button>
+                </span>
+            </div>
         </div>
     );
 }

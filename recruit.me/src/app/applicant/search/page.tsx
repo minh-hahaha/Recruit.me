@@ -1,7 +1,11 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useRef } from "react";
+import { createPortal } from "react-dom"
 import { useRouter, useSearchParams } from "next/navigation";
+import type {Job, Skill} from "@/app/api/entities";
+
+const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
 export default function EditProfilePage() {
     return (
@@ -18,6 +22,19 @@ function SearchJobs() {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [open, setOpen] = useState(false)
+    const buttonRef = useRef(null)
+    const [selected, setSelected] = useState<string[]>([])
+    const [skills, setSkills] = useState<Skill[]>([])
+    const [jobs, setJobs] = useState<Job[]>([])
+
+    const toggleOption = (value: string) => {
+        setSelected(prev =>
+            prev.includes(value)
+                ? prev.filter(v => v !== value)
+                : [...prev, value]
+        )
+    }
 
     useEffect(() => {
         if (!aid) {
@@ -28,7 +45,29 @@ function SearchJobs() {
         (async () => {
             setLoading(true);
             try {
+                console.log("Fetching applicant from:", `${API_BASE_URL}/applicant/review`);
+                const [skillsRes] = await Promise.all([
+                    fetch(`${API_BASE_URL}/applicant/listSkills`, {
+                        method: "GET",
+                        cache: "no-store",
+                    }),
+                ]);
 
+                const [jobsRes] = await Promise.all([
+                    fetch(`${API_BASE_URL}/job/getJob`, {
+                        method: "GET",
+                        cache: "no-store",
+                    })
+                ]);
+
+                if (!skillsRes.ok) throw new Error(await skillsRes.text());
+                if (!jobsRes.ok) throw new Error(await jobsRes.text());
+
+                const skillsList: Skill[] = await skillsRes.json();
+                setSkills(skillsList)
+
+                const jobsList: Job[] = await jobsRes.json();
+                setJobs(jobsList);
             } catch (e: any) {
                 console.error("Failed to load profile:", e?.message || e);
                 setError("Failed to load profile");
@@ -48,7 +87,7 @@ function SearchJobs() {
 
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col gap-8 items-center">
-            {/* Header */}
+            {error && <div className="text-red-600 dark:text-red-400 mt-3">{error}</div>}
             <div className="w-full flex flex-col md:flex-row justify-between bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl px-8 py-6 shadow-lg mb-8 text-left">
                 <div className="px-4">
                     <h1 className="text-3xl font-semibold mb-1">Search Jobs</h1>
@@ -70,28 +109,45 @@ function SearchJobs() {
                         Use filters to find jobs that match your skills and preferences
                     </span>
                     <div className="flex items-center gap-3 mt-4 md-0">
-                        <div className="width:25%">
-                            <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Search</span>
+                        <div className="w-1/4">
+                        <span className="mb-2 text-zinc-800 dark:text-zinc-200">Search</span>
+                            <input
+                                className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                            />
+                        </div>
+
+                        <div className="w-1/4">
+                            <span className="mb-2 text-zinc-800 dark:text-zinc-200">
+                                Skill
+                            </span>
+                            <div className="relative w-full select-none">
+                                <button ref={buttonRef} type="button" onClick={() => setOpen(prev => !prev)} className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                                    Select skills
+                                    <i className={`fa-solid fa-chevron-down text-sm transition-transform ${ open ? "rotate-180" : "" }`} ></i>
+                                </button>
+                                {open && (
+                                    <ul className="absolute left-0 mt-2 w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg shadow-lg max-h-48 overflow-y-auto z-50">
+                                        {skills.map((skill) => (
+                                            <li key={skill.id} onClick={() => toggleOption(skill.name)} className="px-3 py-2 flex items-center gap-2 cursor-pointer text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                                                <input type="checkbox" checked={selected.includes(skill.name)} onChange={() => toggleOption(skill.name)} className="accent-blue-600"/>
+                                                {skill.name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="w-1/4">
+                        <span className="mb-2 text-zinc-800 dark:text-zinc-200">Company</span>
                             <input
                                 className=" border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                             />
                         </div>
-                        <div className="width:25%">
-                            <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Skill</span>
-                            <input
-                                className=" border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-                            />
-                        </div>
-                        <div className="width:25%">
-                            <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Company</span>
-                            <input
-                                className=" border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-                            />
-                        </div>
-                        <div className="width:25%">
-                            <span className="mb-2 font-medium text-zinc-800 dark:text-zinc-200">Actions</span>
-                            <button
-                                className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10">
+
+                        <div className="w-1/4">
+                            <span className="mb-2 text-zinc-800 dark:text-zinc-200">Actions</span>
+                            <button type="button" className="w-full rounded-lg px-3 py-2 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">
                                 Clear Filters
                             </button>
                         </div>
@@ -104,8 +160,15 @@ function SearchJobs() {
                 <div className="flex flex-col items-start gap-1 mb-4">
                     <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Job Results</h2>
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                        Showing 4 jobs * Page 1 of 1
+                        Showing {jobs.length} jobs * Page 1 of 1
                     </span>
+                    <ul>
+                        {jobs.map((job) => (
+                            <li key={job.id} onClick={() => toggleOption(job.title)} className="px-3 py-2 flex items-center gap-2 cursor-pointer text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                                {job.title}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
 

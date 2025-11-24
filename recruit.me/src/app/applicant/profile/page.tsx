@@ -22,6 +22,7 @@ type ProfileApplication = {
 
 type ApplicantWithApplications = Applicant & {
   applications?: ProfileApplication[];
+  offers?: Offer[];
 };
 
 
@@ -32,21 +33,10 @@ type Offer = {
   company: string;
   amount: string;
   offeredOn: string;
-  status: "Pending" | "Accepted" | "Rejected";
+  status: "Pending" | "Accepted" | "Rejected" | "Rescinded";
 };
 
-// ---- MOCK DATA ----
 
-const MOCK_OFFERS: Offer[] = [
-  {
-    id: "o1",
-    title: "Senior Frontend Developer",
-    company: "TechCorp Solutions",
-    amount: "$125,000",
-    offeredOn: "10/01/2025",
-    status: "Pending",
-  },
-];
 
 function getInitials(fullName: string) {
   if (!fullName) return "";
@@ -71,7 +61,7 @@ function ApplicantProfileContent() {
   const [applications,  setApplications] = useState<ProfileApplication[]>([]);
   const [withdrawingIds, setWithdrawingIds] = useState<Set<string>>(new Set());
   const [reapplyingIds, setReapplyingIds] = useState<Set<string>>(new Set());
-  const [offers] = useState<Offer[]>(MOCK_OFFERS);
+  const [offers, setOffers] = useState<Offer[]>([]);
 
 
   useEffect(() => {
@@ -99,6 +89,7 @@ function ApplicantProfileContent() {
         setLocation(a.location || "");
         setExperienceLevel(a.experienceLevel || "");
         setApplications(a.applications || []);
+        setOffers(a.offers || []);
       } catch (e: any) {
         console.error("Failed to load applicant data:", e?.message || e);
         setError(e?.message || "Failed to load applicant data");
@@ -404,7 +395,7 @@ async function handleReapply(app: ProfileApplication) {
 
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">{o.company}</div>
                   <div className="text-sm text-zinc-800 dark:text-zinc-200 mt-1">{o.amount || "—"}</div>
-                  <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Offered {o.offeredOn}</div>
+                  <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Offered {new Date(o.offeredOn).toLocaleDateString("en-US")}</div>
 
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <button 

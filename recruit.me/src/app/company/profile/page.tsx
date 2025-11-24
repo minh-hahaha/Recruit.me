@@ -37,6 +37,11 @@ function CompanyProfileContent() {
       try {
         const companyRes = await fetch(`${API_BASE_URL}/company/getCompany/?id=${encodeURIComponent(cid)}`, { method: 'GET', cache: "no-store" });
         const companyText = await companyRes.text();
+
+        console.log('GET company →', URL);
+        console.log('status:', companyRes.status);
+        console.log('text:', companyText);
+
         let companyBody: any;
         try { companyBody = companyText ? JSON.parse(companyText) : {}; } catch { companyBody = { raw: companyText }; }
         if (!companyRes.ok) throw new Error(companyBody?.error || companyBody?.raw || `API error ${companyRes.status}`);

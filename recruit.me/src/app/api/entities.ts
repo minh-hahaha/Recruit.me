@@ -110,3 +110,53 @@ export class Job {
         this.updatedAt = new Date();
     }
 }
+
+export enum ApplicationStatus {
+    Applied = 'Applied',
+    Withdrawn = 'Withdrawn',
+    Rejected = 'Rejected'}
+
+export enum ApplicationRating {
+    Hireable = 'Hirable',
+    Waitlist = 'Wait',
+    Unacceptable = 'Unacceptable'
+} 
+
+export enum offerStatus {
+    None = 'None',
+    Pending = 'Pending',
+    Accepted = 'Accepted',
+    Rejected = 'Rejected',
+    Rescinded = 'Rescinded'
+}
+
+export class Application {
+    id: string;
+    applicantID: string;
+    jobID: string;
+    companyID: string;
+    status: ApplicationStatus;
+    rating?: ApplicationRating;
+    offerStatus: offerStatus;
+    appliedAt?: Date;
+    withdrawnAt?: Date;
+    offeredAt?: Date;
+    respondedAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+
+    constructor(
+        applicantID: string,
+        jobID: string,
+        companyID: string,
+    ) {
+        this.id = uuidv4();
+        this.applicantID = applicantID;
+        this.jobID = jobID;
+        this.companyID = companyID;
+        this.status = ApplicationStatus.Applied;
+        this.offerStatus = offerStatus.None;
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+}

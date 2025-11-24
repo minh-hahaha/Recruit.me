@@ -179,12 +179,13 @@ function CompanyProfileContent() {
             </section>
           </div>
 
-          {/* Right: Quick Actions */}
+          {/* Right: Actions */}
           <aside className="space-y-6">
             <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow p-6 border border-zinc-100 dark:border-zinc-800">
               <h4 className="text-lg font-semibold mb-2 text-zinc-900 dark:text-white">Actions</h4>
     
               <div className="flex flex-col gap-3">
+                <Link href="/company/offers/"><button className="w-full px-3 py-2 rounded-lg bg-green-600 text-white">Manage Offers</button></Link>
                 <Link href="/company/job/create"><button className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white">Create Job</button></Link>
                 <Link href={`/company/edit?cid=${company.id}`}><button className="w-full px-3 py-2 rounded-lg border">Edit Profile</button></Link>
               </div>

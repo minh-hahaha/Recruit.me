@@ -186,7 +186,7 @@ export default function JobApplicantsPage() {
           <h1 className="text-2xl font-semibold text-white">Applicants for Job</h1>
           <div className="flex gap-2">
             <button onClick={() => router.back()} className="px-3 py-2 border border-zinc-700 rounded text-white">Back</button>
-            <Link href="/"><button className="px-3 py-2 border border-zinc-700 rounded text-white">Home</button></Link>
+            <Link href="/"><button className="px-3 py-2 border border-zinc-700 rounded text-white">Logout</button></Link>
           </div>
         </div>
 

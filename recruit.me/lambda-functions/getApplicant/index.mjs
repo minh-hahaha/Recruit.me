@@ -71,6 +71,35 @@ export const handler = async (event) => {
       withdrawnOn: row.withdrawnAt,
     }));
 
+    // Load Offers for right-hand "Job Offers" panel
+    const offerRows = await query(
+      `SELECT
+          app.id,
+          app.offerStatus,
+          app.offeredAt,
+          j.title          AS jobTitle,
+          j.companyID      AS companyID,
+          c.name           AS companyName,
+          j.salary         AS jobSalary   -- if you want to show amount; optional
+      FROM applications app
+      JOIN jobs j      ON j.id = app.jobID
+      JOIN companies c ON c.id = j.companyID
+      WHERE app.applicantID = ?
+        AND app.offerStatus <> 'None'
+      ORDER BY app.offeredAt DESC`,
+      [String(applicantId)]
+    );
+
+    const formattedOffers = offerRows.map(row => ({
+      id: row.id,
+      title: row.jobTitle,
+      company: row.companyName,
+      amount: row.jobSalary ?? "",   
+      offeredOn: row.offeredAt,     
+      status: row.offerStatus,       // "Pending" | "Accepted" | "Rejected" | "Rescinded"
+    }));
+
+
  
     return createResponse(200, {
       id: a.id,
@@ -80,7 +109,8 @@ export const handler = async (event) => {
       location: a.location ?? "",
       experienceLevel: a.experienceLevel ?? "",
       skills: skills.map(r => ({ name: r.name, level: r.level ?? null })),
-      applications: formattedApplications, 
+      applications: formattedApplications,
+      offers: formattedOffers,
     });
 
   } catch (error) {

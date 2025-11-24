@@ -22,6 +22,7 @@ type ProfileApplication = {
 
 type ApplicantWithApplications = Applicant & {
   applications?: ProfileApplication[];
+  offers?: Offer[];
 };
 
 
@@ -31,22 +32,11 @@ type Offer = {
   title: string;
   company: string;
   amount: string;
-  offeredOn: string;
-  status: "Pending" | "Accepted" | "Rejected";
+  offeredAt: string;
+  status: "Pending" | "Accepted" | "Rejected" | "Rescinded";
 };
 
-// ---- MOCK DATA ----
 
-const MOCK_OFFERS: Offer[] = [
-  {
-    id: "o1",
-    title: "Senior Frontend Developer",
-    company: "TechCorp Solutions",
-    amount: "$125,000",
-    offeredOn: "10/01/2025",
-    status: "Pending",
-  },
-];
 
 function getInitials(fullName: string) {
   if (!fullName) return "";
@@ -71,7 +61,9 @@ function ApplicantProfileContent() {
   const [applications,  setApplications] = useState<ProfileApplication[]>([]);
   const [withdrawingIds, setWithdrawingIds] = useState<Set<string>>(new Set());
   const [reapplyingIds, setReapplyingIds] = useState<Set<string>>(new Set());
-  const [offers] = useState<Offer[]>(MOCK_OFFERS);
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [acceptingOfferIds, setAcceptingOfferIds] = useState<Set<string>>(new Set());
+  const [rejectingOfferIds, setRejectingOfferIds] = useState<Set<string>>(new Set());
 
 
   useEffect(() => {
@@ -99,6 +91,7 @@ function ApplicantProfileContent() {
         setLocation(a.location || "");
         setExperienceLevel(a.experienceLevel || "");
         setApplications(a.applications || []);
+        setOffers(a.offers || []);
       } catch (e: any) {
         console.error("Failed to load applicant data:", e?.message || e);
         setError(e?.message || "Failed to load applicant data");
@@ -111,7 +104,7 @@ function ApplicantProfileContent() {
 
   const totalApps = applications.length;
   const activeApps = applications.filter((a) =>
-    ["Applied", "Interview", "Offer"].includes(a.status)
+    ["Applied"].includes(a.status)
   ).length;
   const offersCount = offers.length;
   const skillCount = data?.skills.length ?? 0;
@@ -221,6 +214,94 @@ async function handleReapply(app: ProfileApplication) {
   }
 }
 
+async function handleAcceptOffer(offerId: string) {
+  try {
+    setAcceptingOfferIds(prev => {
+      const next = new Set(prev);
+      next.add(offerId);
+      return next;
+    });
+
+    const res = await fetch(
+      `${API_BASE_URL}/applications/${encodeURIComponent(offerId)}/acceptOffer`,
+      { method: "PUT" }
+    );
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Failed to accept offer");
+    }
+
+    const data = await res.json();
+    const updatedApp = data.application ?? data; 
+  
+    setOffers(prev =>
+      prev.map(o =>
+        o.id === offerId
+          ? {
+              ...o,
+              status: "Accepted",
+              offeredAt: o.offeredAt
+            }
+          : o
+      )
+    );
+  } catch (err) {
+    console.error("Accept offer failed:", err);
+    alert("Could not accept job. Please try again.");
+  } finally {
+    setAcceptingOfferIds(prev => {
+      const next = new Set(prev);
+      next.delete(offerId);
+      return next;
+    });
+  }
+}
+
+async function handleRejectOffer(offerId: string) {
+  try {
+    setRejectingOfferIds(prev => {
+      const next = new Set(prev);
+      next.add(offerId);
+      return next;
+    });
+
+    const res = await fetch(
+      `${API_BASE_URL}/applications/${encodeURIComponent(offerId)}/rejectOffer`,
+      { method: "PUT" }
+    );
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Failed to accept offer");
+    }
+
+    const data = await res.json();
+    const updatedApp = data.application ?? data; 
+  
+    setOffers(prev =>
+      prev.map(o =>
+        o.id === offerId
+          ? {
+              ...o,
+              status: "Rejected",
+              offeredAt: o.offeredAt
+            }
+          : o
+      )
+    );
+  } catch (err) {
+    console.error("Reject offer failed:", err);
+    alert("Could not reject job. Please try again.");
+  } finally {
+    setRejectingOfferIds(prev => {
+      const next = new Set(prev);
+      next.delete(offerId);
+      return next;
+    });
+  }
+}
+
 
 
 
@@ -268,7 +349,7 @@ async function handleReapply(app: ProfileApplication) {
           </p>
         </div>
         <div className="flex items-center gap-3 mt-4 md:mt-0">
-              <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10">Search Jobs</button>
+              <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10" onClick={() => router.push(`/applicant/search?aid=${encodeURIComponent(aid)}`)}>Search Jobs</button>
               <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed" onClick={() => router.push(`/applicant/edit?aid=${encodeURIComponent(aid)}`)}>
                 Edit Profile
               </button>
@@ -404,20 +485,21 @@ async function handleReapply(app: ProfileApplication) {
 
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">{o.company}</div>
                   <div className="text-sm text-zinc-800 dark:text-zinc-200 mt-1">{o.amount || "—"}</div>
-                  <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Offered {o.offeredOn}</div>
+                  <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Offered {new Date(o.offeredAt).toLocaleDateString("en-US")}</div>
 
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <button 
-                      className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                      disabled={o.status !== "Pending"}
+                      onClick={() => handleAcceptOffer(o.id)} className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      disabled={o.status !== "Pending" || acceptingOfferIds.has(o.id)}
                     >
-                      Accept
+                      {acceptingOfferIds.has(o.id) ? "Accepting..." : "Accept"}
                     </button>
                     <button 
+                      onClick={() => handleRejectOffer(o.id)}
                       className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                      disabled={o.status !== "Pending"}
+                      disabled={o.status !== "Pending" || rejectingOfferIds.has(o.id)}
                     >
-                      Reject
+                      {rejectingOfferIds.has(o.id) ? "Rejecting..." : "Reject"}
                     </button>
                   </div>
                 </div>

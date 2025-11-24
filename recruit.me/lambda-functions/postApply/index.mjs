@@ -1,3 +1,4 @@
+//Apply to a job (create application in db) 
 import crypto from "crypto";
 import { query, getConnection, createResponse, handleError } from "./db-utils.mjs";
 

@@ -1,4 +1,4 @@
-
+// Get job details for application page
 import { query, getConnection, createResponse, handleError } from "./db-utils.mjs";
 
 export const handler = async (event) => {

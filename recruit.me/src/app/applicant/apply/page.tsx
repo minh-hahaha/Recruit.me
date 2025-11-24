@@ -101,7 +101,7 @@ useEffect(() => {
       setJobLoading(true);
       setJobError(null);
       try {
-        const response = await fetch(`${API_BASE_URL}/jobs/${encodeURIComponent(jobid)}`,
+        const response = await fetch(`${API_BASE_URL}/job/${encodeURIComponent(jobid)}`,
         { method: 'GET', cache: 'no-store' });
         if (!response.ok) throw new Error(await response.text());
         const j: Job = await response.json();
@@ -130,19 +130,19 @@ async function handleSubmit() {
 
   setSubmitting(true);
     try {
-    // const res = await fetch(`${API_BASE_URL}/applications/apply`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     applicantID: aid,
-    //     jobID: jobid,
-    //     resumeUrl: "...",
-    //     csvUrl: "...",
-    //     skills,
-    //   }),
-    // });
+    const res = await fetch(`${API_BASE_URL}/applications/apply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        applicantID: aid,
+        jobID: jobid,
+        // resumeUrl: "...",
+        // csvUrl: "...",
+        // skills,
+      }),
+    });
 
-    // if (!res.ok) throw new Error(await res.text());
+    if (!res.ok) throw new Error(await res.text());
 
     console.log("Submit clicked:", {
       applicantID: aid,

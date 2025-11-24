@@ -158,25 +158,32 @@ function CompanyProfileContent() {
                     <div>
 
                       <div className="font-medium text-zinc-900 dark:text-white">{j.title}</div>
-                      <div className="text-sm text-zinc-600 dark:text_zinc-400">{j.createdAt.toString()} • {j.applicantCount} applicants</div>
+                      <div className="text-sm text-zinc-600 dark:text_zinc-400">{j.createdAt ? new Date(j.createdAt).toLocaleDateString() : "—"} • {j.applicantCount} applicants</div>
                 
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-1 rounded-full text-xs ${j.status === "Active" ? "bg-green-100 text-green-800" : j.status === "Draft" ? "bg-zinc-100 text-zinc-800" : "bg-red-100 text-red-800"}`}>
                         {j.status}
                       </span>
-                      { /* <Link href={`/company/job/${j.id}/edit`}> */ }
-                        <button
-                          className="ml-2 px-2 py-1 rounded text-xs border bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300"
-                          title="Edit Job"
-                          onClick={() => {
-                            sessionStorage.setItem("editJobId",j.id);
-                            router.push(`/company/job/edit?jid=${encodeURIComponent(j.id)}`);
-                          }}
-                        >
-                          Edit
-                        </button>
-                      { /* </Link> */ }
+
+                      <button
+                        className="ml-2 px-2 py-1 rounded text-xs border bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300"
+                        title="Edit Job"
+                        onClick={() => {
+                          sessionStorage.setItem("editJobId",j.id);
+                          router.push(`/company/job/edit?jid=${encodeURIComponent(j.id)}`);
+                        }}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        className="ml-2 px-2 py-1 rounded text-xs border bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white"
+                        title="View Applicants"
+                        onClick={() => router.push(`/company/job/applicants?jid=${encodeURIComponent(j.id)}`)}
+                      >
+                        View Applicants
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -211,8 +218,8 @@ function CompanyProfileContent() {
 /* ---------- Presentational helpers ---------- */
 function Metric({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-zinc-100 dark:border-zinc-800 text-center shadow-sm">
-      <div className="text-2xl font-semibold mb-1 text-black dark:text-zinc-900 dark:text-white">{value}</div>
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700 text-center shadow-sm">
+      <div className="text-3xl font-bold mb-1 text-zinc-900 dark:text-white">{value}</div>
       <div className="text-sm text-zinc-600 dark:text-zinc-400">{label}</div>
     </div>
   );

@@ -181,13 +181,51 @@ function SearchJobs() {
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
                         Showing {jobs.length} jobs
                     </span>
-                    <ul>
+                    <div className="mt-4 w-full border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden">
+                        <div className="hidden md:flex bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold text-sm px-4 py-2">
+                            <div className="w-1/5">Company</div>
+                            <div className="w-1/5">Title</div>
+                            <div className="w-2/5">Description</div>
+                            <div className="w-1/5">Skills</div>
+                            <div className="w-1/5 text-center">Action</div>
+                        </div>
+
                         {jobs.map((job) => (
-                            <li key={job.id} onClick={() => toggleOption(job.title)} className="px-3 py-2 flex items-center gap-2 cursor-pointer text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700">
-                                {job.title}
-                            </li>
+                            <div key={job.id} className="flex flex-col md:flex-row items-start md:items-center justify-between border-t border-zinc-200 dark:border-zinc-700 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition">
+                                <div className="w-full md:w-1/5">
+                                    <span className="text-sm text-zinc-500 dark:text-zinc-400 md:hidden font-semibold">Company:</span>
+                                    <span className="text-sm text-zinc-700 dark:text-zinc-200 md:text-base">{job.companyName}</span>
+                                </div>
+
+                                <div className="w-full md:w-1/5 mt-1 md:mt-0">
+                                    <span className="text-sm text-zinc-500 dark:text-zinc-400 md:hidden font-semibold">Title:</span>
+                                    <span className="text-sm text-zinc-700 dark:text-zinc-50 md:text-base">{job.title}</span>
+                                </div>
+
+                                <div className="w-full md:w-2/5 mt-1 md:mt-0">
+                                    <span className="text-sm text-zinc-500 dark:text-zinc-400 md:hidden font-semibold">Description:</span>
+                                    <p className="text-sm text-zinc-700 dark:text-zinc-300 line-clamp-2 md:line-clamp-1">{job.description}</p>
+                                </div>
+
+                                <div className="w-full md:w-1/5 mt-1 md:mt-0">
+                                    <span className="text-sm text-zinc-500 dark:text-zinc-400 md:hidden font-semibold">Skills:</span>
+                                    <div className="flex flex-wrap gap-1">
+                                        {job.skills.map((skill) => (
+                                            <span key={skill.name} className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
+                                                {skill.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="w-full md:w-1/5 mt-2 md:mt-0 flex justify-end md:justify-end">
+                                    <button className="px-4 py-2 rounded-lg bg-blue-600 text-white dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 transition" onClick={() => console.log(`Applying to job ${job.id}`)}>
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>

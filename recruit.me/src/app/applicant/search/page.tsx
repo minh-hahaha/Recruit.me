@@ -27,6 +27,8 @@ function SearchJobs() {
     const [selected, setSelected] = useState<string[]>([])
     const [skills, setSkills] = useState<Skill[]>([])
     const [jobs, setJobs] = useState<Job[]>([])
+    const [title, setTitle] = useState("");
+    const [company, setCompany] = useState("");
 
     const toggleOption = (value: string) => {
         setSelected(prev =>
@@ -54,11 +56,24 @@ function SearchJobs() {
                 ]);
 
                 const [jobsRes] = await Promise.all([
-                    fetch(`${API_BASE_URL}/job/getJob`, {
-                        method: "GET",
-                        cache: "no-store",
+                    fetch(`${API_BASE_URL}/job/filterJob`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            body: JSON.stringify({
+                                title: title?.trim() || null,
+                                skills: selected.length > 0 ? selected : null,
+                                companyName: company?.trim() || null,
+                            })
+                        }),
                     })
                 ]);
+                console.log(
+                    JSON.stringify({
+                        title: title?.trim() || null,
+                        skills: selected.length > 0 ? selected : null,
+                        companyName: company?.trim() || null,
+                }))
 
                 if (!skillsRes.ok) throw new Error(await skillsRes.text());
                 if (!jobsRes.ok) throw new Error(await jobsRes.text());
@@ -75,7 +90,7 @@ function SearchJobs() {
                 setLoading(false);
             }
         })();
-    }, [aid]);
+    }, [aid, title, company, selected]);
 
     if (loading) {
         return (
@@ -112,6 +127,8 @@ function SearchJobs() {
                         <div className="w-1/4">
                         <span className="mb-2 text-zinc-800 dark:text-zinc-200">Search</span>
                             <input
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
                                 className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                             />
                         </div>
@@ -141,13 +158,15 @@ function SearchJobs() {
                         <div className="w-1/4">
                         <span className="mb-2 text-zinc-800 dark:text-zinc-200">Company</span>
                             <input
+                                value={company}
+                                onChange={(e) => setCompany(e.target.value)}
                                 className=" border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                             />
                         </div>
 
                         <div className="w-1/4">
                             <span className="mb-2 text-zinc-800 dark:text-zinc-200">Actions</span>
-                            <button type="button" className="w-full rounded-lg px-3 py-2 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">
+                            <button type="button" onClick={() => { setTitle(""); setCompany(""); setSelected([]); }} className="w-full rounded-lg px-3 py-2 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">
                                 Clear Filters
                             </button>
                         </div>
@@ -160,7 +179,7 @@ function SearchJobs() {
                 <div className="flex flex-col items-start gap-1 mb-4">
                     <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Job Results</h2>
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                        Showing {jobs.length} jobs * Page 1 of 1
+                        Showing {jobs.length} jobs
                     </span>
                     <ul>
                         {jobs.map((job) => (
@@ -170,14 +189,6 @@ function SearchJobs() {
                         ))}
                     </ul>
                 </div>
-            </div>
-
-            <div className="w-full max-w-4xl mx-auto flex justify-center items-center p-8 bg-transparent">
-                <span className="flex items-center gap-6 text-2xl font-semibold text-black dark:text-zinc-50">
-                    <button className="hover:scale-110 transition">&lt;</button>
-                    <button className="hover:scale-110 transition">1</button>
-                    <button className="hover:scale-110 transition">&gt;</button>
-                </span>
             </div>
         </div>
     );

@@ -6,7 +6,7 @@ import type {Applicant} from "@/app/api/entities";
 
 const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
-type ProfileApplicationStatus = "Applied" | "Withdrawn" | "Interview" | "Offer" | "Rejected";
+type ProfileApplicationStatus = "Applied" | "Withdrawn" ;
 
 type ProfileApplication = {
   id: string;
@@ -18,6 +18,7 @@ type ProfileApplication = {
   status: ProfileApplicationStatus;
   appliedOn: string;
   withdrawnOn?: string | null;
+  offerStatus?: "None" | "Pending" | "Accepted" | "Rejected" | "Rescinded";
 };
 
 type ApplicantWithApplications = Applicant & {
@@ -456,7 +457,7 @@ async function handleRejectOffer(offerId: string) {
                 ) : null}
                 </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    {a.status === "Applied" ? (
+                    {a.status === "Applied" && a.offerStatus !== "Pending" ? (
                       <button
                         onClick={() => handleWithdraw(a.id)}
                         disabled={withdrawingIds.has(a.id)}

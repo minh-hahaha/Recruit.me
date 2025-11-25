@@ -26,7 +26,15 @@ export const handler = async (event) => {
         }
 
         await query(
-            `UPDATE applications SET status = 'Applied', withdrawnAt = NULL, appliedAt = NOW(), updatedAt= NOW() WHERE id = ?`,
+            // update by Minh to handle frontend logic of reapplying application
+            `UPDATE applications 
+             SET status = 'Applied', 
+                 rating = NULL,
+                 withdrawnAt = NULL, 
+                 appliedAt = NOW(), 
+                 offerStatus = CASE WHEN offerStatus IN ('Rejected', 'Rescinded') THEN 'None' ELSE offerStatus END, 
+                 updatedAt= NOW() 
+             WHERE id = ?`,
             [String(applicationId)],
         );
 

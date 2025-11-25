@@ -90,19 +90,25 @@ function EditJobContent() {
     setSubmitting(true);
 
     try {
+      const allowFullEdit = job?.status === JobStatus.Draft;
+      const payload: Record<string, any> = {
+        id: jobId,
+        status: data.status,
+      };
+
+      if (allowFullEdit) {
+        payload.title = data.title;
+        payload.description = data.description;
+        payload.positions = data.positions || 1;
+        payload.skills = data.skills || [];
+      }
+
       const response = await fetch(`${API_BASE_URL}/job/editJob`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          id: jobId,
-          title: data.title,
-          description: data.description,
-          positions: data.positions || 1,
-          skills: data.skills || [],
-          status: data.status,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();

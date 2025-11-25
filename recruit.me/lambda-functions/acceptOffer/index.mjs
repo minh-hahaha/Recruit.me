@@ -26,9 +26,24 @@ export const handler = async (event) => {
             return createResponse(400, { error: 'Missing applicationId', received: { query: qs, parsedBody: body } });
         }
 
+        // Check if application is already withdrawn or offer is rejected
+        const existing = await query(
+            'SELECT status, offerStatus FROM applications WHERE id = ?',
+            [String(applicationId)]
+        );
+
+        if (existing.length === 0) {
+            return createResponse(404, { error: 'Application not found' });
+        }
+
+        if (existing[0].status === 'Withdrawn') {
+            return createResponse(400, { error: 'Cannot accept offer for withdrawn application' });
+        }
+
+        // update by Minh to handle frontend logic of accepting offer
         const sql = `
       UPDATE applications
-      SET offerStatus = ?, respondedAt = CURRENT_TIMESTAMP
+      SET offerStatus = ?, status = 'Applied', respondedAt = CURRENT_TIMESTAMP
       WHERE id = ?
     `;
         await query(sql, [rating, applicationId]);

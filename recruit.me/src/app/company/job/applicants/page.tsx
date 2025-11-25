@@ -53,7 +53,6 @@ export default function JobApplicantsPage() {
               const inst = new AppEntity(r.applicantID, r.jobID, r.companyID);
               inst.id = r.id;
               inst.status = (r.applicationStatus || r.status) ? String(r.applicationStatus || r.status) as ApplicationStatus : ApplicationStatus.Applied;
-              // rating kept as DB value (null -> undefined)
               inst.rating = r.rating ? (String(r.rating) as ApplicationRating) : undefined;
               inst.offerStatus = r.offerStatus ?? inst.offerStatus;
               if (r.appliedAt) inst.appliedAt = new Date(r.appliedAt);
@@ -116,11 +115,6 @@ export default function JobApplicantsPage() {
         prev.map((a) => (a.id === appId ? { ...a, offerStatus: "Pending" } : a))
       );
 
-      // const res = await fetch(`${API_BASE_URL}/job/offerApplicant?applicationId=${encodeURIComponent(appId)}`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({}),
-      // });
       const res = await fetch(`${API_BASE_URL}/applications/offerApplicant`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -131,7 +125,6 @@ export default function JobApplicantsPage() {
         throw new Error(txt || `offer failed ${res.status}`);
       }
 
-      // if backend returns updated object you can merge it here; otherwise keep optimistic
     } catch (e) {
       console.error("Failed to offer job", e);
       alert("Failed to offer job: " + (e as any)?.message);

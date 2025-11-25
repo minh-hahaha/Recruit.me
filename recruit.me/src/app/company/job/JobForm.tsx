@@ -9,15 +9,35 @@ interface JobFormProps {
   isEdit?: boolean;
 }
 
+function normalizeSkillName(name: string) {
+  return name.trim().toLowerCase();
+}
+
+function dedupeSkillsByName(skills: Skill[] = []) {
+  const seen = new Set<string>();
+  return skills.filter((skill) => {
+    const key = normalizeSkillName(skill.name);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function ensureSkillId(skill: Skill) {
+  if (skill.id) return skill;
+  return { ...skill, id: `skill-${normalizeSkillName(skill.name)}` };
+}
+
 export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps) {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
     status: initialData?.status || JobStatus.Draft,
     positions: initialData?.positions || 1,
-    skills: initialData?.skills || [],
+    skills: dedupeSkillsByName(initialData?.skills).map(ensureSkillId),
   });
 
+  const canEditDetails = !isEdit || initialData?.status === JobStatus.Draft;
   const [availableSkills] = useState(mockSkills);
   const [newSkill, setNewSkill] = useState('');
 
@@ -31,35 +51,45 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
   };
 
   const addSkill = (skill: Skill) => {
-    if (!formData.skills.find(s => s.id === skill.id)) {
+    const candidateName = normalizeSkillName(skill.name);
+    if (!formData.skills.find(s => normalizeSkillName(s.name) === candidateName)) {
       setFormData(prev => ({
         ...prev,
-        skills: [...prev.skills, skill]
+        skills: [...prev.skills, ensureSkillId(skill)]
       }));
     }
   };
 
-  const removeSkill = (skillId: string) => {
+  const removeSkill = (skillId: string, skillName: string) => {
+    const nameKey = normalizeSkillName(skillName);
     setFormData(prev => ({
       ...prev,
-      skills: prev.skills.filter(s => s.id !== skillId)
+      skills: prev.skills.filter(
+        s => s.id !== skillId && normalizeSkillName(s.name) !== nameKey
+      )
     }));
   };
 
   const addCustomSkill = () => {
-    if (newSkill.trim() && !formData.skills.find(s => s.name.toLowerCase() === newSkill.toLowerCase())) {
+    const trimmed = newSkill.trim();
+    const normalized = normalizeSkillName(trimmed);
+    if (
+      trimmed &&
+      !formData.skills.find((s) => normalizeSkillName(s.name) === normalized)
+    ) {
       const customSkill: Skill = {
         id: `custom-${Date.now()}`,
-        name: newSkill.trim()
+        name: trimmed
       };
       addSkill(customSkill);
       setNewSkill('');
     }
   };
 
-  const filteredSkills = availableSkills.filter(skill => 
-    !formData.skills.find(s => s.id === skill.id)
-  );
+  const filteredSkills = availableSkills.filter((skill) => {
+    const candidateName = normalizeSkillName(skill.name);
+    return !formData.skills.some((s) => normalizeSkillName(s.name) === candidateName);
+  });
 
   return (
     <main className="flex w-full max-w-3xl flex-col items-center justify-center px-6 py-24 sm:px-16 sm:py-32">
@@ -67,6 +97,11 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
         <h1 className="text-3xl font-semibold mb-6 text-black dark:text-zinc-50 text-center">
           {isEdit ? 'Edit Job Posting' : 'Create New Job'}
         </h1>
+        {isEdit && !canEditDetails && (
+          <p className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-400/40 dark:bg-amber-500/10 dark:text-amber-200">
+            This job is no longer a Draft. You can update its status, but other fields are locked to keep posted details consistent.
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-4">
@@ -79,6 +114,7 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
                 type="text"
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
+                disabled={!canEditDetails}
                 className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                 placeholder="e.g., Senior Frontend Developer"
                 required
@@ -94,6 +130,7 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
                 min="1"
                 value={formData.positions}
                 onChange={(e) => handleChange('positions', parseInt(e.target.value))}
+                disabled={!canEditDetails}
                 className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                 placeholder="Number of open positions"
               />
@@ -126,6 +163,7 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
               id="description"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
+              disabled={!canEditDetails}
               className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
               placeholder="Describe the role, responsibilities, requirements, and what makes this opportunity exciting..."
               rows={6}
@@ -151,7 +189,8 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
                       {skill.name}
                       <button
                         type="button"
-                        onClick={() => removeSkill(skill.id)}
+                        onClick={() => removeSkill(skill.id, skill.name)}
+                        disabled={!canEditDetails}
                         className="ml-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
                       >
                         ×
@@ -171,6 +210,7 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
                     key={skill.id}
                     type="button"
                     onClick={() => addSkill(skill)}
+                    disabled={!canEditDetails}
                     className="px-3 py-1 text-sm border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                   >
                     + {skill.name}
@@ -186,6 +226,7 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
                 <input
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
+                  disabled={!canEditDetails}
                   className="flex-1 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                   placeholder="Enter skill name"
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCustomSkill())}
@@ -193,9 +234,9 @@ export function JobForm({ onSubmit, initialData, isEdit = false }: JobFormProps)
                 <button
                   type="button"
                   onClick={addCustomSkill}
-                  disabled={!newSkill.trim()}
+                  disabled={!newSkill.trim() || !canEditDetails}
                   className={`px-4 py-2 rounded-lg font-medium text-white transition ${
-                    !newSkill.trim()
+                    !newSkill.trim() || !canEditDetails
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-blue-600 hover:bg-blue-700'
                   }`}

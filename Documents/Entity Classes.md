@@ -88,8 +88,7 @@ The main model class that contains collections of all entities:
 - **Description**: Represents the skills listed on an application that the applicant chooses specifically when applying to a specific job (can be different from their profile).
 - **Attributes**:
   - `id: UUID`
-  - `skillID: UUID` 
-
+  - `skillID: UUID`
 
 ### Admin
 - **Description**: Represents an admin of Recruit.me

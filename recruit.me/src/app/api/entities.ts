@@ -114,7 +114,7 @@ export class Job {
 export enum ApplicationStatus {
     Applied = 'Applied',
     Withdrawn = 'Withdrawn',
-    Rejected = 'Rejected'}
+}
 
 export enum ApplicationRating {
     Hirable = 'Hirable',

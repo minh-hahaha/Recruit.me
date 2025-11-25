@@ -45,6 +45,7 @@ function SearchJobs() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     body: JSON.stringify({
+                        applicantId: aid?.trim(),
                         title: title?.trim() || null,
                         skills: selected.length > 0 ? selected : null,
                         companyName: company?.trim() || null,
@@ -81,8 +82,16 @@ function SearchJobs() {
 
                 const [jobsRes] = await Promise.all([
                     fetch(`${API_BASE_URL}/job/filterJob`, {
-                        method: "GET",
-                        cache: "no-store",
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            body: JSON.stringify({
+                                applicantId: aid?.trim(),
+                                title: title?.trim() || null,
+                                skills: selected.length > 0 ? selected : null,
+                                companyName: company?.trim() || null,
+                            })
+                        }),
                     })
                 ]);
 

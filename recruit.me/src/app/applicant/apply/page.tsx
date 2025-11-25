@@ -230,9 +230,3 @@ export default function ApplicantApplyPage() {
 }
 
 
-// pull info about job from the table using jobID from search params
-// pull info about applicant from table using applicantID from search params
-// display job info and applicant info
-// have a place to upload resume and cover letter
-// have a place to review/add skills
-// submit application button that sends all info to applications table 

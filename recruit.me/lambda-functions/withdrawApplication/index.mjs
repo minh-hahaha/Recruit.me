@@ -1,12 +1,12 @@
 import { query, getConnection, createResponse, handleError } from './db-utils.mjs';
 
 export const handler = async (event) => {
-  const applicationId = event.pathParameters?.id;
-  if (!applicationId) {
-    return createResponse(400, { error: 'Missing applicant ID in path' });
-  }
+    const applicationId = event.pathParameters?.id;
+    if (!applicationId) {
+        return createResponse(400, { error: 'Missing applicant ID in path' });
+    }
 
-  const connection = await getConnection();
+    const connection = await getConnection();
 
     try {
         const existingApplication = await query(
@@ -14,7 +14,7 @@ export const handler = async (event) => {
             [String(applicationId)],
         );
 
-         if (existingApplication.length === 0) {
+        if (existingApplication.length === 0) {
             return createResponse(404, { error: 'Application not found' });
         }
 
@@ -23,10 +23,17 @@ export const handler = async (event) => {
         if (existing.status === 'Withdrawn') {
             return createResponse(200, { message: 'Application has already been withdrawn',
                 application: existing });
-             }
-        
+        }
+
         await query(
-            `UPDATE applications SET status = 'Withdrawn', withdrawnAt = NOW(), updatedAt = NOW() WHERE id = ?`,
+            // update by Minh to handle frontend logic of withdrawing application
+            `UPDATE applications 
+             SET status = 'Withdrawn', 
+                 withdrawnAt = NOW(), 
+                 offerStatus = CASE WHEN offerStatus IN ('Pending', 'Accepted') THEN 'None' ELSE offerStatus END, 
+                 respondedAt = NOW(), 
+                 updatedAt = NOW() 
+             WHERE id = ?`,
             [String(applicationId)],
         );
 
@@ -51,4 +58,4 @@ export const handler = async (event) => {
         connection.release();
     }
 
-    };
+};

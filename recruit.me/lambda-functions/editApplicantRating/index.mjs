@@ -17,8 +17,8 @@ export const handler = async (event) => {
     }
 
     const applicationId =
-      body.applicationId || body.applicationID || body.id ||
-      qs.applicationId || qs.applicationID || qs.id || null;
+        body.applicationId || body.applicationID || body.id ||
+        qs.applicationId || qs.applicationID || qs.id || null;
 
     const hasRating = Object.prototype.hasOwnProperty.call(body, 'rating');
     const rating = hasRating ? body.rating : undefined;
@@ -36,7 +36,7 @@ export const handler = async (event) => {
       WHERE id = ?
     `;
     await query(sql, [rating, applicationId]);
-    
+
     return createResponse(200, { applicationId, rating });
   } catch (error) {
     return handleError(error, 'Failed to update application rating');

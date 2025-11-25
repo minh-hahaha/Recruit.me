@@ -28,25 +28,27 @@ export const handler = async (event) => {
       await queryOnConnection(connection, 'START TRANSACTION');
 
       // Check if job exists
-      const existingJobs = await queryOnConnection(connection, 'SELECT id FROM jobs WHERE id = ?', [id]);
+      const existingJobs = await queryOnConnection(connection, 'SELECT id, status FROM jobs WHERE id = ?', [id]);
       if (existingJobs.length === 0) {
         await queryOnConnection(connection, 'ROLLBACK');
         return createResponse(400, { error: 'Job not found' });
       }
+      const currentStatus = existingJobs[0].status;
+      const canEditAll = currentStatus === 'Draft';
 
       // Update job fields if provided
       const updateFields = [];
       const updateValues = [];
 
-      if (title !== undefined) {
+      if (canEditAll && title !== undefined) {
         updateFields.push('title = ?');
         updateValues.push(title);
       }
-      if (description !== undefined) {
+      if (canEditAll && description !== undefined) {
         updateFields.push('description = ?');
         updateValues.push(description);
       }
-      if (positions !== undefined) {
+      if (canEditAll && positions !== undefined) {
         updateFields.push('positions = ?');
         updateValues.push(positions);
       }
@@ -63,8 +65,8 @@ export const handler = async (event) => {
         await queryOnConnection(connection, updateSql, updateValues);
       }
 
-      // Update job skills if provided
-      if (skills !== undefined && Array.isArray(skills)) {
+      // Update job skills if provided (only allowed while Draft)
+      if (canEditAll && skills !== undefined && Array.isArray(skills)) {
         await queryOnConnection(connection, 'DELETE FROM job_skills WHERE jobID = ?', [id]);
 
         if (skills.length > 0) {

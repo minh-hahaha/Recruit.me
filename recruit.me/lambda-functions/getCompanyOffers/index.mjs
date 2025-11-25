@@ -10,30 +10,32 @@ export const handler = async (event) => {
 
         // Fetch applications with offer status
         const sql = `
-            SELECT 
+            SELECT
                 app.id,
                 a.name AS applicantName,
                 j.title AS jobTitle,
                 app.offerStatus AS status,
                 app.offeredAt AS offeredOn
             FROM applications app
-            JOIN applicants a ON app.applicantID = a.id
-            JOIN jobs j ON app.jobID = j.id
-            WHERE app.companyID = ? 
-            AND app.offerStatus IN ('Pending', 'Accepted', 'Rejected', 'Rescinded')
+                     JOIN applicants a ON app.applicantID = a.id
+                     JOIN jobs j ON app.jobID = j.id
+            WHERE app.companyID = ?
+              AND app.offerStatus IN ('Pending', 'Accepted', 'Rejected', 'Rescinded')
             ORDER BY app.offeredAt DESC
         `;
 
         const offers = await query(sql, [companyId]);
 
-        // Format dates and add placeholder amount
+        // Format dates and add mock amount (since schema doesn't have it yet)
         const formattedOffers = offers.map(o => ({
             ...o,
-            amount: "Some Salary", // placeholder
+            amount: "Some Salary", // Placeholder
             offeredOn: o.offeredOn ? new Date(o.offeredOn).toISOString().split('T')[0] : null
         }));
 
+        console.log("Formatted Offers:", formattedOffers);
         return createResponse(200, formattedOffers);
+
     } catch (error) {
         return handleError(error, 'Failed to fetch company offers');
     }

@@ -6,7 +6,7 @@ import type {Applicant} from "@/app/api/entities";
 
 const API_BASE_URL = 'https://8f542md451.execute-api.us-east-1.amazonaws.com/prod';
 
-type ProfileApplicationStatus = "Applied" | "Withdrawn" ;
+type ProfileApplicationStatus = "Applied" | "Withdrawn" | "Pending";
 
 type ProfileApplication = {
   id: string;
@@ -66,6 +66,22 @@ function ApplicantProfileContent() {
   const [acceptingOfferIds, setAcceptingOfferIds] = useState<Set<string>>(new Set());
   const [rejectingOfferIds, setRejectingOfferIds] = useState<Set<string>>(new Set());
 
+  // Function to fetch offers - can be called after withdraw/reapply
+  async function fetchOffers(applicantId: string) {
+    try {
+      const offersRes = await fetch(`${API_BASE_URL}/applications/${encodeURIComponent(applicantId)}/getApplicantOffers`, {
+        method: 'GET', cache: 'no-store'
+      });
+      if (offersRes.ok) {
+        const pendingOffers = await offersRes.json();
+        setOffers(pendingOffers);
+      } else {
+        console.warn("Failed to fetch offers");
+      }
+    } catch (offerErr) {
+      console.error("Error fetching applicant offers:", offerErr);
+    }
+  }
 
   useEffect(() => {
     console.log("Loading applicant data for ID:", aid);
@@ -86,13 +102,30 @@ function ApplicantProfileContent() {
         
         if (!a) throw new Error("No applicant data found");
 
+        // Fetch filtered pending offers using the getApplicantOffers lambda
+        let pendingOffers: Offer[] = [];
+        try {
+          const offersRes = await fetch(`${API_BASE_URL}/applications/${encodeURIComponent(aid)}/getApplicantOffers`, {
+            method: 'GET', cache: 'no-store'
+          });
+          console.log("Offers response:", offersRes);
+          if (offersRes.ok) {
+             pendingOffers = await offersRes.json();
+          } else {
+             console.warn("Failed to fetch offers via separate endpoint, falling back to main applicant data if available");
+          }
+        } catch (offerErr) {
+           console.error("Error fetching applicant offers:", offerErr);
+        }
+
         setData(a);
         setName(a.name || "");
         setEmail(a.email || "");
         setLocation(a.location || "");
         setExperienceLevel(a.experienceLevel || "");
         setApplications(a.applications || []);
-        setOffers(a.offers || []);
+        // Use the separately fetched pending offers
+        setOffers(pendingOffers);
       } catch (e: any) {
         console.error("Failed to load applicant data:", e?.message || e);
         setError(e?.message || "Failed to load applicant data");
@@ -105,7 +138,7 @@ function ApplicantProfileContent() {
 
   const totalApps = applications.length;
   const activeApps = applications.filter((a) =>
-    ["Applied"].includes(a.status)
+    ["Applied", "Pending"].includes(a.status)
   ).length;
   const offersCount = offers.length;
   const skillCount = data?.skills.length ?? 0;
@@ -142,10 +175,16 @@ function ApplicantProfileContent() {
               withdrawnOn: updatedApp?.withdrawnAt
                 ? new Date(updatedApp.withdrawnAt).toLocaleDateString("en-US")
                 : new Date().toLocaleDateString("en-US"),
+              offerStatus: "Rejected"
             }
           : app
       )
     );
+
+    if (aid) {
+      await fetchOffers(aid);
+    }
+
   } catch (err) {
     console.error("Withdraw failed:", err);
     alert("Could not withdraw from this job. Please try again.");
@@ -199,10 +238,15 @@ async function handleReapply(app: ProfileApplication) {
                     ? new Date(updatedApp.appliedAt).toLocaleDateString("en-US")
                     : new Date().toLocaleDateString("en-US"),
               withdrawnOn: null,
+              offerStatus: a.offerStatus === "Rejected" || a.offerStatus === "Rescinded" ? "Pending" : a.offerStatus
             }
           : a
       )
     );
+
+    if (aid) {
+      await fetchOffers(aid);
+    }
   } catch (err) {
     console.error("Re-apply failed:", err);
     alert("Could not re-apply to this job. Please try again.");
@@ -256,6 +300,19 @@ async function handleAcceptOffer(offerId: string) {
           : o
       )
     );
+
+    setApplications(prev =>
+      prev.map(a =>
+        a.id === offerId
+          ? {
+              ...a,
+              status: "Applied"
+            }
+          : a
+      )
+    );
+
+
   } catch (err) {
     console.error("Accept offer failed:", err);
     alert("Could not accept job. Please try again.");
@@ -440,9 +497,8 @@ async function handleRejectOffer(offerId: string) {
                   <strong className="text-zinc-900 dark:text-white">{a.title}</strong>
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${
                       a.status === "Applied" ? "border-blue-200 text-blue-700 dark:text-blue-300 dark:border-blue-800" :
+                      a.status === "Pending" ? "border-purple-200 text-purple-700 dark:text-purple-300 dark:border-purple-800" :
                       a.status === "Withdrawn" ? "border-zinc-300 text-zinc-700 dark:text-zinc-300 dark:border-zinc-700" :
-                      a.status === "Interview" ? "border-amber-200 text-amber-700 dark:text-amber-300 dark:border-amber-800" :
-                      a.status === "Offer" ? "border-amber-200 text-amber-700 dark:text-amber-300 dark:border-amber-800" :
                       "border-red-200 text-red-700 dark:text-red-300 dark:border-red-800"
                     }`}>{a.status}</span>
                 </div>
@@ -457,7 +513,7 @@ async function handleRejectOffer(offerId: string) {
                 ) : null}
                 </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    {a.status === "Applied" && a.offerStatus !== "Pending" ? (
+                    {a.status === "Applied" ? (
                       <button
                         onClick={() => handleWithdraw(a.id)}
                         disabled={withdrawingIds.has(a.id)}

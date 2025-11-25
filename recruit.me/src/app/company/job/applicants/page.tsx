@@ -80,12 +80,12 @@ export default function JobApplicantsPage() {
   async function UpdateRating(appId: string, newStatus: string) {
     try {
       const ratingPayload: ApplicationRating | null =
-        newStatus === "Hireable" ? ApplicationRating.Hirable
+        newStatus === "Hireable" ? ApplicationRating.Hireable
           : newStatus === "Wait" ? ApplicationRating.Waitlist
           : newStatus === "Unacceptable" ? ApplicationRating.Unacceptable
           : null;
 
-      const res = await fetch(`${API_BASE_URL}/applicants/updateRating`, {
+      const res = await fetch(`${API_BASE_URL}/applications/updateRating`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ applicationId: appId, rating: ratingPayload }),
@@ -95,7 +95,7 @@ export default function JobApplicantsPage() {
         throw new Error(txt || `status update failed ${res.status}`);
       }
 
-      setApplications((prev) =>
+      setApplications((prev) => 
         prev.map((a) => {
           if (a.id !== appId) return a;
           const copy = { ...a } as FrontendApplication;
@@ -145,7 +145,7 @@ export default function JobApplicantsPage() {
   // helper: map DB fields -> UI category (rating null/undefined => New only if status == Applied)
   function getCategory(a: FrontendApplication): "New" | "Hireable" | "Wait" | "Unacceptable" {
     if ((a.rating === null || a.rating === undefined) && a.status === ApplicationStatus.Applied) return "New";
-    if (a.rating === ApplicationRating.Hirable) return "Hireable";
+    if (a.rating === ApplicationRating.Hireable) return "Hireable";
     if (a.rating === ApplicationRating.Waitlist || a.rating === ApplicationRating.Wait) return "Wait";
     if (a.rating === ApplicationRating.Unacceptable) return "Unacceptable";
     return "New";

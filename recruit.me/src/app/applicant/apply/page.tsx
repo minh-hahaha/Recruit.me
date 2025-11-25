@@ -130,7 +130,7 @@ async function handleSubmit() {
 
   setSubmitting(true);
     try {
-    const res = await fetch(`${API_BASE_URL}/applications/apply`, {
+    const res = await fetch(`${API_BASE_URL}/applications/applyToJob`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

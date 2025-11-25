@@ -44,15 +44,13 @@ export const handler = async (event) => {
       const result = (rows || []).map((r) => {
         const skills = r.skills ? String(r.skills).split(',').map((x) => x.trim()).filter(Boolean) : [];
   
-        const rating = r.rating ?? 'New';
-  
         return {
           id: r.id,
           jobID: r.jobID,
           applicantID: r.applicantID,
           companyID: r.companyID,
           status: r.status,
-          rating,
+          rating: r.rating,
           offerStatus: r.offerStatus,
           appliedAt: r.appliedAt,
           createdAt: r.createdAt,

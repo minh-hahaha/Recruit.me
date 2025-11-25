@@ -64,6 +64,13 @@ export const handler = async (event) => {
       ]
     );
 
+    await query(
+      `UPDATE jobs
+       SET applicantCount = COALESCE(applicantCount, 0) + 1
+       WHERE id = ?`,
+      [String(jobID)] 
+    );
+
 
     const rows = await query(
       `SELECT
@@ -84,6 +91,9 @@ export const handler = async (event) => {
        WHERE id = ?`,
       [applicationID]
     );
+
+    
+
 
     const application = rows[0];
 

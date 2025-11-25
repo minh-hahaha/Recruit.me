@@ -20,18 +20,18 @@ export const handler = async (event) => {
 
         const existing = existingApplication[0];
 
-        if (existing.status === 'Withdrawn') {
-            return createResponse(200, { message: 'Application has already been withdrawn',
+        if (existing.status !== 'Withdrawn') {
+            return createResponse(400, { message: 'Only withdrawn applications can be reapplied',
                 application: existing });
              }
         
         await query(
-            `UPDATE applications SET status = 'Withdrawn', withdrawnAt = NOW(), updatedAt = NOW() WHERE id = ?`,
+            `UPDATE applications SET status = 'Applied', withdrawnAt = NULL, appliedAt = NOW(), updatedAt= NOW(), WHERE id = ?`,
             [String(applicationId)],
         );
 
         await query(
-            `UPDATE jobs SET applicantCount = GREATEST(applicantCount - 1, 0) WHERE id = ?`,
+            `UPDATE jobs SET applicantCount = applicantCount + 1 WHERE id = ?`,
             [String(existing.jobID)]
         );
 
@@ -42,11 +42,11 @@ export const handler = async (event) => {
 
         const updated = updatedApplication[0];
 
-        return createResponse(200, { message: 'Application withdrawn successfully', application: updated });
+        return createResponse(200, { message: 'Application reapplied successfully', application: updated });
 
     } catch (error) {
-        console.error('Error withdrawing application:', error);
-        return handleError(error, 'Failed to withdraw application');
+        console.error('Error reapplying application:', error);
+        return handleError(error, 'Failed to reapply to job');
     } finally {
         connection.release();
     }

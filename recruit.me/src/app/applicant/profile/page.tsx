@@ -170,8 +170,8 @@ async function handleReapply(app: ProfileApplication) {
       return next;
     });
 
-    const res = await fetch(`${API_BASE_URL}/applications/applyToJob`, {
-      method: "POST",
+    const res = await fetch(`${API_BASE_URL}/applications/${encodeURIComponent(app.id)}/reapply`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         applicantID: aid,
@@ -185,7 +185,7 @@ async function handleReapply(app: ProfileApplication) {
     }
 
     const data = await res.json();
-    const newApp = data.application ?? data;
+    const updatedApp = data.application ?? data;
 
     setApplications(prev =>
       prev.map(a =>
@@ -194,8 +194,8 @@ async function handleReapply(app: ProfileApplication) {
               ...a,
               status: "Applied",
               appliedOn:
-                  newApp.appliedAt
-                    ? new Date(newApp.appliedAt).toLocaleDateString("en-US")
+                  updatedApp.appliedAt
+                    ? new Date(updatedApp.appliedAt).toLocaleDateString("en-US")
                     : new Date().toLocaleDateString("en-US"),
               withdrawnOn: null,
             }

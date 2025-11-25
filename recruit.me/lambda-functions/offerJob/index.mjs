@@ -13,7 +13,7 @@ export const handler = async (event) => {
         // Update offer status
         const sql = `
             UPDATE applications 
-            SET offerStatus = 'Pending', updatedAt = NOW()
+            SET offerStatus = 'Pending', updatedAt = NOW(), offeredAt = NOW()
             WHERE id = ? AND status = 'Applied'
         `;
 

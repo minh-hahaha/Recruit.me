@@ -224,8 +224,17 @@ async function handleAcceptOffer(offerId: string) {
 
     const res = await fetch(
       `${API_BASE_URL}/applications/${encodeURIComponent(offerId)}/acceptOffer`,
-      { method: "PUT" }
-    );
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            body: {
+              applicationId: offerId
+            }
+          })
+        });
 
     if (!res.ok) {
       const text = await res.text();
@@ -268,8 +277,17 @@ async function handleRejectOffer(offerId: string) {
 
     const res = await fetch(
       `${API_BASE_URL}/applications/${encodeURIComponent(offerId)}/rejectOffer`,
-      { method: "PUT" }
-    );
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            body: {
+              applicationId: offerId
+            }
+          })
+        });
 
     if (!res.ok) {
       const text = await res.text();
@@ -490,14 +508,14 @@ async function handleRejectOffer(offerId: string) {
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <button 
                       onClick={() => handleAcceptOffer(o.id)} className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                      disabled={o.status !== "Pending" || acceptingOfferIds.has(o.id)}
+                      disabled={o.status == "Rescinded" || acceptingOfferIds.has(o.id)}
                     >
                       {acceptingOfferIds.has(o.id) ? "Accepting..." : "Accept"}
                     </button>
                     <button 
                       onClick={() => handleRejectOffer(o.id)}
                       className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                      disabled={o.status !== "Pending" || rejectingOfferIds.has(o.id)}
+                      disabled={o.status == "Rescinded" || rejectingOfferIds.has(o.id)}
                     >
                       {rejectingOfferIds.has(o.id) ? "Rejecting..." : "Reject"}
                     </button>

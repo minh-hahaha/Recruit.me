@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, Suspense, useRef } from "react";
-import { createPortal } from "react-dom"
 import { useRouter, useSearchParams } from "next/navigation";
 import type {Job, Skill} from "@/app/api/entities";
 
@@ -38,6 +37,31 @@ function SearchJobs() {
         )
     }
 
+    const fetchJobs = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_BASE_URL}/job/filterJob`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    body: JSON.stringify({
+                        title: title?.trim() || null,
+                        skills: selected.length > 0 ? selected : null,
+                        companyName: company?.trim() || null,
+                    })
+                }),
+            })
+
+            if (!res.ok) throw new Error(await res.text());
+            const jobsList = await res.json();
+            setJobs(jobsList);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         if (!aid) {
             setError("No applicant ID provided");
@@ -57,23 +81,10 @@ function SearchJobs() {
 
                 const [jobsRes] = await Promise.all([
                     fetch(`${API_BASE_URL}/job/filterJob`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            body: JSON.stringify({
-                                title: title?.trim() || null,
-                                skills: selected.length > 0 ? selected : null,
-                                companyName: company?.trim() || null,
-                            })
-                        }),
+                        method: "GET",
+                        cache: "no-store",
                     })
                 ]);
-                console.log(
-                    JSON.stringify({
-                        title: title?.trim() || null,
-                        skills: selected.length > 0 ? selected : null,
-                        companyName: company?.trim() || null,
-                }))
 
                 if (!skillsRes.ok) throw new Error(await skillsRes.text());
                 if (!jobsRes.ok) throw new Error(await jobsRes.text());
@@ -90,7 +101,7 @@ function SearchJobs() {
                 setLoading(false);
             }
         })();
-    }, [aid, title, company, selected]);
+    }, [aid]);
 
     if (loading) {
         return (
@@ -124,8 +135,8 @@ function SearchJobs() {
                         Use filters to find jobs that match your skills and preferences
                     </span>
                     <div className="flex items-center gap-3 mt-4 md-0">
-                        <div className="w-1/4">
-                        <span className="mb-2 text-zinc-800 dark:text-zinc-200">Search</span>
+                        <div className="w-2/9">
+                        <span className="mb-2 text-zinc-800 dark:text-zinc-200">Title</span>
                             <input
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
@@ -133,7 +144,7 @@ function SearchJobs() {
                             />
                         </div>
 
-                        <div className="w-1/4">
+                        <div className="w-2/9">
                             <span className="mb-2 text-zinc-800 dark:text-zinc-200">
                                 Skill
                             </span>
@@ -155,19 +166,25 @@ function SearchJobs() {
                             </div>
                         </div>
 
-                        <div className="w-1/4">
+                        <div className="w-2/9">
                         <span className="mb-2 text-zinc-800 dark:text-zinc-200">Company</span>
                             <input
                                 value={company}
                                 onChange={(e) => setCompany(e.target.value)}
-                                className=" border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+                                className="w-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-black dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                             />
                         </div>
 
-                        <div className="w-1/4">
-                            <span className="mb-2 text-zinc-800 dark:text-zinc-200">Actions</span>
-                            <button type="button" onClick={() => { setTitle(""); setCompany(""); setSelected([]); }} className="w-full rounded-lg px-3 py-2 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">
+                        <div className="w-1/5">
+                            <span className="mb-2 text-zinc-800 dark:text-zinc-200">Clear</span>
+                            <button type="button" onClick={() => { setTitle(""); setCompany(""); setSelected([]); fetchJobs(); }} className="w-full rounded-lg px-3 py-2 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">
                                 Clear Filters
+                            </button>
+                        </div>
+                        <div className="w-2/15">
+                            <span className="mb-2 text-zinc-800 dark:text-zinc-200">Search</span>
+                            <button type="button" onClick={fetchJobs} className="w-full rounded-lg px-3 py-2 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">
+                                Search
                             </button>
                         </div>
                     </div>
@@ -219,7 +236,7 @@ function SearchJobs() {
                                 </div>
 
                                 <div className="w-full md:w-1/5 mt-2 md:mt-0 flex justify-end md:justify-end">
-                                    <button className="px-4 py-2 rounded-lg bg-blue-600 text-white dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 transition" onClick={() => console.log(`Applying to job ${job.id}`)}>
+                                    <button className="px-4 py-2 rounded-lg bg-blue-600 text-white dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 transition" onClick={() => router.push(`/applicant/apply?aid=${encodeURIComponent(aid)}&jobid=${encodeURIComponent(job.id)}`)}>
                                         Apply
                                     </button>
                                 </div>

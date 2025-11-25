@@ -514,7 +514,7 @@ async function handleRejectOffer(offerId: string) {
               <span className="text-sm text-zinc-600 dark:text-zinc-400">Shortcuts & Helpful Links</span>
               </div>
             <div className="flex flex-col gap-3">
-              <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-full">Search New Jobs</button>
+              <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-full" onClick={() => router.push(`/applicant/search?aid=${encodeURIComponent(aid)}`)}>Search New Jobs</button>
               <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 w-full">Upload Resume</button>
             </div>
           </div>

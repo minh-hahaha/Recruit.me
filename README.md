@@ -4,6 +4,7 @@ Link:
 http://recruit-me3.s3-website-us-east-1.amazonaws.com/
 
 Use Cases implemented for Iteration 2:
+
 Company:
   - Activate Job
   - Close Job

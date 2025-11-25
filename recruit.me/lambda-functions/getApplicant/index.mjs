@@ -44,6 +44,7 @@ export const handler = async (event) => {
           app.id,
           app.jobID,
           app.status,
+          app.offerStatus,
           app.appliedAt,
           app.withdrawnAt,
           j.title AS jobTitle,
@@ -69,6 +70,7 @@ export const handler = async (event) => {
       status: row.status,
       appliedOn: row.appliedAt,
       withdrawnOn: row.withdrawnAt,
+      offerStatus: row.offerStatus,
     }));
 
     // Load Offers for right-hand "Job Offers" panel
@@ -95,7 +97,7 @@ export const handler = async (event) => {
       title: row.jobTitle,
       company: row.companyName,
       amount: row.jobSalary ?? "",   
-      offeredOn: row.offeredAt,     
+      offeredAt: row.offeredAt,     
       status: row.offerStatus,       // "Pending" | "Accepted" | "Rejected" | "Rescinded"
     }));
 

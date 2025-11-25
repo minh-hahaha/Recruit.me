@@ -26,12 +26,12 @@ export const handler = async (event) => {
              }
         
         await query(
-            `UPDATE applications SET status = 'Applied', withdrawnAt = NULL, appliedAt = NOW(), updatedAt= NOW(), WHERE id = ?`,
+            `UPDATE applications SET status = 'Applied', withdrawnAt = NULL, appliedAt = NOW(), updatedAt= NOW() WHERE id = ?`,
             [String(applicationId)],
         );
 
         await query(
-            `UPDATE jobs SET applicantCount = applicantCount + 1 WHERE id = ?`,
+            `UPDATE jobs SET applicantCount = COALESCE(applicantCount,0) + 1 WHERE id = ?`,
             [String(existing.jobID)]
         );
 

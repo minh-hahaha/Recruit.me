@@ -172,7 +172,7 @@ async function handleSubmit() {
 
   return (
     <div className={baseContainerClasses}>
-      <div className="bg-white dark:bg-zinc-900 shadow rounded-xl p-6 w-full max-w-5xl">
+      <div className="bg-white dark:bg-zinc-900 shadow rounded-xl p-6 w-full max-w-5xl text-zinc-900 dark:text-zinc-50">
 
         {submitSuccess && (
         <div className="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
@@ -183,7 +183,9 @@ async function handleSubmit() {
         <h1 className="text-2xl font-semibold mb-4">Apply for {title}</h1>
 
         <h2 className="text-lg font-medium mt-4">Job Details</h2>
-        <p><strong>Company:</strong> {company}</p>
+        <p><strong>Company:</strong> 
+          <span> {company || "Not specified"}</span>
+        </p>
         <p><strong>Salary:</strong> {jobSalary || "Not specified"}</p>
         <p className="mt-2 whitespace-pre-line">{description}</p>
 

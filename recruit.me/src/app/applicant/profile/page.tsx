@@ -170,7 +170,7 @@ async function handleReapply(app: ProfileApplication) {
       return next;
     });
 
-    const res = await fetch(`${API_BASE_URL}/applications/apply`, {
+    const res = await fetch(`${API_BASE_URL}/applications/applyToJob`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

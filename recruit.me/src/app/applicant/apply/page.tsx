@@ -158,7 +158,7 @@ async function handleSubmit() {
 
     // Redirect to applicant profile after short delay
     setTimeout(() => {
-      router.push(`/applicant/profile?aid=${encodeURIComponent(aid)}`);
+      router.push(`/applicant/search?aid=${encodeURIComponent(aid)}`);
     }, 2000);
 
      } catch (e: any) {

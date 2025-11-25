@@ -230,8 +230,10 @@ async function handleAcceptOffer(offerId: string) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            applicationId: offerId,
-          }),
+            body: {
+              applicationId: offerId
+            }
+          })
         });
 
     if (!res.ok) {
@@ -281,8 +283,10 @@ async function handleRejectOffer(offerId: string) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            applicationId: offerId,
-          }),
+            body: {
+              applicationId: offerId
+            }
+          })
         });
 
     if (!res.ok) {

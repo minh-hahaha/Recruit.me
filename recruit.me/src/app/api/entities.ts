@@ -117,7 +117,7 @@ export enum ApplicationStatus {
     Rejected = 'Rejected'}
 
 export enum ApplicationRating {
-    Hireable = 'Hirable',
+    Hirable = 'Hirable',
     Waitlist = 'Wait',
     Unacceptable = 'Unacceptable'
 } 

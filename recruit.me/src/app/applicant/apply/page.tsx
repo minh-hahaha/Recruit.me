@@ -172,6 +172,19 @@ async function handleSubmit() {
 
   return (
     <div className={baseContainerClasses}>
+      <div className="w-full flex flex-col md:flex-row justify-between bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl px-8 py-6 shadow-lg mb-2 text-left">
+        <div className="px-4">
+          <h1 className="text-3xl font-semibold mb-1">Apply for {title}</h1>
+          <p className="text-white/80">Apply right now!</p>
+        </div>
+        <div className="flex items-center gap-3 mt-2 md:mt-0">
+          <button
+              className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition border border-zinc-300 dark:border-zinc-700 text-white bg-transparent hover:bg-zinc-100/10"
+              onClick={() => router.push(`/applicant/search?aid=${encodeURIComponent(aid)}`)}>
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
       <div className="bg-white dark:bg-zinc-900 shadow rounded-xl p-6 w-full max-w-5xl">
 
         {submitSuccess && (
@@ -179,10 +192,8 @@ async function handleSubmit() {
           {submitMessage}
         </div>
         )}
-        
-        <h1 className="text-2xl font-semibold mb-4">Apply for {title}</h1>
 
-        <h2 className="text-lg font-medium mt-4">Job Details</h2>
+        <h2 className="text-lg font-medium mt-2">Job Details</h2>
         <p><strong>Company:</strong> {company}</p>
         <p><strong>Salary:</strong> {jobSalary || "Not specified"}</p>
         <p className="mt-2 whitespace-pre-line">{description}</p>

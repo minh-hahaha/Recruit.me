@@ -187,7 +187,7 @@ async function handleSubmit() {
           <span> {company || "Not specified"}</span>
         </p>
         <p><strong>Salary:</strong> {jobSalary || "Not specified"}</p>
-        <p className="mt-2 whitespace-pre-line">{description}</p>
+        <p><strong>Description:</strong> {description}</p>
 
         <h2 className="text-lg font-medium mt-6">Your Information</h2>
         <p><strong>Name:</strong> {name}</p>
@@ -195,18 +195,18 @@ async function handleSubmit() {
         <p><strong>Location:</strong> {location}</p>
         <p><strong>Experience Level:</strong> {experienceLevel}</p>
 
-        <h2 className="text-lg font-medium mt-6">Resume</h2>
+        <h2 className="text-lg font-medium mt-5">Resume</h2>
         <input
-          type="file"
-          accept=".pdf,.doc,.docx"
-          onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
+          //type="file"
+          //accept=".pdf,.doc,.docx"
+          //onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
         />
 
-        <h2 className="text-lg font-medium mt-6">CSV Upload</h2>
+        <h2 className="text-lg font-medium mt-1">CSV Upload</h2>
         <input
-          type="file"
-          accept=".csv"
-          onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
+         // type="file"
+         // accept=".csv"
+         // onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
         />
 
         <button

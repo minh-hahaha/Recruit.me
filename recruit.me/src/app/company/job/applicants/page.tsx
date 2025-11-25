@@ -21,12 +21,12 @@ export default function JobApplicantsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [applications, setApplications] = useState<FrontendApplication[]>([]);
-  const [activeTab, setActiveTab] = useState<"New" | "Hireable" | "Wait" | "Unacceptable">("New");
+  const [activeTab, setActiveTab] = useState<"New" | "Hirable" | "Wait" | "Unacceptable">("New");
 
   // pagination state per tab (pageSize = 1)
   const [indexByTab, setIndexByTab] = useState<Record<string, number>>({
     New: 0,
-    Hireable: 0,
+    Hirable: 0,
     Wait: 0,
     Unacceptable: 0,
   });
@@ -80,7 +80,7 @@ export default function JobApplicantsPage() {
   async function UpdateRating(appId: string, newStatus: string) {
     try {
       const ratingPayload: ApplicationRating | null =
-        newStatus === "Hireable" ? ApplicationRating.Hireable
+        newStatus === "Hirable" ? ApplicationRating.Hirable
           : newStatus === "Wait" ? ApplicationRating.Waitlist
           : newStatus === "Unacceptable" ? ApplicationRating.Unacceptable
           : null;
@@ -143,9 +143,9 @@ export default function JobApplicantsPage() {
   }
 
   // helper: map DB fields -> UI category (rating null/undefined => New only if status == Applied)
-  function getCategory(a: FrontendApplication): "New" | "Hireable" | "Wait" | "Unacceptable" {
+  function getCategory(a: FrontendApplication): "New" | "Hirable" | "Wait" | "Unacceptable" {
     if ((a.rating === null || a.rating === undefined) && a.status === ApplicationStatus.Applied) return "New";
-    if (a.rating === ApplicationRating.Hireable) return "Hireable";
+    if (a.rating === ApplicationRating.Hirable) return "Hirable";
     if (a.rating === ApplicationRating.Waitlist || a.rating === ApplicationRating.Wait) return "Wait";
     if (a.rating === ApplicationRating.Unacceptable) return "Unacceptable";
     return "New";
@@ -153,7 +153,7 @@ export default function JobApplicantsPage() {
 
   const grouped = useMemo(() => ({
     New: applications.filter((a) => getCategory(a) === "New"),
-    Hireable: applications.filter((a) => getCategory(a) === "Hireable"),
+    Hirable: applications.filter((a) => getCategory(a) === "Hirable"),
     Wait: applications.filter((a) => getCategory(a) === "Wait"),
     Unacceptable: applications.filter((a) => getCategory(a) === "Unacceptable"),
   }), [applications]);
@@ -191,7 +191,7 @@ export default function JobApplicantsPage() {
         </div>
 
         <div className="mb-4 flex gap-2">
-          {(["New", "Hireable", "Wait", "Unacceptable"] as const).map((t) => (
+          {(["New", "Hirable", "Wait", "Unacceptable"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setActiveTab(t)}
@@ -245,10 +245,10 @@ export default function JobApplicantsPage() {
               </div>
               <div className="flex flex-col gap-3">
                 <div className="flex gap-2">
-                  <button onClick={() => UpdateRating(currentApp.id, "Hireable")} className="px-3 py-2 rounded bg-emerald-600 text-white">Hireable</button>
+                  <button onClick={() => UpdateRating(currentApp.id, "Hirable")} className="px-3 py-2 rounded bg-emerald-600 text-white">Hirable</button>
                   <button onClick={() => UpdateRating(currentApp.id, "Wait")} className="px-3 py-2 rounded bg-yellow-500 text-white">Wait</button>
                   <button onClick={() => UpdateRating(currentApp.id, "Unacceptable")} className="px-3 py-2 rounded bg-red-600 text-white">Unacceptable</button>
-                  {activeTab === "Hireable" && (() => {
+                  {activeTab === "Hirable" && (() => {
                     const offerRaw = currentApp.offerStatus ? String(currentApp.offerStatus).toLowerCase() : null;
                     const isPending = offerRaw === "pending";
                     const isAccepted = offerRaw === "accepted";

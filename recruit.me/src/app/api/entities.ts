@@ -84,6 +84,8 @@ export class Job {
     title: string;
     description: string;
     companyID: string;
+    companyName: string;
+    skills: Skill[];
     status: JobStatus;
     positions?: number;
     applicantCount: number;
@@ -95,6 +97,8 @@ export class Job {
         title: string,
         description: string,
         companyID: string,
+        companyName: string,
+        skills: Skill[],
         positions?: number,
         status: JobStatus = JobStatus.Draft
     ) {
@@ -102,6 +106,8 @@ export class Job {
         this.title = title;
         this.description = description;
         this.companyID = companyID;
+        this.companyName = companyName;
+        this.skills = skills;
         this.status = status;
         this.positions = positions;
         this.applicantCount = 0;
@@ -137,7 +143,7 @@ export class Application {
     companyID: string;
     status: ApplicationStatus;
     rating?: ApplicationRating;
-    offerStatus: offerStatus;
+    offerStatus: offerStatus | undefined;
     appliedAt?: Date;
     withdrawnAt?: Date;
     offeredAt?: Date;

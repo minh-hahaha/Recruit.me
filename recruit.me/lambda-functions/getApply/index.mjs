@@ -18,6 +18,10 @@ export const handler = async (event) => {
          j.location,
          j.salary,
          j.companyID,
+         j.applicantCount,
+         j.hiredCount,
+         j.status,
+         j.positions,
          c.name AS companyName
        FROM jobs j
        JOIN companies c ON c.id = j.companyID
@@ -36,6 +40,10 @@ export const handler = async (event) => {
       title: j.title ?? "",
       description: j.description ?? "",
       location: j.location ?? "",
+      status: j.status ?? "",
+      positions: j.positions ?? 0,
+      applicantCount: j.applicantCount ?? 0,
+      hiredCount: j.hiredCount ?? 0,
       salary: j.salary ?? "",
       company: j.companyName ?? "",
       companyID: j.companyID ?? "",

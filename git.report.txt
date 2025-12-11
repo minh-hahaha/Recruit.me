@@ -1,3 +1,836 @@
+commit 19036b360b760bd68ca415b28830e198c12d5090
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Tue Nov 25 12:17:03 2025 -0500
+
+    updates to apply page
+
+ .DS_Store                                   | Bin 14340 -> 14340 bytes
+ recruit.me/src/app/applicant/apply/page.tsx |  18 +++++++++---------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+commit 50bc7d219f65e6ccd1bb068aba749c905be2193a
+Merge: 7b7c662 0c0bcbf
+Author: htgraves <htgraves91@gmail.com>
+Date:   Tue Nov 25 11:19:14 2025 -0500
+
+    Merge pull request #26 from minh-hahaha/main
+    
+    merge main into applicant-profile
+
+commit 0c0bcbf004a19588269a91f47e27a98661accd33
+Merge: 62e9ef2 8dd1154
+Author: htgraves <htgraves91@gmail.com>
+Date:   Tue Nov 25 11:12:31 2025 -0500
+
+    Merge pull request #25 from minh-hahaha/bugs
+    
+    Bugs
+
+commit 8dd1154ed894569acc6d6b5c572fe449536e6d9a
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Nov 25 03:06:51 2025 -0500
+
+    fix editJob form. can only edit for draft/inactive jobs
+
+ .../lambda-functions/Zip Files/acceptOffer.zip     | Bin 398258 -> 398258 bytes
+ .../lambda-functions/Zip Files/applyToJob.zip      | Bin 398365 -> 398365 bytes
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398548 -> 398548 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398851 -> 398851 bytes
+ .../Zip Files/editApplicantRating.zip              | Bin 398112 -> 398112 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398304 -> 398304 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398726 -> 398791 bytes
+ .../lambda-functions/Zip Files/filterJobs.zip      | Bin 398505 -> 398505 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398635 -> 398635 bytes
+ .../Zip Files/getApplicantOffers.zip               | Bin 398098 -> 398098 bytes
+ .../Zip Files/getApplicantsFromJob.zip             | Bin 398340 -> 398340 bytes
+ recruit.me/lambda-functions/Zip Files/getApply.zip | Bin 398088 -> 398088 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397958 -> 397958 bytes
+ .../Zip Files/getCompanyOffers.zip                 | Bin 398194 -> 398194 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398070 -> 398070 bytes
+ .../lambda-functions/Zip Files/getJobById.zip      | Bin 398083 -> 398083 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397880 -> 397880 bytes
+ .../lambda-functions/Zip Files/loginApplicants.zip | Bin 398005 -> 398005 bytes
+ .../lambda-functions/Zip Files/loginCompany.zip    | Bin 398006 -> 398006 bytes
+ recruit.me/lambda-functions/Zip Files/offerJob.zip | Bin 397951 -> 397951 bytes
+ .../lambda-functions/Zip Files/postApply.zip       | Bin 398357 -> 398357 bytes
+ .../Zip Files/reapplyApplication.zip               | Bin 398291 -> 398291 bytes
+ .../Zip Files/registerApplicants.zip               | Bin 398205 -> 398205 bytes
+ .../Zip Files/registerCompanies.zip                | Bin 398212 -> 398212 bytes
+ .../lambda-functions/Zip Files/rejectOffer.zip     | Bin 398068 -> 398068 bytes
+ .../lambda-functions/Zip Files/rescindOffer.zip    | Bin 398000 -> 398000 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398248 -> 398248 bytes
+ .../Zip Files/withdrawApplication.zip              | Bin 398271 -> 398268 bytes
+ recruit.me/lambda-functions/editJob/index.mjs      |  14 +++--
+ recruit.me/src/app/company/job/JobForm.tsx         |  67 +++++++++++++++++----
+ recruit.me/src/app/company/job/edit/page.tsx       |  22 ++++---
+ 31 files changed, 76 insertions(+), 27 deletions(-)
+
+commit fe76c8c524d1fe27575e829d5caf24b3fac40f79
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Tue Nov 25 02:45:19 2025 -0500
+
+    fix accept/reject job flow. fix withdraw/reapply application flow
+    
+    Applicant can accept or reject as they like in offers tab. Changes will
+    reflect on Company page as well.
+    
+    Applicant can Withdraw from a job, making the offerStatus for that job
+    None and disappear on the list of offers and review list for company.
+    Applicant can reapply, but the company has to offer the job again in the
+    review list since the offerStatus is None (offering it again would
+    change it to Pending)
+
+ .../lambda-functions/Zip Files/acceptOffer.zip     | Bin 398069 -> 398258 bytes
+ .../lambda-functions/Zip Files/applyToJob.zip      | Bin 398365 -> 398365 bytes
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398548 -> 398548 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398851 -> 398851 bytes
+ .../Zip Files/editApplicantRating.zip              | Bin 398112 -> 398112 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398304 -> 398304 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398726 -> 398726 bytes
+ .../lambda-functions/Zip Files/filterJobs.zip      | Bin 398505 -> 398505 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398635 -> 398635 bytes
+ .../Zip Files/getApplicantOffers.zip               | Bin 0 -> 398098 bytes
+ .../Zip Files/getApplicantsFromJob.zip             | Bin 398340 -> 398340 bytes
+ recruit.me/lambda-functions/Zip Files/getApply.zip | Bin 398088 -> 398088 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397958 -> 397958 bytes
+ .../Zip Files/getCompanyOffers.zip                 | Bin 398194 -> 398194 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398070 -> 398070 bytes
+ .../lambda-functions/Zip Files/getJobById.zip      | Bin 398083 -> 398083 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397880 -> 397880 bytes
+ .../lambda-functions/Zip Files/loginApplicants.zip | Bin 398005 -> 398005 bytes
+ .../lambda-functions/Zip Files/loginCompany.zip    | Bin 398006 -> 398006 bytes
+ recruit.me/lambda-functions/Zip Files/offerJob.zip | Bin 397951 -> 397951 bytes
+ .../lambda-functions/Zip Files/postApply.zip       | Bin 398357 -> 398357 bytes
+ .../Zip Files/reapplyApplication.zip               | Bin 398191 -> 398291 bytes
+ .../Zip Files/registerApplicants.zip               | Bin 398205 -> 398205 bytes
+ .../Zip Files/registerCompanies.zip                | Bin 398212 -> 398212 bytes
+ .../lambda-functions/Zip Files/rejectOffer.zip     | Bin 398068 -> 398068 bytes
+ .../lambda-functions/Zip Files/rescindOffer.zip    | Bin 398000 -> 398000 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398248 -> 398248 bytes
+ .../Zip Files/withdrawApplication.zip              | Bin 398168 -> 398271 bytes
+ recruit.me/lambda-functions/acceptOffer/index.mjs  |  17 +++++-
+ .../lambda-functions/getApplicantOffers/index.mjs  |  45 ++++++++++++++
+ .../lambda-functions/reapplyApplication/index.mjs  |  10 ++-
+ .../lambda-functions/withdrawApplication/index.mjs |   9 ++-
+ recruit.me/src/app/applicant/profile/page.tsx      |  68 +++++++++++++++++++--
+ 33 files changed, 140 insertions(+), 9 deletions(-)
+
+commit 62e9ef23f2541cb9360e6f721d8d57919b0ba220
+Merge: e55a4c1 be17ace
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 23:39:20 2025 -0500
+
+    Merge remote-tracking branch 'origin/main'
+
+commit e55a4c1313700a7d35c426736cab90ea12b26117
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 23:39:06 2025 -0500
+
+    Updated Lambdas
+
+ .../lambda-functions/Zip Files/acceptOffer.zip     | Bin 0 -> 398069 bytes
+ .../lambda-functions/Zip Files/applyToJob.zip      | Bin 0 -> 398365 bytes
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398548 -> 398548 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398851 -> 398851 bytes
+ .../Zip Files/editApplicantRating.zip              | Bin 398112 -> 398112 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398304 -> 398304 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398726 -> 398726 bytes
+ .../lambda-functions/Zip Files/filterJobs.zip      | Bin 398170 -> 398505 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398641 -> 398635 bytes
+ .../Zip Files/getApplicantsFromJob.zip             | Bin 398354 -> 398340 bytes
+ recruit.me/lambda-functions/Zip Files/getApply.zip | Bin 398088 -> 398088 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397958 -> 397958 bytes
+ .../Zip Files/getCompanyOffers.zip                 | Bin 398148 -> 398194 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398070 -> 398070 bytes
+ .../lambda-functions/Zip Files/getJobById.zip      | Bin 0 -> 398083 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397880 -> 397880 bytes
+ .../lambda-functions/Zip Files/loginApplicants.zip | Bin 398005 -> 398005 bytes
+ .../lambda-functions/Zip Files/loginCompany.zip    | Bin 398006 -> 398006 bytes
+ recruit.me/lambda-functions/Zip Files/offerJob.zip | Bin 397947 -> 397951 bytes
+ .../lambda-functions/Zip Files/postApply.zip       | Bin 398357 -> 398357 bytes
+ .../Zip Files/reapplyApplication.zip               | Bin 0 -> 398191 bytes
+ .../Zip Files/registerApplicants.zip               | Bin 398205 -> 398205 bytes
+ .../Zip Files/registerCompanies.zip                | Bin 398212 -> 398212 bytes
+ .../Zip Files/{reapply.zip => rejectOffer.zip}     | Bin 398189 -> 398068 bytes
+ .../lambda-functions/Zip Files/rescindOffer.zip    | Bin 398000 -> 398000 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398248 -> 398248 bytes
+ .../Zip Files/withdrawApplication.zip              | Bin 398177 -> 398168 bytes
+ recruit.me/lambda-functions/acceptOffer/index.mjs  |  40 ++++++++
+ recruit.me/lambda-functions/applyToJob/index.mjs   | 109 +++++++++++++++++++++
+ .../lambda-functions/editApplicantRating/index.mjs |   6 +-
+ recruit.me/lambda-functions/filterJobs/index.mjs   |  86 ++++++++++++----
+ recruit.me/lambda-functions/getApplicant/index.mjs |  96 +++++++++---------
+ .../getApplicantsFromJob/index.mjs                 |  52 +++++-----
+ .../lambda-functions/getCompanyOffers/index.mjs    |  16 +--
+ recruit.me/lambda-functions/getJobById/index.mjs   |  46 +++++++++
+ recruit.me/lambda-functions/offerJob/index.mjs     |   2 +-
+ .../{reapply => reapplyApplication}/index.mjs      |  18 ++--
+ recruit.me/lambda-functions/rejectOffer/index.mjs  |  40 ++++++++
+ recruit.me/lambda-functions/rescindOffer/index.mjs |   2 +-
+ .../lambda-functions/withdrawApplication/index.mjs |  18 ++--
+ 40 files changed, 408 insertions(+), 123 deletions(-)
+
+commit be17ace8036f65e3dcebdbbdf01a58b2372833f0
+Merge: 80b0733 7b7c662
+Author: htgraves <htgraves91@gmail.com>
+Date:   Mon Nov 24 23:28:06 2025 -0500
+
+    Merge pull request #24 from minh-hahaha/applicant-profile
+    
+    updates to apply page
+
+commit 7b7c662c9e0ef5821f4e95f3c9fcd7ada9c3b737
+Merge: 183d7d7 80b0733
+Author: htgraves <htgraves91@gmail.com>
+Date:   Mon Nov 24 23:27:58 2025 -0500
+
+    Merge branch 'main' into applicant-profile
+
+commit 80b07331e28d6959a699eb929064ae86552a099a
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Mon Nov 24 23:19:43 2025 -0500
+
+    fix formatting
+
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit b816c43da82bba10eb4095dd35740290473bf0f0
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Mon Nov 24 23:19:16 2025 -0500
+
+    Update README with iteration 2 use cases
+
+ README.md | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+commit 183d7d73d531895aa15103ed15c0bd7f905b312e
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 23:18:54 2025 -0500
+
+    updates to apply page
+
+ .DS_Store                                   | Bin 14340 -> 14340 bytes
+ recruit.me/src/app/applicant/apply/page.tsx |   6 ++++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+commit cdcc8aa8ea1f319d54217bec13f58a9efe87ac7b
+Merge: c13d609 3cdd64e
+Author: htgraves <htgraves91@gmail.com>
+Date:   Mon Nov 24 23:10:52 2025 -0500
+
+    Merge pull request #23 from minh-hahaha/applicant-profile
+    
+    Applicant profile
+
+commit 3cdd64e350567837609e467f94210f87cc31f1f5
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 23:07:13 2025 -0500
+
+    withdraw button hide if job offered
+
+ .DS_Store | Bin 14340 -> 14340 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 0dcb040dcee06ed7bdf4296940eacc2833400706
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 23:04:44 2025 -0500
+
+    withdraw button hide if job offered
+
+ .DS_Store                                           | Bin 14340 -> 14340 bytes
+ .../Zip Files/editApplicantRating.zip               | Bin 0 -> 398112 bytes
+ .../lambda-functions/Zip Files/filterJobs.zip       | Bin 0 -> 398170 bytes
+ recruit.me/lambda-functions/Zip Files/offerJob.zip  | Bin 0 -> 397947 bytes
+ recruit.me/lambda-functions/Zip Files/reapply.zip   | Bin 0 -> 398189 bytes
+ recruit.me/lambda-functions/getApplicant/index.mjs  |   4 +++-
+ recruit.me/lambda-functions/reapply/index.mjs       |   4 ++--
+ recruit.me/src/app/applicant/profile/page.tsx       |   5 +++--
+ 8 files changed, 8 insertions(+), 5 deletions(-)
+
+commit c13d60994a0a37581eebf6a1c78647bfef9b136a
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 23:07:28 2025 -0500
+
+    Apply Page Back Button UI
+
+ Documents/Entity Classes.md                 |  3 +--
+ recruit.me/src/app/applicant/apply/page.tsx | 17 ++++++++++++++---
+ 2 files changed, 15 insertions(+), 5 deletions(-)
+
+commit 5b4671118707a1406dbeddbb338625c169736db2
+Merge: 322af22 f0a9cf0
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Mon Nov 24 22:53:21 2025 -0500
+
+    Merge pull request #21 from minh-hahaha/remove_unreachable_state
+    
+    an Applicant cannot be rejected by a company, they can only reject of…
+
+commit 322af22eeae66a999ab2597949b5767cd921c83b
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 22:34:53 2025 -0500
+
+    Filter Search With Jobs Already Applied To
+
+ recruit.me/src/app/applicant/search/page.tsx | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+commit b287e59e921c7e905e2069470423a68d29a05d3a
+Merge: fff52f7 30fecee
+Author: htgraves <htgraves91@gmail.com>
+Date:   Mon Nov 24 22:29:46 2025 -0500
+
+    Merge pull request #22 from minh-hahaha/applicant-profile
+    
+    reapply on profile page updated to new lambda
+
+commit f0a9cf03e1e84a999deb812b765f6c7426f50bda
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 22:21:22 2025 -0500
+
+    an Applicant cannot be rejected by a company, they can only reject offers
+
+ recruit.me/src/app/api/entities.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 30fecee209d7ad5dd26c5f5094e90ce2ae572d80
+Merge: b6e2bcd fff52f7
+Author: htgraves <htgraves91@gmail.com>
+Date:   Mon Nov 24 22:20:13 2025 -0500
+
+    Merge pull request #20 from minh-hahaha/main
+    
+    reapply on profile updated
+
+commit b6e2bcddc4199be44a697e5a027ce0ef2282a489
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 22:16:34 2025 -0500
+
+    Update Lambdas
+
+ .DS_Store                                          | Bin 14340 -> 14340 bytes
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398523 -> 398548 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398826 -> 398851 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398279 -> 398304 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398726 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398154 -> 398641 bytes
+ .../Zip Files/getApplicantsFromJob.zip             | Bin 398458 -> 398354 bytes
+ recruit.me/lambda-functions/Zip Files/getApply.zip | Bin 398038 -> 398088 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397933 -> 397958 bytes
+ .../Zip Files/getCompanyOffers.zip                 | Bin 398123 -> 398148 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398045 -> 398070 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397880 bytes
+ .../lambda-functions/Zip Files/loginApplicants.zip | Bin 397980 -> 398005 bytes
+ .../lambda-functions/Zip Files/loginCompany.zip    | Bin 397981 -> 398006 bytes
+ .../lambda-functions/Zip Files/postApply.zip       | Bin 398265 -> 398357 bytes
+ .../Zip Files/registerApplicants.zip               | Bin 398180 -> 398205 bytes
+ .../Zip Files/registerCompanies.zip                | Bin 398187 -> 398212 bytes
+ .../lambda-functions/Zip Files/rescindOffer.zip    | Bin 397975 -> 398000 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398248 bytes
+ .../Zip Files/withdrawApplication.zip              | Bin 398121 -> 398177 bytes
+ 20 files changed, 0 insertions(+), 0 deletions(-)
+
+commit fff52f7edaaa7084765506b5e42b45e2bc9425ad
+Merge: 46e17a6 c5b691d
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Mon Nov 24 22:09:57 2025 -0500
+
+    Merge pull request #19 from minh-hahaha/small_update_to_offer_lambda
+    
+    set offerAt time in offer lambda
+
+commit c5b691db7f7b1f1be55ee99fef36e22fffcc7215
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 22:06:44 2025 -0500
+
+    set offerAt time in offer lambda
+
+ recruit.me/lambda-functions/offerJob/index.mjs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 94859d16144c1679a5bca59644d7831936a938ee
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 22:02:07 2025 -0500
+
+    reapply lambda created, applicantCount on apply,reapply,withdraw
+
+ recruit.me/lambda-functions/postApply/index.mjs    | 10 ++++
+ recruit.me/lambda-functions/reapply/index.mjs      | 54 ++++++++++++++++++++++
+ .../lambda-functions/withdrawApplication/index.mjs |  5 ++
+ recruit.me/src/app/applicant/profile/page.tsx      | 10 ++--
+ 4 files changed, 74 insertions(+), 5 deletions(-)
+
+commit 46e17a6cb81a992d27f49dd6ac307ffb84a94d54
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 21:38:56 2025 -0500
+
+    Accept+Reject Actually works now.
+
+ recruit.me/src/app/applicant/profile/page.tsx | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+commit b4e83c9ee17dde7b7b3ef3753a6a701e9c0a77a9
+Merge: 75a6d0d cfc39df
+Author: htgraves <htgraves91@gmail.com>
+Date:   Mon Nov 24 21:24:44 2025 -0500
+
+    Merge pull request #18 from minh-hahaha/applicant-profile
+    
+    apply to job updates
+
+commit 75a6d0dd7bb750e68652d6d8af6baa73f6e44d16
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 21:23:28 2025 -0500
+
+    Accept+Reject Offers
+
+ recruit.me/src/app/applicant/profile/page.tsx | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+commit cfc39dff9bb15b13e14593a5856f227982ff1288
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 21:23:24 2025 -0500
+
+    apply to rereoute to search page
+
+ recruit.me/src/app/applicant/apply/page.tsx   | 2 +-
+ recruit.me/src/app/applicant/profile/page.tsx | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 9d80e01401be9d3c734caa3cfef62cdfc58f4a2e
+Merge: d5b2dd1 18c2bfb
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 21:18:09 2025 -0500
+
+    Merge branch 'main' of https://github.com/minh-hahaha/Recruit.me into applicant-profile
+    
+    :wq
+
+commit d5b2dd1613099a08c8412e62aecfbaaa0727c53b
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 21:16:34 2025 -0500
+
+    apply update
+
+ recruit.me/src/app/applicant/apply/page.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 9073fcbcbb566203d17435fc2743f8e95a82d695
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Mon Nov 24 21:03:29 2025 -0500
+
+    profile page update
+
+ recruit.me/src/app/applicant/profile/page.tsx | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+commit 18c2bfbd5602dd6b37c2a16bd4e90815333c8f45
+Merge: 08b3f99 61159e1
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Mon Nov 24 20:51:35 2025 -0500
+
+    Merge pull request #17 from minh-hahaha/review_applicants
+    
+    Review applicants by Zach
+
+commit 61159e11058cb1616d83d1002834a2b0692e4416
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 20:47:55 2025 -0500
+
+    update to match lambda code
+
+ recruit.me/lambda-functions/getApplicantsFromJob/index.mjs | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+commit bc582d5384b62b14053bbb7e398951c0f54ad320
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 20:45:52 2025 -0500
+
+    remove some commented out code i was testing with
+
+ recruit.me/src/app/company/job/applicants/page.tsx | 7 -------
+ 1 file changed, 7 deletions(-)
+
+commit 9b5085a8c0b897a5452353a8e917a7b5ad884bfd
+Merge: b49c965 08b3f99
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 20:39:21 2025 -0500
+
+    Merge branch 'main' into review_applicants
+
+commit b49c96506aa80096dfdcf356e6dc1f7656ba8b36
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 20:30:06 2025 -0500
+
+    change all instances of Hireable to Hirable
+
+ recruit.me/src/app/api/entities.ts                 |  2 +-
+ recruit.me/src/app/company/job/applicants/page.tsx | 18 +++++++++---------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+commit 0b9f35cdb7f2574795a9241548110c5eca04cef2
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Mon Nov 24 20:20:48 2025 -0500
+
+    applicants to applications/updateRating
+
+ recruit.me/src/app/company/job/applicants/page.tsx | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+commit 08b3f9938d834ce2d7737a37f7fddb702a101cd3
+Merge: 7037b06 a757564
+Author: Huy Ho <149995341+huyho1@users.noreply.github.com>
+Date:   Mon Nov 24 19:33:42 2025 -0500
+
+    Merge pull request #16 from minh-hahaha/apply
+    
+    Connected Search to Apply. Apply page may need minor fixes.
+
+commit a7575648f362a2f1cd54a5e9368c718239cdaae7
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Mon Nov 24 19:27:41 2025 -0500
+
+    Connected Search to Apply. Apply page may need minor fixes.
+
+ recruit.me/src/app/applicant/apply/page.tsx   | 2 +-
+ recruit.me/src/app/applicant/profile/page.tsx | 2 +-
+ recruit.me/src/app/applicant/search/page.tsx  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 93190d2a936f7b87fd377ab2fe89f5708003f28f
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 00:34:57 2025 -0500
+
+    add logout buttons; remove extra  edit profile button
+
+ recruit.me/src/app/company/job/applicants/page.tsx | 2 +-
+ recruit.me/src/app/company/profile/page.tsx        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit a8a09335f0caa909c297c8dee0e1ddc486c3e6d0
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Mon Nov 24 00:28:45 2025 -0500
+
+    first attempt at reviewing applicants and offereing jobs
+
+ .../Zip Files/getApplicantsFromJob.zip             | Bin 0 -> 398458 bytes
+ .../lambda-functions/editApplicantRating/index.mjs |  44 ++++
+ .../getApplicantsFromJob/index.mjs                 |  74 ++++++
+ recruit.me/lambda-functions/offerJob/index.mjs     |  26 ++
+ recruit.me/src/app/company/job/applicants/page.tsx | 280 +++++++++++++++++++++
+ recruit.me/src/app/company/profile/page.tsx        |  37 +--
+ 6 files changed, 446 insertions(+), 15 deletions(-)
+
+commit 7037b06a8987443965c80e8a94cafe9a3b78cf75
+Merge: a858f33 45a8f5d
+Author: Huy Ho <149995341+huyho1@users.noreply.github.com>
+Date:   Sun Nov 23 22:29:25 2025 -0500
+
+    Merge pull request #15 from minh-hahaha/search_jobs
+    
+    Added Search Button
+
+commit a858f3375462629f99f283a4862f4084d159c4ce
+Merge: 75f1679 e4570ed
+Author: htgraves <htgraves91@gmail.com>
+Date:   Sun Nov 23 22:28:24 2025 -0500
+
+    Merge pull request #14 from minh-hahaha/applicant-profile
+    
+    profile page updates to job offer and accept/reject offer button
+
+commit e4570edd5d9453c31c540a3eff4f279810665b35
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 22:21:19 2025 -0500
+
+    Accept/Reject Offer buttons built out on profile
+
+ .DS_Store                                     | Bin 14340 -> 14340 bytes
+ recruit.me/src/app/applicant/profile/page.tsx | 107 ++++++++++++++++++++++++--
+ 2 files changed, 99 insertions(+), 8 deletions(-)
+
+commit 45a8f5d2608787c780dd26d8cfccede03576aa13
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sun Nov 23 22:14:31 2025 -0500
+
+    Added Search Button
+
+ recruit.me/src/app/applicant/search/page.tsx | 67 +++++++++++++++++-----------
+ 1 file changed, 42 insertions(+), 25 deletions(-)
+
+commit 32eebdc5437a3e78726f311e5a7adfe73771439d
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:56:04 2025 -0500
+
+    Cleanup after merge
+
+ recruit.me/src/app.zip | Bin 51121 -> 0 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 12cd3d826ba94b1fcac8e0924d4910c2cd8108d4
+Merge: 52fa58c bcac3b5
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:52:42 2025 -0500
+
+    Merge remote-tracking branch 'origin/search_jobs' into applicant-profile
+
+commit bcac3b5325e6fb08c5b7699e1837ab9f87dee294
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sun Nov 23 21:46:17 2025 -0500
+
+    Added Apply Button and Changed UI
+
+ recruit.me/src/app/applicant/search/page.tsx | 48 +++++++++++++++++++++++++---
+ 1 file changed, 43 insertions(+), 5 deletions(-)
+
+commit 52fa58c95087fdce769fb49cd1e1c3f57e48542c
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:45:30 2025 -0500
+
+    job offer on profile working
+
+ .DS_Store | Bin 14340 -> 14340 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 2ce15ef1f3058a0bf29bfa4660380c5f939d9145
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:43:45 2025 -0500
+
+    job offer on profile working
+
+ .DS_Store | Bin 14340 -> 14340 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 3149eadd2592099333abeeb63b2571b88d37f089
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:37:12 2025 -0500
+
+    removed mock data from job Offers in profile page
+
+ recruit.me/lambda-functions/getApplicant/index.mjs | 32 +++++++++++++++++++++-
+ recruit.me/src/app/applicant/profile/page.tsx      | 19 ++++---------
+ 2 files changed, 36 insertions(+), 15 deletions(-)
+
+commit 92e5f41edd64de0091686eeb64d1941ab6ae81c2
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sun Nov 23 21:30:53 2025 -0500
+
+    Search Filter Works Now
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398523 -> 398523 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398826 -> 398826 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398279 -> 398279 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398154 -> 398154 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397933 -> 397933 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398045 -> 398045 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397855 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398223 bytes
+ recruit.me/lambda-functions/filterJobs/index.mjs   |  54 +++++++++++++++++++++
+ recruit.me/src/app/applicant/search/page.tsx       |  39 +++++++++------
+ 11 files changed, 79 insertions(+), 14 deletions(-)
+
+commit 75f16799471ed372331bfb052bfafd021cdf2f01
+Merge: 2a22b3f 995bbd3
+Author: htgraves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:26:12 2025 -0500
+
+    Merge pull request #13 from minh-hahaha/applicant-profile
+    
+    Applicant profile PR
+
+commit 995bbd35005f9e6a321d7ff65dd76b1f508d8594
+Merge: 8d57c67 2a22b3f
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sun Nov 23 21:25:28 2025 -0500
+
+    Merge branch 'main' into applicant-profile
+    
+    merging main with new updated rescind job
+
+commit 2a22b3f05d10745d59444c313ff7422cefaa324d
+Merge: 2630eaa 452a1b4
+Author: Minh Ha <116596990+minh-hahaha@users.noreply.github.com>
+Date:   Sun Nov 23 21:17:47 2025 -0500
+
+    Merge pull request #12 from minh-hahaha/CompanyManageOffers
+    
+    Company manage offers, rescind offers
+
+commit 8d57c6728de90e779a9d259d587b4ea84b2778a3
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Sun Nov 23 21:04:36 2025 -0500
+
+    updates to apply page and lambdas
+
+ recruit.me/lambda-functions/getApply/index.mjs  |  2 +-
+ recruit.me/lambda-functions/postApply/index.mjs |  1 +
+ recruit.me/src/app/applicant/apply/page.tsx     | 28 ++++++++++++-------------
+ 3 files changed, 16 insertions(+), 15 deletions(-)
+
+commit 403858eba6693cccb107c2ffa3daaed6260fa322
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sun Nov 23 14:23:16 2025 -0500
+
+    Retrieved Skill and Job Data, Need to Filter based on Search
+
+ recruit.me/src/app/applicant/search/page.tsx | 97 +++++++++++++++++++++++-----
+ 1 file changed, 80 insertions(+), 17 deletions(-)
+
+commit 452a1b4490e6bf167e12c3f103fa64895a72038a
+Author: minh.hahaha <haminh893@gmail.com>
+Date:   Sat Nov 22 18:47:52 2025 -0500
+
+    Company manage offers, rescind offers
+
+ Documents/Entity Classes.md                        |   2 +-
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398523 -> 398523 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398826 -> 398826 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398279 -> 398279 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398154 -> 398154 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397933 -> 397933 bytes
+ .../Zip Files/getCompanyOffers.zip                 | Bin 0 -> 398123 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398045 -> 398045 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397855 bytes
+ .../lambda-functions/Zip Files/loginApplicants.zip | Bin 0 -> 397980 bytes
+ .../lambda-functions/Zip Files/loginCompany.zip    | Bin 0 -> 397981 bytes
+ .../Zip Files/registerApplicants.zip               | Bin 0 -> 398180 bytes
+ .../Zip Files/registerCompanies.zip                | Bin 0 -> 398187 bytes
+ .../lambda-functions/Zip Files/rescindOffer.zip    | Bin 0 -> 397975 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398223 bytes
+ .../lambda-functions/getCompanyOffers/index.mjs    |  41 +++++
+ recruit.me/lambda-functions/rescindOffer/index.mjs |  29 +++
+ recruit.me/src/app/company/offers/page.tsx         | 194 +++++++++++++++++++++
+ recruit.me/src/app/company/profile/page.tsx        |   3 +-
+ 20 files changed, 267 insertions(+), 2 deletions(-)
+
+commit 622be55ba2db3dd7f141282defaac44062245713
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sat Nov 22 12:47:37 2025 -0500
+
+    Basic Page Number
+
+ recruit.me/src/app/applicant/search/page.tsx | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+commit 6fb4c88c671aad542387a7cac96f9a4777596c52
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Sat Nov 22 00:07:38 2025 -0500
+
+    Basic UI for Search
+
+ recruit.me/src/app/applicant/profile/page.tsx |   2 +-
+ recruit.me/src/app/applicant/search/page.tsx  | 113 ++++++++++++++++++++++++++
+ 2 files changed, 114 insertions(+), 1 deletion(-)
+
+commit df7a57d1a0d0311decf7ea82d65b2c203c99d58d
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Fri Nov 21 14:08:49 2025 -0500
+
+    fixing withdraw connection to db
+
+ recruit.me/lambda-functions/db-utils.mjs           |  3 ++-
+ .../lambda-functions/withdrawApplication/index.mjs |  2 +-
+ recruit.me/src/app/applicant/profile/page.tsx      | 23 +++++++++++++---------
+ recruit.me/src/app/company/profile/page.tsx        |  2 +-
+ 4 files changed, 18 insertions(+), 12 deletions(-)
+
+commit cf07b2ad1cd300a289d51c42fa6df9d043fdc0d9
+Merge: 67810ec 2630eaa
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Fri Nov 21 11:48:21 2025 -0500
+
+    Resolve merge conflicts in lambda zip artifacts
+
+commit 67810ec0c5238a782d4d323b96fc63746218cb17
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Fri Nov 21 11:39:32 2025 -0500
+
+    updates to withdrawApp lambda, profile page
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398485 -> 398485 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398798 -> 398798 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398279 -> 398279 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398174 -> 398389 bytes
+ recruit.me/lambda-functions/Zip Files/getApply.zip | Bin 0 -> 398038 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397933 -> 397933 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398045 -> 398045 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397855 bytes
+ .../lambda-functions/Zip Files/postApply.zip       | Bin 0 -> 398265 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398223 bytes
+ .../Zip Files/withdrawApplication.zip              | Bin 0 -> 398121 bytes
+ recruit.me/lambda-functions/getApplicant/index.mjs |  61 +++++++++++---
+ recruit.me/lambda-functions/getApplicant/v2.mjs    |  92 ---------------------
+ .../lambda-functions/withdrawApplication/index.mjs |   2 +-
+ recruit.me/src/app/applicant/apply/page.tsx        |  13 +--
+ recruit.me/src/app/applicant/profile/page.tsx      |  20 -----
+ 17 files changed, 57 insertions(+), 131 deletions(-)
+
+commit 11fb4d6533a58d961aa9645c6fea567e441d7897
+Author: Henry Graves <htgraves91@gmail.com>
+Date:   Thu Nov 20 21:52:19 2025 -0500
+
+    new getApplicant lambda, get/postApply lambdas, Apply page
+
+ .DS_Store                                          | Bin 10244 -> 14340 bytes
+ recruit.me/lambda-functions/getApplicant/v2.mjs    |  92 ++++++++
+ recruit.me/lambda-functions/getApply/index.mjs     |  49 +++++
+ recruit.me/lambda-functions/postApply/index.mjs    | 100 +++++++++
+ .../lambda-functions/withdrawApplication/index.mjs |  49 +++++
+ recruit.me/src/app.zip                             | Bin 0 -> 51121 bytes
+ recruit.me/src/app/api/entities.ts                 |  50 +++++
+ recruit.me/src/app/applicant/apply/page.tsx        | 233 +++++++++++++++++++++
+ recruit.me/src/app/applicant/profile/page.tsx      | 142 ++++++++++++-
+ recruit.me/src/app/company/profile/page.tsx        |   5 +
+ 10 files changed, 713 insertions(+), 7 deletions(-)
+
+commit 2630eaa833e1304dff638c006cb650539f8f0a0f
+Author: Huy Ho <hqho@wpi.edu>
+Date:   Tue Nov 4 02:46:11 2025 -0500
+
+    Zip Files for Lambdas
+
+ .../lambda-functions/Zip Files/createJob.zip       | Bin 398485 -> 398523 bytes
+ .../lambda-functions/Zip Files/editApplicant.zip   | Bin 398798 -> 398826 bytes
+ .../lambda-functions/Zip Files/editCompany.zip     | Bin 398279 -> 398279 bytes
+ recruit.me/lambda-functions/Zip Files/editJob.zip  | Bin 398701 -> 398701 bytes
+ .../lambda-functions/Zip Files/getApplicant.zip    | Bin 398174 -> 398154 bytes
+ .../lambda-functions/Zip Files/getCompany.zip      | Bin 397933 -> 397933 bytes
+ recruit.me/lambda-functions/Zip Files/getJob.zip   | Bin 398045 -> 398045 bytes
+ .../lambda-functions/Zip Files/listSkills.zip      | Bin 397855 -> 397855 bytes
+ .../lambda-functions/Zip Files/reviewApplicant.zip | Bin 398223 -> 398223 bytes
+ 9 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 8434059aeb149c149fc163b486593f08cceb1aaa
+Author: MZachary <66347880+MZachary@users.noreply.github.com>
+Date:   Tue Nov 4 02:41:30 2025 -0500
+
+    small readme update
+
+ README.md | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+commit 00b394c30acfdaa436305363e603988a3102286a
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 02:39:51 2025 -0500
+
+    move git report to top level
+
+ recruit.me/git.report.txt => git.report.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit d3efa9afc793e931b10f1b8a78549d98857edeaf
+Author: Zachary Murdock <zachary.t.murdock@gmail.com>
+Date:   Tue Nov 4 02:38:52 2025 -0500
+
+    run git log --stat for Iteration 1
+
+ recruit.me/git.report.txt | 1260 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 1260 insertions(+)
+
 commit be4825d8e882b8075fc571137cbb1ee46d997df2
 Author: Zachary Murdock <zachary.t.murdock@gmail.com>
 Date:   Tue Nov 4 02:37:29 2025 -0500

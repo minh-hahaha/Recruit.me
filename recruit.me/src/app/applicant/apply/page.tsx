@@ -36,7 +36,7 @@ function ApplicantApplyContent() {
 
 
   // Job info
-  const jobid = params.get("jobid") || (typeof window !== "undefined" ? sessionStorage.getItem("jobID") || "" : "");
+  const jobid = params.get("jobid") || (typeof window !== "undefined" ? sessionStorage.getItem("jobId") || "" : "");
   const [jobData, setJobData] = useState<Job | null>(null);
   const [jobError, setJobError] = useState<string | null>(null);
   const [jobLoading, setJobLoading] = useState(true);

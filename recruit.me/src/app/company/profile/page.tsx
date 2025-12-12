@@ -200,6 +200,9 @@ function CompanyProfileContent() {
               <div className="flex flex-col gap-3">
                 <Link href="/company/offers/"><button className="w-full px-3 py-2 rounded-lg bg-green-600 text-white">Manage Offers</button></Link>
                 <Link href="/company/job/create"><button className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white">Create Job</button></Link>
+                <Link href={`/company/skills-search?cid=${company.id}`}>
+                  <button className="w-full px-3 py-2 rounded-lg bg-indigo-600 text-white">Find Applicants by Skills</button>
+                </Link>
               </div>
             </div>
 

@@ -121,7 +121,17 @@ function CompanyProfileContent() {
             <Link href={`/company/edit?cid=${company.id}`}>
               <button className="inline-flex items-center px-4 py-2 rounded-lg border bg-transparent dark:border-zinc-600 dark:text-white">Edit Profile</button>
             </Link>
-            <Link href="/"><button className="px-3 py-2 border border-zinc-700 rounded text-white">Logout</button></Link>
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  sessionStorage.removeItem("companyId");
+                  router.push("/company/login");
+                }
+              }}
+              className="px-4 py-2 rounded-lg border border-red-600 dark:border-red-500 bg-red-600 hover:bg-red-700 text-white dark:text-white transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
 

@@ -121,7 +121,17 @@ function CompanyProfileContent() {
             <Link href={`/company/edit?cid=${company.id}`}>
               <button className="inline-flex items-center px-4 py-2 rounded-lg border bg-transparent dark:border-zinc-600 dark:text-white">Edit Profile</button>
             </Link>
-            <Link href="/"><button className="px-3 py-2 border border-zinc-700 rounded text-white">Logout</button></Link>
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  sessionStorage.removeItem("companyId");
+                  router.push("/company/login");
+                }
+              }}
+              className="px-4 py-2 rounded-lg border border-red-600 dark:border-red-500 bg-red-600 hover:bg-red-700 text-white dark:text-white transition"
+            >
+              Logout
+            </button>
           </div>
         </div>
 
@@ -200,6 +210,9 @@ function CompanyProfileContent() {
               <div className="flex flex-col gap-3">
                 <Link href="/company/offers/"><button className="w-full px-3 py-2 rounded-lg bg-green-600 text-white">Manage Offers</button></Link>
                 <Link href="/company/job/create"><button className="w-full px-3 py-2 rounded-lg bg-blue-600 text-white">Create Job</button></Link>
+                <Link href={`/company/skills-search?cid=${company.id}`}>
+                  <button className="w-full px-3 py-2 rounded-lg bg-indigo-600 text-white">Find Applicants by Skills</button>
+                </Link>
               </div>
             </div>
 

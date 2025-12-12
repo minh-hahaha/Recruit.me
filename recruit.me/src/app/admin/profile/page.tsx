@@ -86,18 +86,33 @@ function AdminProfileContent() {
 
   const firstName = adminData.name?.split(" ")[0] || "Admin";
 
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("adminId");
+      router.push("/admin/login");
+    }
+  };
+
   return (
       <div className={baseContainerClasses}>
         {/* ==== WELCOME HEADER ==== */}
         <div className="w-full flex flex-col md:flex-row justify-between items-start bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl px-8 py-6 shadow-lg mb-8">
           <div className="h-14 w-14 rounded-full bg-white/20 mr-4" aria-hidden />
-          <div>
+          <div className="flex-1">
             <h1 className="text-3xl font-semibold mb-1">
               Welcome back, {firstName}!
             </h1>
             <p className="text-white/80">
               Admin Dashboard
             </p>
+          </div>
+          <div className="mt-4 md:mt-0">
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-red-600 hover:bg-red-700"
+            >
+              Logout
+            </button>
           </div>
         </div>
 

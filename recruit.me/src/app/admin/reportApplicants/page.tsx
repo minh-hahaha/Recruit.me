@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const API_BASE_URL = "https://8f542md451.execute-api.us-east-1.amazonaws.com/prod";
 

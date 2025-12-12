@@ -429,6 +429,17 @@ async function handleRejectOffer(offerId: string) {
               <button className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed" onClick={() => router.push(`/applicant/edit?aid=${encodeURIComponent(aid)}`)}>
                 Edit Profile
               </button>
+              <button
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    sessionStorage.removeItem("applicantId");
+                    router.push("/applicant/login");
+                  }
+                }}
+                className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-red-600 hover:bg-red-700"
+              >
+                Logout
+              </button>
         </div>
       </div>
 

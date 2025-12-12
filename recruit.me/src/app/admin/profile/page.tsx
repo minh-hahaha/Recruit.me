@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const API_BASE_URL = "https://8f542md451.execute-api.us-east-1.amazonaws.com/prod";
 
@@ -85,18 +86,58 @@ function AdminProfileContent() {
 
   const firstName = adminData.name?.split(" ")[0] || "Admin";
 
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("adminId");
+      router.push("/admin/login");
+    }
+  };
+
   return (
       <div className={baseContainerClasses}>
         {/* ==== WELCOME HEADER ==== */}
         <div className="w-full flex flex-col md:flex-row justify-between items-start bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl px-8 py-6 shadow-lg mb-8">
           <div className="h-14 w-14 rounded-full bg-white/20 mr-4" aria-hidden />
-          <div>
+          <div className="flex-1">
             <h1 className="text-3xl font-semibold mb-1">
               Welcome back, {firstName}!
             </h1>
             <p className="text-white/80">
               Admin Dashboard
             </p>
+          </div>
+          <div className="mt-4 md:mt-0">
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition text-white bg-red-600 hover:bg-red-700"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {/* ==== REPORTS SECTION ==== */}
+        <div className="w-full max-w-7xl bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-100 dark:border-zinc-800">
+          <h2 className="text-2xl font-semibold mb-6 text-zinc-900 dark:text-white">
+            Reports
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link href="/admin/reportApplicants">
+              <button className="w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all text-left">
+                <div className="text-lg font-semibold mb-1">Applicant Report</div>
+                <div className="text-sm text-blue-100">
+                  View all applicants with their job application
+                </div>
+              </button>
+            </Link>
+            <Link href="/admin/reportJobs">
+              <button className="w-full px-6 py-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all text-left">
+                <div className="text-lg font-semibold mb-1">Jobs Report</div>
+                <div className="text-sm text-indigo-100">
+                  View all companies and their job postings
+                </div>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

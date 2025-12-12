@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const API_BASE_URL = "https://8f542md451.execute-api.us-east-1.amazonaws.com/prod";
 
@@ -53,7 +54,7 @@ function ApplicantReportContent() {
         setLoading(false);
       }
     })();
-  }, [page]);
+  }, [page, pageSize]);
 
   const totalPages = data ? Math.max(1, Math.ceil(data.totalApplicants / data.pageSize)) : 1;
 
@@ -61,7 +62,7 @@ function ApplicantReportContent() {
     setPage(nextPage);
     const params = new URLSearchParams(window.location.search);
     params.set("page", String(nextPage));
-    router.push(`/admin/report/applicants?${params.toString()}`);
+    router.push(`/admin/reportApplicants?${params.toString()}`, { scroll: false });
   }
 
   if (loading) {
@@ -84,7 +85,21 @@ function ApplicantReportContent() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col items-center">
       <div className="w-full max-w-5xl bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-6 border border-zinc-100 dark:border-zinc-800">
-        <h1 className="text-2xl font-semibold mb-4">Applicant Report</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-semibold">Applicant Report</h1>
+          <div className="flex gap-2">
+            <Link href="/admin/reportJobs">
+              <button className="px-3 py-1.5 rounded border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm">
+                View Jobs Report
+              </button>
+            </Link>
+            <Link href="/admin/profile">
+              <button className="px-3 py-1.5 rounded border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm">
+                Back to Profile
+              </button>
+            </Link>
+          </div>
+        </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
           Lists all applicants with counts of jobs applied to, accepted, and withdrawn.
         </p>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const API_BASE_URL = "https://8f542md451.execute-api.us-east-1.amazonaws.com/prod";
 
@@ -97,6 +98,31 @@ function AdminProfileContent() {
             <p className="text-white/80">
               Admin Dashboard
             </p>
+          </div>
+        </div>
+
+        {/* ==== REPORTS SECTION ==== */}
+        <div className="w-full max-w-7xl bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-100 dark:border-zinc-800">
+          <h2 className="text-2xl font-semibold mb-6 text-zinc-900 dark:text-white">
+            Reports
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link href="/admin/reportApplicants">
+              <button className="w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all text-left">
+                <div className="text-lg font-semibold mb-1">Applicant Report</div>
+                <div className="text-sm text-blue-100">
+                  View all applicants with their job application
+                </div>
+              </button>
+            </Link>
+            <Link href="/admin/reportJobs">
+              <button className="w-full px-6 py-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all text-left">
+                <div className="text-lg font-semibold mb-1">Jobs Report</div>
+                <div className="text-sm text-indigo-100">
+                  View all companies and their job postings
+                </div>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -53,6 +53,9 @@ export class Company {
     website?: string;
     description: string;
     createdAt: Date;
+    jobsCount: number;
+    totalApplicants: number;
+    totalHired: number;
 
     constructor(
         name: string,
@@ -70,6 +73,9 @@ export class Company {
         this.description = description;
         this.website = website;
         this.createdAt = new Date();
+        this.jobsCount = 0;
+        this.totalApplicants = 0;
+        this.totalHired = 0;
     }
 }
 

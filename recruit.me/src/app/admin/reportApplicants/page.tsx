@@ -24,18 +24,7 @@ type ApplicantsReportResponse = {
   applicants: ApplicantReportRow[];
 };
 
-/* ---------------- Helpers ---------------- */
 
-function unwrapApiGateway<T>(raw: any): T {
-  // If Lambda proxy response: { statusCode, headers, body: "stringified json" }
-  if (raw && typeof raw.body === "string") {
-    return JSON.parse(raw.body) as T;
-  }
-  // If already the object
-  return raw as T;
-}
-
-/* ---------------- Page ---------------- */
 
 function ApplicantsReportContent() {
   const params = useSearchParams();
@@ -62,8 +51,7 @@ function ApplicantsReportContent() {
 
         if (!res.ok) throw new Error(await res.text());
 
-        const raw = await res.json();
-        const json = unwrapApiGateway<ApplicantsReportResponse>(raw);
+        const json: ApplicantsReportResponse = await res.json();
 
         setData(json);
       } catch (e: any) {

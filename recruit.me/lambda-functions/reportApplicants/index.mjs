@@ -1,15 +1,33 @@
 import { query, getConnection, createResponse, handleError } from "./db-utils.mjs";
 
+function getQueryParam(event, key) {
+  if (event?.queryStringParameters?.[key] != null) return event.queryStringParameters[key];
+
+  const mv = event?.multiValueQueryStringParameters?.[key];
+  if (Array.isArray(mv) && mv.length) return mv[0];
+
+  if (typeof event?.rawQueryString === "string" && event.rawQueryString.length) {
+    const usp = new URLSearchParams(event.rawQueryString);
+    const v = usp.get(key);
+    if (v != null) return v;
+  }
+
+  return null;
+}
+
 export const handler = async (event) => {
-  const page = parseInt(event.queryStringParameters?.page || "1", 10);
-  const pageSize = parseInt(event.queryStringParameters?.pageSize || "10", 10);
-  const limit = Math.max(1, Math.min(pageSize, 50)); // cap page size
+  const pageRaw = getQueryParam(event, "page") ?? "1";
+  const pageSizeRaw = getQueryParam(event, "pageSize") ?? "10";
+
+  const page = parseInt(pageRaw, 10) || 1;
+  const pageSize = parseInt(pageSizeRaw, 10) || 10;
+
+  const limit = Math.max(1, Math.min(pageSize, 50));
   const offset = (page - 1) * limit;
 
   const connection = await getConnection();
 
   try {
-    // 1) paginated rows
     const rows = await query(
       `SELECT 
          a.id,
@@ -26,23 +44,20 @@ export const handler = async (event) => {
       [limit, offset]
     );
 
-    // 2) total applicants for pagination
-    const totalResult = await query(
-      `SELECT COUNT(*) AS totalApplicants FROM applicants`
-    );
-    const totalApplicants = totalResult[0]?.totalApplicants ?? 0;
+    const totalResult = await query(`SELECT COUNT(*) AS totalApplicants FROM applicants`);
+    const totalApplicants = Number(totalResult[0]?.totalApplicants) || 0;
 
     return createResponse(200, {
       page,
       pageSize: limit,
       totalApplicants,
       applicants: rows.map((r) => ({
-        id: r.id,
-        name: r.name ?? "",
-        email: r.email ?? "",
-        jobsApplied: r.jobsApplied ?? 0,
-        jobsAccepted: r.jobsAccepted ?? 0,
-        jobsWithdrawn: r.jobsWithdrawn ?? 0,
+        id: String(r.id),
+        name: String(r.name ?? ""),
+        email: String(r.email ?? ""),
+        jobsApplied: Number(r.jobsApplied) || 0,
+        jobsAccepted: Number(r.jobsAccepted) || 0,
+        jobsWithdrawn: Number(r.jobsWithdrawn) || 0,
       })),
     });
   } catch (error) {

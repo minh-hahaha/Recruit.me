@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -9,6 +9,14 @@ const API_BASE_URL = "https://8f542md451.execute-api.us-east-1.amazonaws.com/pro
 type Skill = { id: string; name: string };
 
 export default function SkillsSearchPage() {
+  return (
+      <Suspense fallback={<div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex items-center justify-center">Loading...</div>}>
+        <SkillsSearch />
+      </Suspense>
+  );
+}
+
+function SkillsSearch() {
   const params = useSearchParams();
   const router = useRouter();
   const cid =

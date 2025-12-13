@@ -6,10 +6,13 @@ http://recruit-me3.s3-website-us-east-1.amazonaws.com/
 Use Cases implemented for Iteration 3:
 
 Admin:
-  - tbd
+  - Report companies
+  - Report jobs for company
+  - report applicants
 
 Company:
   - Review Applicants for Job
+  - A company can report on the number of applicants that match a given list of skills, S1, S2, ...
 
 Applicant:
   - accept offer

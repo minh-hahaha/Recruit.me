@@ -57,14 +57,14 @@ function ReportCompanies() {
 
     const nextPage = () => {
         if (page * pageSize < totalCompanies) {
-            router.push(`/admin/report/companies?page=${page + 1}`);
+            router.push(`/admin/reportCompanies?page=${page + 1}`);
             setPage(page + 1);
         }
     };
 
     const prevPage = () => {
         if (page > 1) {
-            router.push(`/admin/report/companies?page=${page - 1}`);
+            router.push(`/admin/reportCompanies?page=${page - 1}`);
             setPage(page - 1);
         }
     };

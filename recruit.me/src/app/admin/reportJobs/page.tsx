@@ -100,7 +100,7 @@ function JobsReportContent() {
           <div className="flex gap-2">
             <Link href="/admin/profile">
               <button className="px-3 py-1.5 rounded border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm">
-                Back to Profile
+                Back to Admin Dashboard
               </button>
             </Link>
           </div>

@@ -6,8 +6,6 @@ import Link from "next/link";
 
 const API_BASE_URL = "https://8f542md451.execute-api.us-east-1.amazonaws.com/prod";
 
-/* ---------------- Types ---------------- */
-
 type ApplicantReportRow = {
   id: string;
   name: string;
@@ -24,25 +22,22 @@ type ApplicantsReportResponse = {
   applicants: ApplicantReportRow[];
 };
 
-/* ---------------- Helpers ---------------- */
-
+// ✅ Handles Lambda proxy wrapper OR direct payload
 function unwrapApiGateway<T>(raw: any): T {
-  // If Lambda proxy response: { statusCode, headers, body: "stringified json" }
-  if (raw && typeof raw.body === "string") {
-    return JSON.parse(raw.body) as T;
+  if (raw && raw.body != null) {
+    if (typeof raw.body === "string") return JSON.parse(raw.body) as T;
+    return raw.body as T;
   }
-  // If already the object
   return raw as T;
 }
-
-/* ---------------- Page ---------------- */
 
 function ApplicantsReportContent() {
   const params = useSearchParams();
   const router = useRouter();
 
   const pageParam = params.get("page");
-  const [page, setPage] = useState<number>(pageParam ? parseInt(pageParam, 10) : 1);
+  const pageFromUrl = pageParam ? parseInt(pageParam, 10) : 1;
+  const [page, setPage] = useState<number>(pageFromUrl);
 
   const [data, setData] = useState<ApplicantsReportResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,10 +45,17 @@ function ApplicantsReportContent() {
 
   const pageSize = 10;
 
+  // ✅ keep state in sync if user edits URL / uses back button
+  useEffect(() => {
+    if (page !== pageFromUrl) setPage(pageFromUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageFromUrl]);
+
   useEffect(() => {
     (async () => {
       setLoading(true);
       setError(null);
+
       try {
         const res = await fetch(
           `${API_BASE_URL}/admin/report/applicants?page=${page}&pageSize=${pageSize}`,
@@ -88,23 +90,15 @@ function ApplicantsReportContent() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading report...
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
   }
 
   if (error || !data) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow p-6 text-center">
-          <h2 className="text-xl font-semibold mb-2 text-red-600 dark:text-red-400">
-            Error
-          </h2>
-          <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-300">
-            {error || "Failed to load applicants report."}
-          </p>
+          <h2 className="text-xl font-semibold mb-2 text-red-600 dark:text-red-400">Error</h2>
+          <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-300">{error || "Failed to load applicants report."}</p>
           <Link href="/admin/profile">
             <button className="px-3 py-1.5 rounded border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm">
               Back to Profile
@@ -119,9 +113,7 @@ function ApplicantsReportContent() {
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-10 px-4 flex flex-col items-center">
       <div className="w-full max-w-6xl bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-6 border border-zinc-100 dark:border-zinc-800">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">
-            Applicants Report
-          </h1>
+          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Applicants Report</h1>
           <div className="flex gap-2">
             <Link href="/admin/reportJobs">
               <button className="px-3 py-1.5 rounded border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm">
@@ -136,14 +128,8 @@ function ApplicantsReportContent() {
           </div>
         </div>
 
-        <p className="text-sm text-zinc-600 dark:text-zinc-300 mb-6">
-          Lists all applicants with counts of applied, accepted, and withdrawn applications.
-        </p>
-
         {(data.applicants ?? []).length === 0 ? (
-          <div className="text-center py-8 text-zinc-500 dark:text-zinc-400">
-            No applicants found.
-          </div>
+          <div className="text-center py-8 text-zinc-500 dark:text-zinc-400">No applicants found.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm border-collapse">
@@ -199,13 +185,7 @@ function ApplicantsReportContent() {
 
 export default function ApplicantsReportPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center text-white">
-          Loading...
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-white">Loading...</div>}>
       <ApplicantsReportContent />
     </Suspense>
   );
